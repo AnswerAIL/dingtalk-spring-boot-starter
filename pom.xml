@@ -7,7 +7,12 @@
     <groupId>io.github.jaemon</groupId>
     <artifactId>jaemon-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.0-RELEASE</version>
+
+    <name>spring-boot-starter-jaemon</name>
+    <description>Java Utils for Jaemon.</description>
+    <url>https://github.com/AnswerAIL/spring-boot-starter-jaemon</url>
+
 
     <properties>
         <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
@@ -48,9 +53,11 @@
     </dependencies>
 
 
+    <!-- 许可证信息 -->
     <licenses>
+        <!-- Apache许可证 -->
         <license>
-            <name>Apache 2</name>
+            <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
@@ -65,5 +72,93 @@
         </developer>
     </developers>
 
+
+    <!-- SCM信息 -->
+    <scm>
+        <connection>scm:git:git://github.com/AnswerAIL/spring-boot-starter-jaemon.git</connection>
+        <developerConnection>scm:git:ssh://github.com/AnswerAIL/spring-boot-starter-jaemon.git</developerConnection>
+        <url>https://github.com/AnswerAIL/spring-boot-starter-jaemon/tree/master</url>
+    </scm>
+
+
+    <!-- snapshotRepository 与 repository 中的 id 一定要与 setting.xml 中 server 的 id 保持一致！ -->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>oss</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>oss</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+
+    <build>
+        <plugins>
+            <!-- 要生成Javadoc和Source jar文件，您必须配置javadoc和源Maven插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <doclint>none</doclint>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- 进行验签 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>oss</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
