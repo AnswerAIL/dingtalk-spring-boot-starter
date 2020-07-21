@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>jaemon.github</groupId>
+    <artifactId>jaemon-spring-boot-starter</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0</version>
+
+    <properties>
+        <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
+        <lombok.version>1.18.10</lombok.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- 引入 spring-boot-starter, 所有starter的基本配合 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>${spring-boot.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- 引入自动配置模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+    </dependencies>
+
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>jaemon</name>
+            <email>answer_ljm@163.com</email>
+            <organization>Answer.AI.L</organization>
+            <organizationUrl>https://github.com/AnswerAIL/spring-boot-starter-jaemon</organizationUrl>
+            <url>https://github.com/AnswerAIL/spring-boot-starter-jaemon</url>
+        </developer>
+    </developers>
+
+
+</project>

@@ -1,0 +1,4 @@
+# Auto Configuration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.jaemon.JaemonServiceAutoConfiguration, \
+com.jaemon.AnswerServiceAutoConfiguration
