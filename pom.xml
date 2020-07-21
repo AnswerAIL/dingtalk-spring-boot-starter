@@ -9,9 +9,9 @@
     <packaging>jar</packaging>
     <version>1.0.0-RELEASE</version>
 
-    <name>spring-boot-starter-jaemon</name>
+    <name>dingtalk-spring-boot-starter</name>
     <description>Java Utils for Jaemon.</description>
-    <url>https://github.com/AnswerAIL/spring-boot-starter-jaemon</url>
+    <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter</url>
 
 
     <properties>
@@ -67,17 +67,17 @@
             <name>jaemon</name>
             <email>answer_ljm@163.com</email>
             <organization>Answer.AI.L</organization>
-            <organizationUrl>https://github.com/AnswerAIL/spring-boot-starter-jaemon</organizationUrl>
-            <url>https://github.com/AnswerAIL/spring-boot-starter-jaemon</url>
+            <organizationUrl>https://github.com/AnswerAIL/dingtalk-spring-boot-starter</organizationUrl>
+            <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter</url>
         </developer>
     </developers>
 
 
     <!-- SCM信息 -->
     <scm>
-        <connection>scm:git:git://github.com/AnswerAIL/spring-boot-starter-jaemon.git</connection>
-        <developerConnection>scm:git:ssh://github.com/AnswerAIL/spring-boot-starter-jaemon.git</developerConnection>
-        <url>https://github.com/AnswerAIL/spring-boot-starter-jaemon/tree/master</url>
+        <connection>scm:git:git://github.com/AnswerAIL/dingtalk-spring-boot-starter.git</connection>
+        <developerConnection>scm:git:ssh://github.com/AnswerAIL/dingtalk-spring-boot-starter.git</developerConnection>
+        <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master</url>
     </scm>
 
 
