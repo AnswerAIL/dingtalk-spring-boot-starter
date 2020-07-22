@@ -15,9 +15,6 @@ import com.jaemon.dingtalk.entity.DingTalkProperties;
 import com.jaemon.dingtalk.entity.Message;
 import com.jaemon.dingtalk.entity.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -31,18 +28,16 @@ import static com.jaemon.dingtalk.entity.Message.MSG_TEXT;
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-// 表示这是个自动配置类
-@Configuration
-// 对 web 生效
-@ConditionalOnWebApplication
-@EnableConfigurationProperties(DingTalkProperties.class)
 public class DingTalkRobot {
 
     @Autowired
     private HttpClient httpClient;
 
-    @Autowired
     private DingTalkProperties dingTalkProperties;
+
+    public DingTalkRobot(DingTalkProperties dingTalkProperties) {
+        this.dingTalkProperties = dingTalkProperties;
+    }
 
     /** 钉钉消息推送地址 */
     public static final String ROBOT_URL = "https://oapi.dingtalk.com/robot/send?access_token";
@@ -124,20 +119,5 @@ public class DingTalkRobot {
                 dingTalkProperties.getTitle(), dingTalkProperties.getRemarks(), dingTalkProperties.getProjectId(), keyword, content);
     }
 
-
-    public static void main(String[] args) {
-        DingTalkRobot dingTalkRobot = new DingTalkRobot();
-        try {
-            List<String> list = new ArrayList<>();
-            list.get(1);
-        } catch (IndexOutOfBoundsException e) {
-            String response = dingTalkRobot.send(
-                    "abc8ba21d7df4aicaeaal25bed2520ai",
-                    e.toString());
-
-            System.out.println(response);
-        }
-
-    }
 
 }

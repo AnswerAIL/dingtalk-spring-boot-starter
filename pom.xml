@@ -15,7 +15,7 @@
 
 
     <properties>
-        <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
         <lombok.version>1.18.10</lombok.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
