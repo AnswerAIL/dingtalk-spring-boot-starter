@@ -1,9 +1,10 @@
 package com.jaemon.dingtalk.config;
 
+import com.jaemon.dingtalk.exception.DingTalkException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jaemon.dingtalk.entity.RequestBody;
+import com.jaemon.dingtalk.entity.RequestHeader;
 
 /**
  * @author Jaemon@answer_ljm@163.com
@@ -28,7 +29,7 @@ public class HttpClient {
      * @param url 请求地址
      * @return 响应报文
      * */
-    public String doGet(String url) {
+    public String doGet(String url) throws DingTalkException {
         Request.Builder builder = new Request.Builder();
         Request request = builder.url(url).build();
         return execute(request);
@@ -44,7 +45,7 @@ public class HttpClient {
      * @param headers 请求头
      * @return 响应报文
      * */
-    public String doGet(String url, RequestBody headers) {
+    public String doGet(String url, RequestHeader headers) throws DingTalkException {
         Request.Builder builder = new Request.Builder();
         headers.getData().forEach(e -> builder.addHeader(e.getKey(), e.getValue()));
         Request request = builder.url(url).build();
@@ -58,7 +59,7 @@ public class HttpClient {
      * @param body 请求体(k-v)
      * @return 响应报文
      * */
-    public String doPost(String url, RequestBody body) {
+    public String doPost(String url, RequestHeader body) throws DingTalkException {
         return doPost(url, null, body);
     }
 
@@ -73,7 +74,7 @@ public class HttpClient {
      * @param body 请求体(k-v)
      * @return 响应报文
      * */
-    public String doPost(String url, RequestBody headers, RequestBody body) {
+    public String doPost(String url, RequestHeader headers, RequestHeader body) throws DingTalkException {
         Request.Builder builder = new Request.Builder();
 
         if (headers != null) {
@@ -103,7 +104,7 @@ public class HttpClient {
      *      </blockquote>
      * @return 响应报文
      * */
-    public String doPost(String url, String data, MediaType contentType) {
+    public String doPost(String url, String data, MediaType contentType) throws DingTalkException {
         return doPost(url, null, data, contentType);
     }
 
@@ -128,7 +129,7 @@ public class HttpClient {
      *      </blockquote>
      * @return 响应报文
      * */
-    public String doPost(String url, RequestBody headers, String data, MediaType contentType) {
+    public String doPost(String url, RequestHeader headers, String data, MediaType contentType) throws DingTalkException {
         Request.Builder builder = new Request.Builder();
 
         if (headers != null) {
@@ -150,7 +151,7 @@ public class HttpClient {
                 return response.body().string();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new DingTalkException(e);
         } finally {
             if (response != null) {
                 response.close();

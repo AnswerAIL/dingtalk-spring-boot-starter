@@ -9,6 +9,7 @@
 package com.jaemon.dingtalk.entity;
 
 
+import com.jaemon.dingtalk.DingTalkRobot;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -22,6 +23,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "spring.dingtalk")
 public class DingTalkProperties {
+
+    /** 钉钉消息推送地址 */
+    private static final String ROBOT_URL = "https://oapi.dingtalk.com/robot/send?access_token";
+
+    /**
+     * 请求地址前缀, 默认： https://oapi.dingtalk.com/robot/send?access_token
+     * */
+    private String robotUrl = ROBOT_URL;
 
     /**
      * 获取 access_token

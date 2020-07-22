@@ -8,9 +8,11 @@
  */
 package com.jaemon.dingtalk.config;
 
+import lombok.Data;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,25 +24,20 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * OkHttpClient 配置
+ *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
+@Data
 @Configuration
+@ConditionalOnMissingBean(OkHttpClient.class)
+@ConfigurationProperties(prefix = "ok.http")
 public class OkHttpConfiguration {
-
-    @Value("${ok.http.connect-timeout:30}")
     private Integer connectTimeout = 30;
-
-    @Value("${ok.http.read-timeout:30}")
     private Integer readTimeout = 30;
-
-    @Value("${ok.http.write-timeout:30}")
     private Integer writeTimeout = 30;
-
-    @Value("${ok.http.max-idle-connections:200}")
     private Integer maxIdleConnections = 200;
-
-    @Value("${ok.http.keep-alive-duration:300}")
     private Long keepAliveDuration = 300L;
 
     @Bean
@@ -97,8 +94,4 @@ public class OkHttpConfiguration {
         return new ConnectionPool(maxIdleConnections, keepAliveDuration, TimeUnit.SECONDS);
     }
 
-    @Bean
-    public HttpClient httpClient() {
-        return new HttpClient();
-    }
 }

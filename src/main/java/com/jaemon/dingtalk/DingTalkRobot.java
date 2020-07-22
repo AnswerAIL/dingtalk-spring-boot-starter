@@ -13,7 +13,10 @@ import com.alibaba.fastjson.JSON;
 import com.jaemon.dingtalk.config.HttpClient;
 import com.jaemon.dingtalk.entity.DingTalkProperties;
 import com.jaemon.dingtalk.entity.Message;
-import com.jaemon.dingtalk.entity.RequestBody;
+import com.jaemon.dingtalk.entity.RequestHeader;
+import com.jaemon.dingtalk.exception.DingTalkException;
+import com.jaemon.dingtalk.support.CustomMessage;
+import com.jaemon.dingtalk.support.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.MessageFormat;
@@ -32,15 +35,16 @@ public class DingTalkRobot {
 
     @Autowired
     private HttpClient httpClient;
+    @Autowired
+    private Notice notice;
+    @Autowired
+    private CustomMessage customMessage;
 
     private DingTalkProperties dingTalkProperties;
 
     public DingTalkRobot(DingTalkProperties dingTalkProperties) {
         this.dingTalkProperties = dingTalkProperties;
     }
-
-    /** 钉钉消息推送地址 */
-    public static final String ROBOT_URL = "https://oapi.dingtalk.com/robot/send?access_token";
 
     /**
      * 发送预警消息到钉钉
@@ -50,12 +54,12 @@ public class DingTalkRobot {
      * @return 响应报文
      * */
     public String send(String keyword, String content) {
-        String text = messsage(keyword, content);
+        String text = customMessage.message(dingTalkProperties, keyword, content);
         Message message = Message.builder()
                 .msgtype(MSG_TEXT)
                 .text(new Message.Text(text)).build();
 
-        return send(dingTalkProperties.getTokenId(), message);
+        return send(keyword, message);
     }
 
 
@@ -71,13 +75,13 @@ public class DingTalkRobot {
      * @return 响应报文
      * */
     public String send(String keyword, String content, List<String> phones) {
-        String text = messsage(keyword, content);
+        String text = customMessage.message(dingTalkProperties, keyword, content);
         Message message = Message.builder()
                 .msgtype(MSG_TEXT)
                 .text(new Message.Text(text))
                 .at(new Message.At(phones)).build();
 
-        return send(dingTalkProperties.getTokenId(), message);
+        return send(keyword, message);
     }
 
 
@@ -92,32 +96,32 @@ public class DingTalkRobot {
      * @return 响应报文
      * */
     public String sendAll(String keyword, String content) {
-        String text = messsage(keyword, content);
+        String text = customMessage.message(dingTalkProperties, keyword, content);
         Message message = Message.builder()
                 .msgtype(MSG_TEXT)
                 .text(new Message.Text(text))
                 .at(new Message.At(true)).build();
 
-        return send(dingTalkProperties.getTokenId(), message);
+        return send(keyword, message);
     }
 
 
-    private String send(String tokenId, Message message) {
-        String webhook = MessageFormat.format("{0}={1}", ROBOT_URL, tokenId);
+    private String send(String keyword, Message message) {
+        try {
+            String tokenId = dingTalkProperties.getTokenId();
+            String webhook = MessageFormat.format("{0}={1}", dingTalkProperties.getRobotUrl(), tokenId);
 
-        RequestBody headers = new RequestBody();
-        RequestBody.Pairs pairs = new RequestBody.Pairs("Content-Type", "application/json; charset=utf-8");
-        ArrayList<RequestBody.Pairs> list = new ArrayList<>();
-        list.add(pairs);
-        headers.setData(list);
+            RequestHeader headers = new RequestHeader();
+            RequestHeader.Pairs pairs = new RequestHeader.Pairs("Content-Type", "application/json; charset=utf-8");
+            ArrayList<RequestHeader.Pairs> list = new ArrayList<>();
+            list.add(pairs);
+            headers.setData(list);
 
-        return httpClient.doPost(webhook, headers, JSON.toJSONString(message), HttpClient.HC_JSON);
+            return httpClient.doPost(webhook, headers, JSON.toJSONString(message), HttpClient.HC_JSON);
+        } catch (DingTalkException e) {
+            notice.callback(dingTalkProperties, keyword, message, e);
+        }
+        return null;
     }
-
-    private String messsage(String keyword, String content) {
-        return MessageFormat.format("【{0}】 {1}\n- project: {2}\n- keyword: {3}\n- text: {4}.",
-                dingTalkProperties.getTitle(), dingTalkProperties.getRemarks(), dingTalkProperties.getProjectId(), keyword, content);
-    }
-
 
 }

@@ -18,7 +18,7 @@ import java.util.List;
  * @version 1.0
  */
 @Data
-public class RequestBody {
+public class RequestHeader {
 
     private List<Pairs> data;
 
