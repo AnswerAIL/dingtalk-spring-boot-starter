@@ -62,3 +62,4 @@
  - [Maven(6) Java上传本地jar包到maven中央仓库](https://blog.csdn.net/qq_38225558/article/details/94381467)
  - [把自己的项目发布到maven中心仓库----论姿势的正确性](https://blog.csdn.net/qq_28802119/article/details/85256852)
  - [发布jar包到Maven中央仓库](https://blog.csdn.net/dawei0523/article/details/84918820)
+ - [钉钉开放平台开发手册](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h)
