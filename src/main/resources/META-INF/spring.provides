@@ -1,1 +1,1 @@
-provides: spring-boot-starter,lombok
+provides: spring-boot-starter,lombok,okhttp,fastjson

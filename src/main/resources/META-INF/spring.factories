@@ -1,4 +1,7 @@
 # Auto Configuration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.jaemon.JaemonServiceAutoConfiguration, \
-com.jaemon.AnswerServiceAutoConfiguration
+com.jaemon.dingtalk.DingTalkRobot, \
+com.jaemon.dingtalk.config.OkHttpConfiguration
+
+org.springframework.stereotype.Component=\
+com.jaemon.dingtalk.config.HttpClient
