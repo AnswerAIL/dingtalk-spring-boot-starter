@@ -33,25 +33,21 @@ public class DingTalkProperties {
      *     <br /><br />
      *     tokenId=c60d4824e0ba4a30544e81212256789331d68b0085ed1a5b2279715741355fbc
      * </blockquote>
-     *
-     * @return .
      * */
     private String tokenId;
 
     /**
-     * @return .
+     * 标题
      * */
     private String title;
 
     /**
-     * @return .
+     * 标题描述备注
      * */
     private String remarks;
 
     /**
      * 项目名称
-     *
-     * @return .
      * */
     private String projectId;
 
