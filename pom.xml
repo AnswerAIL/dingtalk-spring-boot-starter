@@ -10,7 +10,7 @@
     <version>1.0.0-RELEASE</version>
 
     <name>dingtalk-spring-boot-starter</name>
-    <description>Java Utils for Jaemon.</description>
+    <description>集成钉钉机器人实现消息通知</description>
     <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter</url>
 
 
