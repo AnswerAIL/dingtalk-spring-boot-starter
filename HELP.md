@@ -28,8 +28,13 @@
 &nbsp;
 
 # 发布
+> mvn clean deploy
+>
 > mvn clean deploy -Dgpg.passphrase=******
+>
 > mvn clean deploy -P release -Dgpg.passphrase=******
+>
+> mvn clean deploy -P release -Darguments="gpg.passphrase=******"
 
 &nbsp;
 

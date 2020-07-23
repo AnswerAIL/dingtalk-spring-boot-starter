@@ -20,9 +20,9 @@
     <dependency>
         <groupId>com.github.answerail</groupId>
         <artifactId>dingtalk-spring-boot-starter</artifactId>
-        <version>1.0.0-RELEASE</version>
+        <version>1.0.1-RELEASE</version>
         <scope>system</scope>
-        <systemPath>${project.basedir}/lib/dingtalk-spring-boot-starter-1.0.0-RELEASE.jar</systemPath>
+        <systemPath>${project.basedir}/lib/dingtalk-spring-boot-starter-1.0.1-RELEASE.jar</systemPath>
     </dependency>
     
 
@@ -34,7 +34,6 @@
     </dependency>
 ```
 **answerail-dingtalk.version目前支持版本**
- - 1.0.0-RELEASE
  - 1.0.1-RELEASE
 
 ***
