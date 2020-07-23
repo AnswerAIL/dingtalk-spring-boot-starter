@@ -64,6 +64,7 @@
  - [我发布的构件地址： http://mvnrepository.com/artifact/com.github.XXX](http://mvnrepository.com/artifact/com.github.answerail)
  - [dingtalk issue OSSRH-59361](https://issues.sonatype.org/browse/OSSRH-59361)
  - [sonatype 仓库](https://oss.sonatype.org/#stagingRepositories)
+   - Staging Repositories 中选择发布的临时包点 Close， 如果校验通过, 再选中该包， 点击 Release 按钮， 即发布到Release版本中
  
 &nbsp;
 
