@@ -9,7 +9,6 @@
 package com.jaemon.dingtalk.support;
 
 import com.jaemon.dingtalk.entity.DingTalkProperties;
-import com.jaemon.dingtalk.entity.Message;
 import com.jaemon.dingtalk.exception.DingTalkException;
 import lombok.extern.slf4j.Slf4j;
 
