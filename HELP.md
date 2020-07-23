@@ -53,7 +53,8 @@
  - [搜索地址： https://search.maven.org/](https://search.maven.org/)
  - [中央仓库地址： http://mvnrepository.com/](http://mvnrepository.com/)
  - [我发布的构件地址： http://mvnrepository.com/artifact/com.github.XXX](http://mvnrepository.com/artifact/com.github.answerail)
- - [OSSRH-59361](https://issues.sonatype.org/browse/OSSRH-59361)
+ - [dingtalk issue OSSRH-59361](https://issues.sonatype.org/browse/OSSRH-59361)
+ - [sonatype 仓库](https://oss.sonatype.org/#stagingRepositories)
  
 &nbsp;
 
