@@ -27,7 +27,7 @@ public class DingTalkProperties {
     private static final String ROBOT_URL = "https://oapi.dingtalk.com/robot/send?access_token";
 
     /**
-     * 请求地址前缀, 默认： https://oapi.dingtalk.com/robot/send?access_token
+     * 请求地址前缀-选填，默认： https://oapi.dingtalk.com/robot/send?access_token
      * */
     private String robotUrl = ROBOT_URL;
 
@@ -45,13 +45,14 @@ public class DingTalkProperties {
     private String tokenId;
 
     /**
-     * 标题
+     * 标题-选填， 默认值(通知)
      * */
-    private String title;
+    private String title = "通知";
 
     /**
      * 标题描述备注
      * */
+    @Deprecated
     private String remarks;
 
     /**

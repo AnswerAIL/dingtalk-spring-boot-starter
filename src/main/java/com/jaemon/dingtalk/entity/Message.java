@@ -8,8 +8,8 @@
  */
 package com.jaemon.dingtalk.entity;
 
+import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -21,23 +21,12 @@ import java.util.List;
  * @version 1.0
  */
 @Data
-@Builder
 public class Message {
-    public static final String MSG_TEXT = "text";
     /**
      * 消息类型，此时固定为：text
      * */
-    private String msgtype = MSG_TEXT;
-    /**
-     * 消息内容
-     * */
-    private Text text;
+    private String msgtype = MsgTypeEnum.TEXT.type();
     private At at;
-    @Data
-    @AllArgsConstructor
-    public static class Text {
-        private String content;
-    }
 
     @Data
     @AllArgsConstructor

@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultNotice implements Notice {
     @Override
-    public void callback(DingTalkProperties dingTalkProperties, String keyword, Message message, DingTalkException e) {
+    public void callback(DingTalkProperties dingTalkProperties, String keyword, String message, DingTalkException e) {
       log.info("异常静默处理");
     }
 }

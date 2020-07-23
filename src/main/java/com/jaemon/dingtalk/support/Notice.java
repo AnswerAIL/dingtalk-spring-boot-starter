@@ -9,7 +9,6 @@
 package com.jaemon.dingtalk.support;
 
 import com.jaemon.dingtalk.entity.DingTalkProperties;
-import com.jaemon.dingtalk.entity.Message;
 import com.jaemon.dingtalk.exception.DingTalkException;
 
 /**
@@ -32,6 +31,6 @@ public interface Notice {
      * @param e
      *                  异常对象
      */
-    void callback(DingTalkProperties dingTalkProperties, String keyword, Message message, DingTalkException e);
+    void callback(DingTalkProperties dingTalkProperties, String keyword, String message, DingTalkException e);
 
 }
