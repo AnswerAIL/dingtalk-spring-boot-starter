@@ -64,10 +64,7 @@ public class DingTalkRobot {
 
 
     /**
-     * 发送预警消息到钉钉
-     *  <blockquote>
-     *      消息指定 @ 人电话信息
-     *  </blockquote>
+     * 发送预警消息到钉钉-消息指定艾特人电话信息
      *
      * @param keyword 关键词(方便定位日志)
      * @param content 消息内容
@@ -86,10 +83,7 @@ public class DingTalkRobot {
 
 
     /**
-     * 发送预警消息到钉钉
-     *  <blockquote>
-     *      @ 所有人
-     *  </blockquote>
+     * 发送预警消息到钉钉-艾特所有人
      *
      * @param keyword 关键词(方便定位日志)
      * @param content 消息内容

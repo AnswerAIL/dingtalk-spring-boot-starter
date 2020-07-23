@@ -108,6 +108,15 @@
     </distributionManagement>
 
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <!-- 要生成Javadoc和Source jar文件，您必须配置javadoc和源Maven插件 -->

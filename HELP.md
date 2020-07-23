@@ -26,6 +26,7 @@
 
 # 发布
 > mvn clean deploy -Dgpg.passphrase=******
+> mvn clean deploy -P release -Dgpg.passphrase=******
 
 &nbsp;
 
