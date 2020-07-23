@@ -16,11 +16,11 @@
     uid           [ultimate] Answer.AI.L <answer_ljm@163.com>
     sub   rsa2048 2020-07-22 [E] [expires: 2022-07-22]
     
-    # 将公钥发布到 PGP 密钥服务器,公钥ID(后位即可), 两个密钥服务器都要发布
+    # 将公钥发布到 PGP 密钥服务器,公钥ID(后16位即可), 两个密钥服务器都要发布
     gpg --keyserver hkp://pool.sks-keyservers.net --send-keys 6F65CBF6BDAA1CDQ
     gpg --keyserver hkp://keyserver.ubuntu.com:11371 --send-keys 6F65CBF6BDAA1CDQ
     
-    # 查询公钥是否发布成功,公钥ID(后位即可)
+    # 查询公钥是否发布成功,公钥ID(后16位即可)
     gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys  6F65CBF6BDAA1CDQ
     gpg --keyserver hkp://keyserver.ubuntu.com:11371 --recv-keys 6F65CBF6BDAA1CDQ
 ```
