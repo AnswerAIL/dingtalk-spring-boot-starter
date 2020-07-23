@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2015-2019, AnswerAIL
+ * Copyright(c) 2015-2020, AnswerAIL
  * ShenZhen Answer.AI.L Technology Co., Ltd.
  * All rights reserved.
  *
@@ -14,6 +14,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 请求头
+ *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */

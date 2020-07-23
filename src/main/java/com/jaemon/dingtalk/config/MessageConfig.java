@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2015-2019, AnswerAIL
+ * Copyright(c) 2015-2020, AnswerAIL
  * ShenZhen Answer.AI.L Technology Co., Ltd.
  * All rights reserved.
  *
@@ -10,8 +10,6 @@ package com.jaemon.dingtalk.config;
 
 import com.jaemon.dingtalk.support.CustomMessage;
 import com.jaemon.dingtalk.support.DefaultMessage;
-import com.jaemon.dingtalk.support.DefaultNotice;
-import com.jaemon.dingtalk.support.Notice;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

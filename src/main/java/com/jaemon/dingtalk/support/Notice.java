@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2015-2019, AnswerAIL
+ * Copyright(c) 2015-2020, AnswerAIL
  * ShenZhen Answer.AI.L Technology Co., Ltd.
  * All rights reserved.
  *
@@ -13,7 +13,7 @@ import com.jaemon.dingtalk.entity.Message;
 import com.jaemon.dingtalk.exception.DingTalkException;
 
 /**
- *
+ * 异常回调接口
  *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0

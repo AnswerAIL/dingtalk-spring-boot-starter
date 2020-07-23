@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2015-2019, AnswerAIL
+ * Copyright(c) 2015-2020, AnswerAIL
  * ShenZhen Answer.AI.L Technology Co., Ltd.
  * All rights reserved.
  *
@@ -9,7 +9,6 @@
 package com.jaemon.dingtalk.entity;
 
 
-import com.jaemon.dingtalk.DingTalkRobot;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
