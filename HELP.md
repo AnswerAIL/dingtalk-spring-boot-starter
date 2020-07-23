@@ -10,16 +10,19 @@
     
     # 查看公钥列表
     gpg --list-keys 
+    -------------------------------------------------
+    pub   rsa2048 2020-07-22 [SC] [expires: 2023-12-31]
+          21D5FBF1E95FA504C4B652E56F65CBF6BDAA1CDQ
+    uid           [ultimate] Answer.AI.L <answer_ljm@163.com>
+    sub   rsa2048 2020-07-22 [E] [expires: 2022-07-22]
     
-    # 将公钥发布到 PGP 密钥服务器
-    gpg --keyserver hkp://pool.sks-keyservers.net --send-keys 公钥ID 
-    # 或者
-    gpg --keyserver hkp://keyserver.ubuntu.com:11371 --send-keys 公钥ID
+    # 将公钥发布到 PGP 密钥服务器,公钥ID(后位即可), 两个密钥服务器都要发布
+    gpg --keyserver hkp://pool.sks-keyservers.net --send-keys 6F65CBF6BDAA1CDQ
+    gpg --keyserver hkp://keyserver.ubuntu.com:11371 --send-keys 6F65CBF6BDAA1CDQ
     
-    # 查询公钥是否发布成功
-    gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 公钥ID 
-    # 或者
-    gpg --keyserver hkp://keyserver.ubuntu.com:11371 --recv-keys 公钥ID
+    # 查询公钥是否发布成功,公钥ID(后位即可)
+    gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys  6F65CBF6BDAA1CDQ
+    gpg --keyserver hkp://keyserver.ubuntu.com:11371 --recv-keys 6F65CBF6BDAA1CDQ
 ```
 
 &nbsp;
@@ -65,3 +68,4 @@
  - [把自己的项目发布到maven中心仓库----论姿势的正确性](https://blog.csdn.net/qq_28802119/article/details/85256852)
  - [发布jar包到Maven中央仓库](https://blog.csdn.net/dawei0523/article/details/84918820)
  - [钉钉开放平台开发手册](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h)
+ - [Java上传本地jar包到maven中央仓库的坑逼经历](https://blog.csdn.net/pdsu161530247/article/details/105429597)
