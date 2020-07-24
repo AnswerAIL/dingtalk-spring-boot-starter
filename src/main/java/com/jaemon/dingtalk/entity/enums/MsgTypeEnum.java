@@ -56,6 +56,8 @@ public enum MsgTypeEnum {
 
 
     /**
+     * 消息类型对应的消息体
+     *
      * @param customMessage
      *              消息接口
      * @param keyword

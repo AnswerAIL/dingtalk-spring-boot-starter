@@ -1,3 +1,11 @@
+/*
+ * Copyright(c) 2015-2020, AnswerAIL
+ * ShenZhen Answer.AI.L Technology Co., Ltd.
+ * All rights reserved.
+ *
+ * <a>https://github.com/AnswerAIL/</a>
+ *
+ */
 package com.jaemon.dingtalk.config;
 
 import com.jaemon.dingtalk.DingTalkRobot;
@@ -15,13 +23,9 @@ import org.springframework.context.annotation.Configuration;
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-// 表示这是个自动配置类
 @Configuration
-// 对 web 生效
 @ConditionalOnWebApplication
-// 只有在 classpath 中找到 AnswerService 类的情况下, 才会解析此自动配置类, 否则不解析
 @ConditionalOnClass(DingTalkRobot.class)
-// 启用配置类
 @EnableConfigurationProperties(DingTalkProperties.class)
 public class DingTalkConfiguration {
 

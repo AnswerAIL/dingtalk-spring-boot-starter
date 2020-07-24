@@ -32,12 +32,27 @@ import java.util.concurrent.TimeUnit;
 @Data
 @Configuration
 @ConditionalOnMissingBean(OkHttpClient.class)
-@ConfigurationProperties(prefix = "ok.http")
+@ConfigurationProperties(prefix = "spring.dingtalk.ok-http")
 public class OkHttpConfiguration {
+    /**
+     * 连接超时时间, 单位S
+     */
     private Integer connectTimeout = 30;
+    /**
+     * 读超时时间，单位S
+     */
     private Integer readTimeout = 30;
+    /**
+     * 写超时时间，单位S
+     */
     private Integer writeTimeout = 30;
+    /**
+     * 连接池中整体的空闲连接的最大数量， 单位S
+     */
     private Integer maxIdleConnections = 200;
+    /**
+     * 连接空闲时间, 单位S
+     */
     private Long keepAliveDuration = 300L;
 
     @Bean

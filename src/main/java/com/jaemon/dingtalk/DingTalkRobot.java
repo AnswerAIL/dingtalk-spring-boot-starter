@@ -12,16 +12,24 @@ package com.jaemon.dingtalk;
 import com.alibaba.fastjson.JSON;
 import com.jaemon.dingtalk.config.HttpClient;
 import com.jaemon.dingtalk.entity.*;
+import com.jaemon.dingtalk.entity.enums.ContentTypeEnum;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import com.jaemon.dingtalk.exception.DingTalkException;
+import com.jaemon.dingtalk.sign.DkSignAlgorithm;
 import com.jaemon.dingtalk.support.CustomMessage;
+import com.jaemon.dingtalk.support.DkCallable;
+import com.jaemon.dingtalk.support.DkIdGenerator;
 import com.jaemon.dingtalk.support.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.StringUtils;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+
+import static com.jaemon.dingtalk.constant.DkConstant.MARKDOWN_MESSAGE;
+import static com.jaemon.dingtalk.constant.DkConstant.TEXT_MESSAGE;
 
 /**
  * 钉钉机器人消息推送工具类
@@ -36,12 +44,20 @@ public class DingTalkRobot {
     @Autowired
     private Notice notice;
     @Autowired
-    @Qualifier("textMessage")
+    @Qualifier(TEXT_MESSAGE)
     private CustomMessage textMessage;
     @Autowired
-    @Qualifier("markDownMessage")
+    @Qualifier(MARKDOWN_MESSAGE)
     private CustomMessage markDownMessage;
     private DingTalkProperties dingTalkProperties;
+    @Autowired
+    private DkSignAlgorithm dkSignAlgorithm;
+    @Autowired
+    private DkIdGenerator dkIdGenerator;
+    @Autowired
+    private Executor dingTalkExecutor;
+    @Autowired
+    private DkCallable dkCallable;
 
     public DingTalkRobot(DingTalkProperties dingTalkProperties) {
         this.dingTalkProperties = dingTalkProperties;
@@ -154,9 +170,19 @@ public class DingTalkRobot {
      *              响应报文
      */
     public String send(String keyword, String message) {
+        String dkid = dkIdGenerator.dkid();
+
         try {
             String tokenId = dingTalkProperties.getTokenId();
-            String webhook = MessageFormat.format("{0}={1}", dingTalkProperties.getRobotUrl(), tokenId);
+            StringBuilder webhook = new StringBuilder();
+            webhook.append(dingTalkProperties.getRobotUrl()).append("=").append(tokenId);
+
+            String secret = dingTalkProperties.getSecret();
+            // 处理签名问题
+            if (!StringUtils.isEmpty(secret)) {
+                SignBase sign = dkSignAlgorithm.sign(secret.trim());
+                webhook.append(sign.transfer());
+            }
 
             RequestHeader headers = new RequestHeader();
             RequestHeader.Pairs pairs = new RequestHeader.Pairs("Content-Type", "application/json; charset=utf-8");
@@ -164,9 +190,35 @@ public class DingTalkRobot {
             list.add(pairs);
             headers.setData(list);
 
-            return httpClient.doPost(webhook, headers, message, HttpClient.HC_JSON);
-        } catch (DingTalkException e) {
-            notice.callback(dingTalkProperties, keyword, message, e);
+            // 异步处理, 直接返回标识id
+            if (dingTalkProperties.isAsync()) {
+                dingTalkExecutor.execute(() -> {
+                    try {
+                        String result = httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
+                        dkCallable.execute(dkid, result);
+                    } catch (Exception e) {
+                        DingTalkException ex = new DingTalkException(e);
+                        DkExCallable dkExCallable = DkExCallable.builder()
+                                .dkid(dkid)
+                                .dingTalkProperties(dingTalkProperties)
+                                .keyword(keyword)
+                                .message(message)
+                                .ex(ex).build();
+                        notice.callback(dkExCallable);
+                    }
+                });
+                return dkid;
+            }
+            return httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
+        } catch (Exception e) {
+            DingTalkException ex = new DingTalkException(e);
+            DkExCallable dkExCallable = DkExCallable.builder()
+                    .dkid(dkid)
+                    .dingTalkProperties(dingTalkProperties)
+                    .keyword(keyword)
+                    .message(message)
+                    .ex(ex).build();
+            notice.callback(dkExCallable);
         }
         return null;
     }

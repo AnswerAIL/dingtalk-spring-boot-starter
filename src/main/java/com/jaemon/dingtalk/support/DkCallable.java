@@ -8,21 +8,21 @@
  */
 package com.jaemon.dingtalk.support;
 
-import com.jaemon.dingtalk.entity.DkExCallable;
-
 /**
- * 异常回调接口
+ * 异步执行回调接口
  *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-public interface Notice {
+public interface DkCallable {
 
     /**
-     * 通知回调执行
+     * 异步执行回调函数
      *
-     * @param dkExCallable 异常回调信息
+     * @param dkid
+     *              执行id
+     * @param result
+     *              返回结果
      */
-    void callback(DkExCallable dkExCallable);
-
+    void execute(String dkid, String result);
 }

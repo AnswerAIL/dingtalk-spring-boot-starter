@@ -1,20 +1,26 @@
+/*
+ * Copyright(c) 2015-2020, AnswerAIL
+ * ShenZhen Answer.AI.L Technology Co., Ltd.
+ * All rights reserved.
+ *
+ * <a>https://github.com/AnswerAIL/</a>
+ *
+ */
 package com.jaemon.dingtalk.config;
 
-import com.jaemon.dingtalk.exception.DingTalkException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.jaemon.dingtalk.entity.RequestHeader;
 
 /**
+ * HttpClient
+ *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
 @Slf4j
 public class HttpClient {
-
-    public static final MediaType HC_JSON = MediaType.parse("application/json; charset=utf-8");
-    public static final MediaType HC_XML = MediaType.parse("application/xml; charset=utf-8");
 
     @Autowired
     private OkHttpClient okHttpClient;
@@ -29,7 +35,7 @@ public class HttpClient {
      * @param url 请求地址
      * @return 响应报文
      * */
-    public String doGet(String url) throws DingTalkException {
+    public String doGet(String url) throws Exception {
         Request.Builder builder = new Request.Builder();
         Request request = builder.url(url).build();
         return execute(request);
@@ -45,7 +51,7 @@ public class HttpClient {
      * @param headers 请求头
      * @return 响应报文
      * */
-    public String doGet(String url, RequestHeader headers) throws DingTalkException {
+    public String doGet(String url, RequestHeader headers) throws Exception {
         Request.Builder builder = new Request.Builder();
         headers.getData().forEach(e -> builder.addHeader(e.getKey(), e.getValue()));
         Request request = builder.url(url).build();
@@ -59,7 +65,7 @@ public class HttpClient {
      * @param body 请求体(k-v)
      * @return 响应报文
      * */
-    public String doPost(String url, RequestHeader body) throws DingTalkException {
+    public String doPost(String url, RequestHeader body) throws Exception {
         return doPost(url, null, body);
     }
 
@@ -74,7 +80,7 @@ public class HttpClient {
      * @param body 请求体(k-v)
      * @return 响应报文
      * */
-    public String doPost(String url, RequestHeader headers, RequestHeader body) throws DingTalkException {
+    public String doPost(String url, RequestHeader headers, RequestHeader body) throws Exception {
         Request.Builder builder = new Request.Builder();
 
         if (headers != null) {
@@ -100,11 +106,11 @@ public class HttpClient {
      * @param data 请求参数
      * @param contentType 请求体类型
      *      <blockquote>
-     *          {@link HttpClient#HC_JSON} or {@link HttpClient#HC_XML}
+     *          {@link com.jaemon.dingtalk.entity.enums.ContentTypeEnum#JSON} or {@link com.jaemon.dingtalk.entity.enums.ContentTypeEnum#XML}
      *      </blockquote>
      * @return 响应报文
      * */
-    public String doPost(String url, String data, MediaType contentType) throws DingTalkException {
+    public String doPost(String url, String data, MediaType contentType) throws Exception {
         return doPost(url, null, data, contentType);
     }
 
@@ -125,11 +131,11 @@ public class HttpClient {
      * @param headers 请求头
      * @param contentType 请求体类型
      *      <blockquote>
-     *          {@link HttpClient#HC_JSON} or {@link HttpClient#HC_XML}
+     *          {@link com.jaemon.dingtalk.entity.enums.ContentTypeEnum#JSON} or {@link com.jaemon.dingtalk.entity.enums.ContentTypeEnum#XML}
      *      </blockquote>
      * @return 响应报文
      * */
-    public String doPost(String url, RequestHeader headers, String data, MediaType contentType) throws DingTalkException {
+    public String doPost(String url, RequestHeader headers, String data, MediaType contentType) throws Exception {
         Request.Builder builder = new Request.Builder();
 
         if (headers != null) {
@@ -143,15 +149,13 @@ public class HttpClient {
         return execute(request);
     }
 
-    private String execute(Request request) {
+    private String execute(Request request) throws Exception {
         Response response = null;
         try {
             response = okHttpClient.newCall(request).execute();
             if (response.isSuccessful()) {
                 return response.body().string();
             }
-        } catch (Exception e) {
-            throw new DingTalkException(e);
         } finally {
             if (response != null) {
                 response.close();

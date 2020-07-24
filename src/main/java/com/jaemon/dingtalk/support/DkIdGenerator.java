@@ -8,21 +8,19 @@
  */
 package com.jaemon.dingtalk.support;
 
-import com.jaemon.dingtalk.entity.DkExCallable;
-
 /**
- * 异常回调接口
+ *  dkid 生成接口
  *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-public interface Notice {
+public interface DkIdGenerator {
 
     /**
-     * 通知回调执行
+     * dkid生成规则, 须保证全局唯一
      *
-     * @param dkExCallable 异常回调信息
+     * @return dkid
      */
-    void callback(DkExCallable dkExCallable);
+    String dkid();
 
 }

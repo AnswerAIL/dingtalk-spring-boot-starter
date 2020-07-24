@@ -11,6 +11,7 @@ package com.jaemon.dingtalk.entity;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 
 
 /**
@@ -52,7 +53,6 @@ public class DingTalkProperties {
     /**
      * 标题描述备注
      * */
-    @Deprecated
     private String remarks;
 
     /**
@@ -60,4 +60,20 @@ public class DingTalkProperties {
      * */
     private String projectId;
 
+
+    /**
+     * 签名秘钥-选填。 需要验签时必填
+     */
+    private String secret;
+
+
+    /**
+     * 是否开启异步处理, 默认： false
+     */
+    private boolean async = false;
+
+    @DeprecatedConfigurationProperty(reason = "no longer in use")
+    public String getRemarks() {
+        return remarks;
+    }
 }

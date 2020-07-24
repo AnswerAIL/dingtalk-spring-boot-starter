@@ -3,4 +3,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.jaemon.dingtalk.config.DingTalkConfiguration,\
 com.jaemon.dingtalk.config.OkHttpConfiguration,\
 com.jaemon.dingtalk.config.NoticeConfig,\
-com.jaemon.dingtalk.config.BeanConfiguration
+com.jaemon.dingtalk.config.BeanConfiguration,\
+com.jaemon.dingtalk.config.DkThreadPoolConfig
