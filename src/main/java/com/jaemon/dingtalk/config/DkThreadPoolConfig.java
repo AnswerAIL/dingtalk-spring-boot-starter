@@ -38,7 +38,6 @@ public class DkThreadPoolConfig {
     @Bean(name = DINGTALK_EXECUTOR)
     public Executor dingTalkExecutor(DkThreadPoolProperties threadPoolProperties) {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setThreadNamePrefix(threadPoolProperties.getThreadNamePrefix());
         // 核心线程数
         executor.setCorePoolSize(threadPoolProperties.getCoreSize());
         // 最大线程数

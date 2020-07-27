@@ -218,5 +218,33 @@ spring:
 
 &nbsp;
 
+#### 自定义线程池(可选)
+```java
+    @Configuration
+    public class MyConfiguration {
+        @Bean
+        public Executor dingTalkExecutor() {
+            ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+            // ...
+            return executor;
+        }
+    }
+```
+
+&nbsp;
+
+#### 自定义http客户端(可选)
+```java
+    @Configuration
+    public class MyConfiguration {
+        @Bean
+        public OkHttpClient okHttpClient() {
+            // ...
+        }
+    }
+```
+
+&nbsp;
+
 ## References
  - [https://blog.csdn.net/u010979642/article/details/107566714](https://blog.csdn.net/u010979642/article/details/107566714)
