@@ -75,3 +75,4 @@
  - [发布jar包到Maven中央仓库](https://blog.csdn.net/dawei0523/article/details/84918820)
  - [钉钉开放平台开发手册](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h)
  - [Java上传本地jar包到maven中央仓库的坑逼经历](https://blog.csdn.net/pdsu161530247/article/details/105429597)
+ - [Spring Factories](https://blog.csdn.net/u010979642/article/details/107642130)

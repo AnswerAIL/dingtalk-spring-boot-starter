@@ -6,11 +6,12 @@
  * <a>https://github.com/AnswerAIL/</a>
  *
  */
-package com.jaemon.dingtalk.entity;
+package com.jaemon.dingtalk.entity.message;
 
-import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -21,14 +22,12 @@ import java.util.List;
  * @version 1.0
  */
 @Data
-public class Message {
-    /**
-     * 消息类型，此时固定为：text
-     * */
-    private String msgtype = MsgTypeEnum.TEXT.type();
+@EqualsAndHashCode(callSuper = true)
+public class Message extends MsgType {
     private At at;
 
     @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class At {
         /**

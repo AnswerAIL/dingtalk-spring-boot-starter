@@ -6,11 +6,13 @@
  * <a>https://github.com/AnswerAIL/</a>
  *
  */
-package com.jaemon.dingtalk.entity;
+package com.jaemon.dingtalk.entity.message;
 
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Text 消息格式实体
@@ -19,6 +21,7 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class TextReq extends Message {
 
     /**
@@ -32,6 +35,7 @@ public class TextReq extends Message {
     }
 
     @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Text {
         private String content;

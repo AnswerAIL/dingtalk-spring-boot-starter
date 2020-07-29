@@ -9,9 +9,10 @@
 package com.jaemon.dingtalk.entity.enums;
 
 import com.jaemon.dingtalk.entity.DingTalkProperties;
-import com.jaemon.dingtalk.entity.MarkDownReq;
-import com.jaemon.dingtalk.entity.Message;
-import com.jaemon.dingtalk.entity.TextReq;
+import com.jaemon.dingtalk.entity.message.MarkDownReq;
+import com.jaemon.dingtalk.entity.message.Message;
+import com.jaemon.dingtalk.entity.message.TextReq;
+import com.jaemon.dingtalk.exception.MsgTypeException;
 import com.jaemon.dingtalk.support.CustomMessage;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public enum MsgTypeEnum {
             return textReq;
         }
     },
+
     MARKDOWN("markdown") {
         @Override
         public Message message(
@@ -52,7 +54,11 @@ public enum MsgTypeEnum {
             MarkDownReq markDownReq = new MarkDownReq(new MarkDownReq.MarkDown(subTitle, text));
             return markDownReq;
         }
-    };
+    },
+
+    ACTIONCARD("actionCard"),
+
+    FEEDCARD("feedCard");
 
 
     /**
@@ -73,13 +79,15 @@ public enum MsgTypeEnum {
      * @return
      *              消息实体
      */
-    public abstract Message message(
+    public Message message(
             CustomMessage customMessage,
             String keyword,
             String subTitle,
             String content,
             DingTalkProperties dingTalkProperties,
-            List<String> phones);
+            List<String> phones) {
+        throw new MsgTypeException("暂不支持" + this.type + "类型");
+    };
 
     private String type;
 

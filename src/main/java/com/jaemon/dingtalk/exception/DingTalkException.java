@@ -8,8 +8,8 @@
  */
 package com.jaemon.dingtalk.exception;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.jaemon.dingtalk.entity.enums.Pairs;
+import lombok.Getter;
 
 /**
  * 异常类
@@ -17,15 +17,18 @@ import lombok.EqualsAndHashCode;
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
 public class DingTalkException extends RuntimeException {
+    @Getter
+    private Pairs pairs;
 
-    public DingTalkException(String msg) {
+
+    public DingTalkException(String msg, Pairs pairs) {
         super(msg);
+        this.pairs = pairs;
     }
 
-    public DingTalkException(Throwable cause) {
+    public DingTalkException(Throwable cause, Pairs pairs) {
         super(cause);
+        this.pairs = pairs;
     }
 }

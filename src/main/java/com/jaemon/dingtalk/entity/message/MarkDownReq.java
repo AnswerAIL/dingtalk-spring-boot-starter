@@ -6,12 +6,13 @@
  * <a>https://github.com/AnswerAIL/</a>
  *
  */
-package com.jaemon.dingtalk.entity;
+package com.jaemon.dingtalk.entity.message;
 
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Markdown 消息格式实体
@@ -20,9 +21,12 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
 public class MarkDownReq extends Message {
 
+    /**
+     * {@link MarkDown}
+     */
     private MarkDown markdown;
 
     public MarkDownReq(MarkDown markdown) {
@@ -31,6 +35,7 @@ public class MarkDownReq extends Message {
     }
 
     @Data
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class MarkDown {
         /**

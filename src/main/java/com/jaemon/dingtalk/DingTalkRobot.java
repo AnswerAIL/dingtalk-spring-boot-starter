@@ -14,7 +14,12 @@ import com.jaemon.dingtalk.config.HttpClient;
 import com.jaemon.dingtalk.entity.*;
 import com.jaemon.dingtalk.entity.enums.ContentTypeEnum;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
+import com.jaemon.dingtalk.entity.message.Message;
+import com.jaemon.dingtalk.entity.message.MsgType;
+import com.jaemon.dingtalk.exception.AsyncCallException;
 import com.jaemon.dingtalk.exception.DingTalkException;
+import com.jaemon.dingtalk.exception.MsgTypeException;
+import com.jaemon.dingtalk.exception.SendMsgException;
 import com.jaemon.dingtalk.sign.DkSignAlgorithm;
 import com.jaemon.dingtalk.support.CustomMessage;
 import com.jaemon.dingtalk.support.DkCallable;
@@ -67,7 +72,7 @@ public class DingTalkRobot {
      * 发送预警消息到钉钉
      *
      * @param msgType
-     *              消息类型{@link MsgTypeEnum}
+     *              消息类型{@link MsgTypeEnum}, 仅支持{@link MsgTypeEnum#TEXT} AND {@link MsgTypeEnum#MARKDOWN}
      * @param keyword
      *              关键词(方便定位日志)
      * @param subTitle
@@ -78,7 +83,18 @@ public class DingTalkRobot {
      *              响应报文
      * */
     public String send(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
-        CustomMessage customMessage = msgType == MsgTypeEnum.TEXT ? textMessage : markDownMessage;
+        CustomMessage customMessage;
+        try {
+            customMessage = checkMsgType(msgType);
+        } catch (MsgTypeException ex) {
+            DkExCallable dkExCallable = DkExCallable.builder()
+                    .dingTalkProperties(dingTalkProperties)
+                    .keyword(keyword)
+                    .message(content)
+                    .ex(ex).build();
+            notice.callback(dkExCallable);
+            return null;
+        }
         Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, null);
 
         return send(keyword, message);
@@ -89,7 +105,7 @@ public class DingTalkRobot {
      * 发送预警消息到钉钉-消息指定艾特人电话信息
      *
      * @param msgType
-     *              消息类型{@link MsgTypeEnum}
+     *              消息类型{@link MsgTypeEnum}, 仅支持{@link MsgTypeEnum#TEXT} AND {@link MsgTypeEnum#MARKDOWN}
      * @param keyword
      *              关键词(方便定位日志)
      * @param subTitle
@@ -102,8 +118,19 @@ public class DingTalkRobot {
      *              响应报文
      * */
     public String send(MsgTypeEnum msgType, String keyword, String subTitle, String content, List<String> phones) {
-        CustomMessage customMessage = msgType == MsgTypeEnum.TEXT ? textMessage : markDownMessage;
-        Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, phones);
+        CustomMessage customMessage;
+        try {
+            customMessage = checkMsgType(msgType);
+        } catch (MsgTypeException ex) {
+            DkExCallable dkExCallable = DkExCallable.builder()
+                    .dingTalkProperties(dingTalkProperties)
+                    .keyword(keyword)
+                    .message(content)
+                    .ex(ex).build();
+            notice.callback(dkExCallable);
+            return null;
+        }
+        Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, phones);;
         message.setAt(new Message.At(phones));
 
         return send(keyword, message);
@@ -118,7 +145,7 @@ public class DingTalkRobot {
      * </pre>
      *
      * @param msgType
-     *              消息类型{@link MsgTypeEnum}
+     *              消息类型{@link MsgTypeEnum}, 仅支持{@link MsgTypeEnum#TEXT} AND {@link MsgTypeEnum#MARKDOWN}
      * @param keyword
      *              关键词(方便定位日志)
      * @param subTitle
@@ -129,7 +156,18 @@ public class DingTalkRobot {
      *              响应报文
      * */
     public String sendAll(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
-        CustomMessage customMessage = msgType == MsgTypeEnum.TEXT ? textMessage : markDownMessage;
+        CustomMessage customMessage;
+        try {
+            customMessage = checkMsgType(msgType);
+        } catch (MsgTypeException ex) {
+            DkExCallable dkExCallable = DkExCallable.builder()
+                    .dingTalkProperties(dingTalkProperties)
+                    .keyword(keyword)
+                    .message(content)
+                    .ex(ex).build();
+            notice.callback(dkExCallable);
+            return null;
+        }
         Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, null);
         message.setAt(new Message.At(true));
 
@@ -152,6 +190,28 @@ public class DingTalkRobot {
      *              响应报文
      */
     public String send(String keyword, Message message) {
+        return send(keyword, JSON.toJSONString(message));
+    }
+
+
+
+    /**
+     * 发送完全自定义消息-对象方式
+     *
+     * <blockquote>
+     *     具体报文体格式参见： <a>https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/e9d991e2</a>
+     * </blockquote>
+     *
+     * @param keyword
+     *              关键词(方便定位日志)
+     * @param message
+     *              消息内容
+     * @param <T>
+     *              T extends {@link MsgType}
+     * @return
+     *              响应报文
+     */
+    public <T extends MsgType> String send(String keyword, T message) {
         return send(keyword, JSON.toJSONString(message));
     }
 
@@ -197,7 +257,7 @@ public class DingTalkRobot {
                         String result = httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
                         dkCallable.execute(dkid, result);
                     } catch (Exception e) {
-                        DingTalkException ex = new DingTalkException(e);
+                        AsyncCallException ex = new AsyncCallException(e);
                         DkExCallable dkExCallable = DkExCallable.builder()
                                 .dkid(dkid)
                                 .dingTalkProperties(dingTalkProperties)
@@ -211,7 +271,7 @@ public class DingTalkRobot {
             }
             return httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
         } catch (Exception e) {
-            DingTalkException ex = new DingTalkException(e);
+            SendMsgException ex = new SendMsgException(e);
             DkExCallable dkExCallable = DkExCallable.builder()
                     .dkid(dkid)
                     .dingTalkProperties(dingTalkProperties)
@@ -221,6 +281,22 @@ public class DingTalkRobot {
             notice.callback(dkExCallable);
         }
         return null;
+    }
+
+    /**
+     * 消息类型校验
+     *
+     * @param msgType
+     *              消息类型
+     * @return
+     *              消息生成器
+     */
+    private CustomMessage checkMsgType(MsgTypeEnum msgType) {
+        if (msgType != MsgTypeEnum.TEXT && msgType != MsgTypeEnum.MARKDOWN) {
+            throw new MsgTypeException("暂不支持" + msgType.type() + "类型");
+        }
+
+        return msgType == MsgTypeEnum.TEXT ? textMessage : markDownMessage;
     }
 
 }

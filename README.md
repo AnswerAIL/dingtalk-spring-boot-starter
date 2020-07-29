@@ -11,8 +11,8 @@
 | ------------- | ---------- | ------------------------------------------ |
 | [1.0.1-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.1) | 2020-07-23 | 初始化版本<br /> + 支持通知消息体自定义<br />+ 支持异常回调 |
 | [1.0.2-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.2) | 2020-07-24 | + 支持markdown消息体 |
-| 1.0.3-RELEASE | 2020-07-25 | + 支持验签<br /> + 支持异步处理<br /> + 支持异步回调函数 |
-
+| [1.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.3) | 2020-07-25 | + 支持验签<br /> + 支持异步处理<br /> + 支持异步回调函数 |
+| 1.0.4-RELEASE | 2020-XX-XX | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型 |
 
 
 &nbsp;
@@ -41,6 +41,7 @@
  - 1.0.1-RELEASE
  - 1.0.2-RELEASE
  - 1.0.3-RELEASE
+ - 1.0.4-RELEASE
 
 ***
 &nbsp;
@@ -49,9 +50,10 @@
 ```yaml
 spring:
   dingtalk:
+    # 仅支持text和markdown消息类型
     project-id: oms
     token-id: c60d4824e0ba4a30544e81212256789331d68b0085ed1a5b2279715741355fbc
-    # 自定义关键字
+    # 自定义关键字, 仅支持text和markdown消息类型
     title: 消息推送
     # 签名秘钥
     secret: APC3eb471b2761851d6ddd1abcndf2d97be21447d8818f1231c5ed61234as52d1w0
@@ -71,6 +73,7 @@ spring:
 &nbsp;
 
 ### SpringBoot中使用
+#### 预警消息推送
 ```java
     public class Demo {
         @Autowired
@@ -92,6 +95,69 @@ spring:
     }
 ```
 > markdown消息体暂时不支持@全部
+
+&nbsp;
+
+#### 其他格式消息类型
+```java
+    public class Demo {
+        @Autowired
+        private DingTalkRobot dingTalkRobot;
+
+        // 整体跳转ActionCard类型
+        public void singleActionCardReq() {
+            String keyword = "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM";
+    
+            SingleActionCardReq actionCardReq = new SingleActionCardReq();
+            SingleActionCardReq.SingleActionCard actionCard = new SingleActionCardReq.SingleActionCard();
+            actionCardReq.setActionCard(actionCard);
+            actionCard.setTitle("乔布斯 20 年前想打造一间苹果咖啡厅，而它正是 Apple Store 的前身");
+            actionCard.setText("\"![screenshot](https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png) \n" +
+                    " ### 乔布斯 20 年前想打造的苹果咖啡厅 \n" +
+                    " Apple Store 的设计正从原来满满的科技感走向生活化，而其生活化的走向其实可以追溯到 20 年前苹果一个建立咖啡馆的计划");
+            actionCard.setBtnOrientation("0");
+            actionCard.setSingleTitle("阅读全文");
+            actionCard.setSingleURL("https://github.com/AnswerAIL");
+    
+            dingTalkRobot.send(keyword, actionCardReq);
+        }
+
+        // 独立跳转ActionCard类型
+        public void actionCardReq() {
+            String keyword = "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM";
+    
+            ActionCardReq actionCardReq = new ActionCardReq();
+            ActionCardReq.ActionCard actionCard = new ActionCardReq.ActionCard();
+            actionCardReq.setActionCard(actionCard);
+            actionCard.setTitle("乔布斯 20 年前想打造一间苹果咖啡厅，而它正是 Apple Store 的前身");
+            actionCard.setText("![screenshot](https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png) \n" +
+                    " ### 乔布斯 20 年前想打造的苹果咖啡厅 \n" +
+                    " Apple Store 的设计正从原来满满的科技感走向生活化，而其生活化的走向其实可以追溯到 20 年前苹果一个建立咖啡馆的计划");
+            actionCard.setBtnOrientation("0");
+            List<ActionCardReq.ActionCard.Button> buttons = Lists.newArrayList();
+            actionCard.setBtns(buttons);
+            buttons.add(new ActionCardReq.ActionCard.Button("内容不错", "https://github.com/AnswerAIL"));
+            buttons.add(new ActionCardReq.ActionCard.Button("不感兴趣", "https://github.com/AnswerAIL"));
+    
+            dingTalkRobot.send(keyword, actionCardReq);
+        }
+    
+        // FeedCard类型
+        public void feedCardReq() {
+            String keyword = "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM";
+    
+            FeedCardReq feedCardReq = new FeedCardReq();
+            FeedCardReq.FeedCard feedCard = new FeedCardReq.FeedCard();
+            feedCardReq.setFeedCard(feedCard);
+            List<FeedCardReq.FeedCard.Link> links = Lists.newArrayList();
+            feedCard.setLinks(links);
+            links.add(new FeedCardReq.FeedCard.Link("时代的火车向前开1", "https://github.com/AnswerAIL", "https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png"));
+            links.add(new FeedCardReq.FeedCard.Link("时代的火车向前开2", "https://github.com/AnswerAIL", "https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png"));
+    
+            dingTalkRobot.send(keyword, feedCardReq);
+        }
+    }
+```
 
 &nbsp;
 
@@ -121,6 +187,7 @@ spring:
         }
     }
 ```
+> 仅支持text和markdown消息类型
 
 &nbsp;
 

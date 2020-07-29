@@ -34,6 +34,7 @@ public class HttpClient {
      *
      * @param url 请求地址
      * @return 响应报文
+     * @throws Exception ex
      * */
     public String doGet(String url) throws Exception {
         Request.Builder builder = new Request.Builder();
@@ -50,6 +51,7 @@ public class HttpClient {
      * @param url 请求地址
      * @param headers 请求头
      * @return 响应报文
+     * @throws Exception ex
      * */
     public String doGet(String url, RequestHeader headers) throws Exception {
         Request.Builder builder = new Request.Builder();
@@ -64,6 +66,7 @@ public class HttpClient {
      * @param url 请求地址
      * @param body 请求体(k-v)
      * @return 响应报文
+     * @throws Exception ex
      * */
     public String doPost(String url, RequestHeader body) throws Exception {
         return doPost(url, null, body);
@@ -79,6 +82,7 @@ public class HttpClient {
      * @param headers 请求头
      * @param body 请求体(k-v)
      * @return 响应报文
+     * @throws Exception ex
      * */
     public String doPost(String url, RequestHeader headers, RequestHeader body) throws Exception {
         Request.Builder builder = new Request.Builder();
@@ -109,6 +113,7 @@ public class HttpClient {
      *          {@link com.jaemon.dingtalk.entity.enums.ContentTypeEnum#JSON} or {@link com.jaemon.dingtalk.entity.enums.ContentTypeEnum#XML}
      *      </blockquote>
      * @return 响应报文
+     * @throws Exception ex
      * */
     public String doPost(String url, String data, MediaType contentType) throws Exception {
         return doPost(url, null, data, contentType);
@@ -134,6 +139,7 @@ public class HttpClient {
      *          {@link com.jaemon.dingtalk.entity.enums.ContentTypeEnum#JSON} or {@link com.jaemon.dingtalk.entity.enums.ContentTypeEnum#XML}
      *      </blockquote>
      * @return 响应报文
+     * @throws Exception ex
      * */
     public String doPost(String url, RequestHeader headers, String data, MediaType contentType) throws Exception {
         Request.Builder builder = new Request.Builder();
