@@ -5,3 +5,10 @@ com.jaemon.dingtalk.config.OkHttpConfiguration,\
 com.jaemon.dingtalk.config.NoticeConfig,\
 com.jaemon.dingtalk.config.BeanConfiguration,\
 com.jaemon.dingtalk.config.DkThreadPoolConfig
+
+# Application Listeners
+org.springframework.context.ApplicationListener=\
+com.jaemon.dingtalk.listeners.StartEventListener,\
+com.jaemon.dingtalk.listeners.SuccessEventListener,\
+com.jaemon.dingtalk.listeners.FailedEventListener,\
+com.jaemon.dingtalk.listeners.ExitEventListener

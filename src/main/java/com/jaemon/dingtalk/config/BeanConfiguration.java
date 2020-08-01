@@ -89,4 +89,15 @@ public class BeanConfiguration {
     public DkCallable dkCallable() {
         return new DefaultDkCallable();
     }
+
+    /**
+     * notification(default)
+     *
+     * @return notification instance
+     */
+    @Bean
+    @ConditionalOnMissingBean(Notification.class)
+    public Notification notification() {
+        return new DefaultApplicationEventNotification();
+    }
 }

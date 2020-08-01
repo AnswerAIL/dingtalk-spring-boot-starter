@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * 移除处理条件类
+ * 异步处理条件类
  *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
@@ -21,7 +21,8 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 public class AsyncCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        String enabled = context.getEnvironment().getProperty("spring.dingtalk.enabled");
         String async = context.getEnvironment().getProperty("spring.dingtalk.async");
-        return "true".equals(async);
+        return "true".equals(enabled) && "true".equals(async);
     }
 }

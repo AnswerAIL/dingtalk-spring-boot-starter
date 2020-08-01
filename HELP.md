@@ -62,7 +62,6 @@
  - [搜索地址： https://search.maven.org/](https://search.maven.org/)
  - [中央仓库地址： http://mvnrepository.com/](http://mvnrepository.com/)
  - [我发布的构件地址： http://mvnrepository.com/artifact/com.github.XXX](http://mvnrepository.com/artifact/com.github.answerail)
- - [dingtalk issue OSSRH-59361](https://issues.sonatype.org/browse/OSSRH-59361)
  - [sonatype 仓库](https://oss.sonatype.org/#stagingRepositories)
    - Staging Repositories 中选择发布的临时包点 Close， 如果校验通过, 再选中该包， 点击 Release 按钮， 即发布到Release版本中
  
@@ -71,6 +70,7 @@
 ## References
  - [提交本地jar到Maven中央仓库(Windows)的那些小事](https://blog.csdn.net/u010651369/article/details/79970726)
  - [Maven(6) Java上传本地jar包到maven中央仓库](https://blog.csdn.net/qq_38225558/article/details/94381467)
+ - [sonatype issue](https://issues.sonatype.org/browse/OSSRH-59361)
  - [把自己的项目发布到maven中心仓库----论姿势的正确性](https://blog.csdn.net/qq_28802119/article/details/85256852)
  - [发布jar包到Maven中央仓库](https://blog.csdn.net/dawei0523/article/details/84918820)
  - [钉钉开放平台开发手册](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h)

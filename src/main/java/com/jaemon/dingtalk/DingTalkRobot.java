@@ -10,31 +10,20 @@ package com.jaemon.dingtalk;
 
 
 import com.alibaba.fastjson.JSON;
-import com.jaemon.dingtalk.config.HttpClient;
 import com.jaemon.dingtalk.entity.*;
 import com.jaemon.dingtalk.entity.enums.ContentTypeEnum;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
+import com.jaemon.dingtalk.entity.enums.ResultCode;
 import com.jaemon.dingtalk.entity.message.Message;
 import com.jaemon.dingtalk.entity.message.MsgType;
 import com.jaemon.dingtalk.exception.AsyncCallException;
-import com.jaemon.dingtalk.exception.DingTalkException;
 import com.jaemon.dingtalk.exception.MsgTypeException;
 import com.jaemon.dingtalk.exception.SendMsgException;
-import com.jaemon.dingtalk.sign.DkSignAlgorithm;
 import com.jaemon.dingtalk.support.CustomMessage;
-import com.jaemon.dingtalk.support.DkCallable;
-import com.jaemon.dingtalk.support.DkIdGenerator;
-import com.jaemon.dingtalk.support.Notice;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-
-import static com.jaemon.dingtalk.constant.DkConstant.MARKDOWN_MESSAGE;
-import static com.jaemon.dingtalk.constant.DkConstant.TEXT_MESSAGE;
 
 /**
  * 钉钉机器人消息推送工具类
@@ -44,28 +33,12 @@ import static com.jaemon.dingtalk.constant.DkConstant.TEXT_MESSAGE;
  */
 public class DingTalkRobot {
 
-    @Autowired
-    private HttpClient httpClient;
-    @Autowired
-    private Notice notice;
-    @Autowired
-    @Qualifier(TEXT_MESSAGE)
-    private CustomMessage textMessage;
-    @Autowired
-    @Qualifier(MARKDOWN_MESSAGE)
-    private CustomMessage markDownMessage;
     private DingTalkProperties dingTalkProperties;
-    @Autowired
-    private DkSignAlgorithm dkSignAlgorithm;
-    @Autowired
-    private DkIdGenerator dkIdGenerator;
-    @Autowired
-    private Executor dingTalkExecutor;
-    @Autowired
-    private DkCallable dkCallable;
+    private DingTalkManagerBuilder dingTalkManagerBuilder;
 
-    public DingTalkRobot(DingTalkProperties dingTalkProperties) {
+    public DingTalkRobot(DingTalkProperties dingTalkProperties, DingTalkManagerBuilder dingTalkManagerBuilder) {
         this.dingTalkProperties = dingTalkProperties;
+        this.dingTalkManagerBuilder = dingTalkManagerBuilder;
     }
 
     /**
@@ -82,7 +55,7 @@ public class DingTalkRobot {
      * @return
      *              响应报文
      * */
-    public String send(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
+    public DingTalkResult send(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
         CustomMessage customMessage;
         try {
             customMessage = checkMsgType(msgType);
@@ -92,8 +65,8 @@ public class DingTalkRobot {
                     .keyword(keyword)
                     .message(content)
                     .ex(ex).build();
-            notice.callback(dkExCallable);
-            return null;
+            dingTalkManagerBuilder.notice.callback(dkExCallable);
+            return DingTalkResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
         }
         Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, null);
 
@@ -117,7 +90,7 @@ public class DingTalkRobot {
      * @return
      *              响应报文
      * */
-    public String send(MsgTypeEnum msgType, String keyword, String subTitle, String content, List<String> phones) {
+    public DingTalkResult send(MsgTypeEnum msgType, String keyword, String subTitle, String content, List<String> phones) {
         CustomMessage customMessage;
         try {
             customMessage = checkMsgType(msgType);
@@ -127,8 +100,8 @@ public class DingTalkRobot {
                     .keyword(keyword)
                     .message(content)
                     .ex(ex).build();
-            notice.callback(dkExCallable);
-            return null;
+            dingTalkManagerBuilder.notice.callback(dkExCallable);
+            return DingTalkResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
         }
         Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, phones);;
         message.setAt(new Message.At(phones));
@@ -155,7 +128,7 @@ public class DingTalkRobot {
      * @return
      *              响应报文
      * */
-    public String sendAll(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
+    public DingTalkResult sendAll(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
         CustomMessage customMessage;
         try {
             customMessage = checkMsgType(msgType);
@@ -165,8 +138,8 @@ public class DingTalkRobot {
                     .keyword(keyword)
                     .message(content)
                     .ex(ex).build();
-            notice.callback(dkExCallable);
-            return null;
+            dingTalkManagerBuilder.notice.callback(dkExCallable);
+            return DingTalkResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
         }
         Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, null);
         message.setAt(new Message.At(true));
@@ -189,7 +162,7 @@ public class DingTalkRobot {
      * @return
      *              响应报文
      */
-    public String send(String keyword, Message message) {
+    public DingTalkResult send(String keyword, Message message) {
         return send(keyword, JSON.toJSONString(message));
     }
 
@@ -211,7 +184,7 @@ public class DingTalkRobot {
      * @return
      *              响应报文
      */
-    public <T extends MsgType> String send(String keyword, T message) {
+    public <T extends MsgType> DingTalkResult send(String keyword, T message) {
         return send(keyword, JSON.toJSONString(message));
     }
 
@@ -229,8 +202,11 @@ public class DingTalkRobot {
      * @return
      *              响应报文
      */
-    public String send(String keyword, String message) {
-        String dkid = dkIdGenerator.dkid();
+    public DingTalkResult send(String keyword, String message) {
+        String dkid = dingTalkManagerBuilder.dkIdGenerator.dkid();
+        if (!dingTalkProperties.isEnabled()) {
+            return DingTalkResult.failed(ResultCode.DINGTALK_DISABLED, dkid);
+        }
 
         try {
             String tokenId = dingTalkProperties.getTokenId();
@@ -240,7 +216,7 @@ public class DingTalkRobot {
             String secret = dingTalkProperties.getSecret();
             // 处理签名问题
             if (!StringUtils.isEmpty(secret)) {
-                SignBase sign = dkSignAlgorithm.sign(secret.trim());
+                SignBase sign = dingTalkManagerBuilder.dkSignAlgorithm.sign(secret.trim());
                 webhook.append(sign.transfer());
             }
 
@@ -252,10 +228,10 @@ public class DingTalkRobot {
 
             // 异步处理, 直接返回标识id
             if (dingTalkProperties.isAsync()) {
-                dingTalkExecutor.execute(() -> {
+                dingTalkManagerBuilder.dingTalkExecutor.execute(() -> {
                     try {
-                        String result = httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
-                        dkCallable.execute(dkid, result);
+                        String result = dingTalkManagerBuilder.httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
+                        dingTalkManagerBuilder.dkCallable.execute(dkid, result);
                     } catch (Exception e) {
                         AsyncCallException ex = new AsyncCallException(e);
                         DkExCallable dkExCallable = DkExCallable.builder()
@@ -264,12 +240,13 @@ public class DingTalkRobot {
                                 .keyword(keyword)
                                 .message(message)
                                 .ex(ex).build();
-                        notice.callback(dkExCallable);
+                        dingTalkManagerBuilder.notice.callback(dkExCallable);
                     }
                 });
-                return dkid;
+                return DingTalkResult.success(dkid, dkid);
             }
-            return httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
+            String response = dingTalkManagerBuilder.httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
+            return DingTalkResult.success(dkid, response);
         } catch (Exception e) {
             SendMsgException ex = new SendMsgException(e);
             DkExCallable dkExCallable = DkExCallable.builder()
@@ -278,9 +255,9 @@ public class DingTalkRobot {
                     .keyword(keyword)
                     .message(message)
                     .ex(ex).build();
-            notice.callback(dkExCallable);
+            dingTalkManagerBuilder.notice.callback(dkExCallable);
+            return DingTalkResult.failed(ResultCode.SEND_MESSAGE_FAILED, dkid);
         }
-        return null;
     }
 
     /**
@@ -296,7 +273,7 @@ public class DingTalkRobot {
             throw new MsgTypeException("暂不支持" + msgType.type() + "类型");
         }
 
-        return msgType == MsgTypeEnum.TEXT ? textMessage : markDownMessage;
+        return msgType == MsgTypeEnum.TEXT ? dingTalkManagerBuilder.textMessage : dingTalkManagerBuilder.markDownMessage;
     }
 
 }

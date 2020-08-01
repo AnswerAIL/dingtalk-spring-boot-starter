@@ -18,6 +18,7 @@ public enum ExceptionEnum implements Pairs<Integer, String> {
     SEND_MSG(1000, "发送消息异常"),
     MSG_TYPE_CHECK(2000, "消息类型异常"),
     ASYNC_CALL(3000, "异步调用异常"),
+    CONFIG_ERROR(4000, "配置异常"),
 
     UNKNOWN(9999, "未知异常")
     ;

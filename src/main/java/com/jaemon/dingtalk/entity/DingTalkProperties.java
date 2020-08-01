@@ -28,6 +28,11 @@ public class DingTalkProperties {
     private static final String ROBOT_URL = "https://oapi.dingtalk.com/robot/send?access_token";
 
     /**
+     * 是否启用DingTalk, 默认true
+     */
+    private boolean enabled = true;
+
+    /**
      * 请求地址前缀-选填，默认： https://oapi.dingtalk.com/robot/send?access_token
      * */
     private String robotUrl = ROBOT_URL;
@@ -72,8 +77,29 @@ public class DingTalkProperties {
      */
     private boolean async = false;
 
+    /**
+     * 应用程序状态监控
+     */
+    private MonitorStatus monitor = new MonitorStatus();
+
     @DeprecatedConfigurationProperty(reason = "no longer in use")
     public String getRemarks() {
         return remarks;
+    }
+
+    @Data
+    public static class MonitorStatus {
+        /**
+         * 应用启动成功是否通知
+         */
+        private boolean success = false;
+        /**
+         * 应用启动失败是否通知
+         */
+        private boolean falied = false;
+        /**
+         * 应用退出是否通知
+         */
+        private boolean exit = false;
     }
 }

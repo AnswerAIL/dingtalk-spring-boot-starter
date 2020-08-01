@@ -12,7 +12,7 @@
 | [1.0.1-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.1) | 2020-07-23 | 初始化版本<br /> + 支持通知消息体自定义<br />+ 支持异常回调 |
 | [1.0.2-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.2) | 2020-07-24 | + 支持markdown消息体 |
 | [1.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.3) | 2020-07-25 | + 支持验签<br /> + 支持异步处理<br /> + 支持异步回调函数 |
-| 1.0.4-RELEASE | 2020-XX-XX | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型 |
+| 1.0.4-RELEASE | 2020-08-01 | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型<br /> + 支持服务状态监控消息通知<br /> + 支持服务状态监控消息通知<br /> + 支持全局开关DingTalk<br /> + 支持个性化整体配置 |
 
 
 &nbsp;
@@ -24,9 +24,9 @@
     <dependency>
         <groupId>com.github.answerail</groupId>
         <artifactId>dingtalk-spring-boot-starter</artifactId>
-        <version>1.0.3-RELEASE</version>
+        <version>1.0.4-RELEASE</version>
         <scope>system</scope>
-        <systemPath>${project.basedir}/lib/dingtalk-spring-boot-starter-1.0.3-RELEASE.jar</systemPath>
+        <systemPath>${project.basedir}/lib/dingtalk-spring-boot-starter-1.0.4-RELEASE.jar</systemPath>
     </dependency>
     
 
@@ -50,6 +50,8 @@
 ```yaml
 spring:
   dingtalk:
+    # dingtalk功能开关
+    enabled: true
     # 仅支持text和markdown消息类型
     project-id: oms
     token-id: c60d4824e0ba4a30544e81212256789331d68b0085ed1a5b2279715741355fbc
@@ -59,16 +61,23 @@ spring:
     secret: APC3eb471b2761851d6ddd1abcndf2d97be21447d8818f1231c5ed61234as52d1w0
     # 是否异步执行
     async: true
+    # 服务状态监控通知开关
+    monitor:
+      success: true
+      exit: false
+      falied: false
     # 异步处理线程池参数配置, 可选
 #   executor-pool:
     # http客户端配置(优先使用项目中已有的), 可选
 #   ok-http:
 ```
+ - enabled： 选填
  - token-id： 必填， [获取方式](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/26eaddd5)
  - project-id： 项目名称， 必填
  - title： 选填。 默认值(通知)
  - secret： 选填， 需要签名时必填， [获取方式](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/26eaddd5)
- - async： 选填， true | false
+ - async： 选填， true | false(默认)
+ - monitor： 选填，默认值(false)
 
 &nbsp;
 
@@ -161,7 +170,24 @@ spring:
 
 &nbsp;
 
-### 个性化配置
+***
+### 个性化整体配置
+***
+```java
+    @Configuration
+    public class MyConfiguration extends DingTalkConfigurerAdapter {
+        @Override
+        public void configure(DingTalkManagerBuilder config) throws Exception {
+            // ...
+        }
+    }
+```
+
+&nbsp;
+
+***
+### 个性化独立配置
+***
 #### 自定义消息体
 ```java
     @Configuration
@@ -313,5 +339,91 @@ spring:
 
 &nbsp;
 
-## References
- - [https://blog.csdn.net/u010979642/article/details/107566714](https://blog.csdn.net/u010979642/article/details/107566714)
+***
+### 自定义服务状态通知消息体
+***
+**服务状态通知需艾特所有人**
+```java
+    @Configuration
+    public class MyConfiguration {
+        @Bean
+        public Notification notification() {
+            return new DefaultApplicationEventNotification() {
+                @Override
+                public MsgType message(String text) {
+                    TextReq message = (TextReq) super.message(text);
+                    Message.At at = new Message.At();
+                    at.setIsAtAll(true);
+                    message.setAt(at);
+                    return message;
+                }
+            };
+        }
+    }
+    
+```
+&nbsp;
+
+**服务状态通知只需启动失败时艾特所有人，其他情况不艾特**
+```java
+    @Configuration
+    public class MyConfiguration {
+        @Bean
+        public Notification notification() {
+            return new DefaultApplicationEventNotification() {
+                @Override
+                public MsgType failed(ApplicationFailedEvent event, String projectId) {
+                    TextReq message = (TextReq) super.failed(event, projectId);
+                    Message.At at = new Message.At();
+                    at.setIsAtAll(true);
+                    message.setAt(at);
+                    return message;
+                }
+            };
+        }
+    }
+```
+
+&nbsp;
+
+**服务状态通知需自定义消息内容**
+```java
+    @Configuration
+    public class MyConfiguration {
+        @Bean
+        public Notification notification() {
+            return new Notification() {
+                @Override
+                public String successMessage(ApplicationReadyEvent event, String projectId) {
+                    String message = null;
+                    // TODO ...
+                    return message;
+                }
+    
+                @Override
+                public String failedMessage(ApplicationFailedEvent event, String projectId) {
+                    String message = null;
+                    // TODO ...
+                    return message;
+                }
+    
+                @Override
+                public String exitMessage(ContextClosedEvent event, String projectId) {
+                    String message = null;
+                    // TODO ...
+                    return message;
+                }
+            };
+        }    
+    }
+```
+
+***
+
+&nbsp;
+
+***
+> [有问题欢迎提Issue](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues)
+***
+
+&nbsp;
