@@ -20,41 +20,25 @@ import com.jaemon.dingtalk.exception.AsyncCallException;
 import com.jaemon.dingtalk.exception.MsgTypeException;
 import com.jaemon.dingtalk.exception.SendMsgException;
 import com.jaemon.dingtalk.support.CustomMessage;
+import com.jaemon.dingtalk.utils.ConfigTools;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 钉钉机器人消息推送工具类
+ * DingTalk Robot
  *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-public class DingTalkRobot {
-
-    private DingTalkProperties dingTalkProperties;
-    private DingTalkManagerBuilder dingTalkManagerBuilder;
+public class DingTalkRobot extends AbstractDingTalkSender {
 
     public DingTalkRobot(DingTalkProperties dingTalkProperties, DingTalkManagerBuilder dingTalkManagerBuilder) {
-        this.dingTalkProperties = dingTalkProperties;
-        this.dingTalkManagerBuilder = dingTalkManagerBuilder;
+        super(dingTalkProperties, dingTalkManagerBuilder);
     }
 
-    /**
-     * 发送预警消息到钉钉
-     *
-     * @param msgType
-     *              消息类型{@link MsgTypeEnum}, 仅支持{@link MsgTypeEnum#TEXT} AND {@link MsgTypeEnum#MARKDOWN}
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param subTitle
-     *              标题
-     * @param content
-     *              消息内容
-     * @return
-     *              响应报文
-     * */
+    @Override
     public DingTalkResult send(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
         CustomMessage customMessage;
         try {
@@ -74,22 +58,7 @@ public class DingTalkRobot {
     }
 
 
-    /**
-     * 发送预警消息到钉钉-消息指定艾特人电话信息
-     *
-     * @param msgType
-     *              消息类型{@link MsgTypeEnum}, 仅支持{@link MsgTypeEnum#TEXT} AND {@link MsgTypeEnum#MARKDOWN}
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param subTitle
-     *              副标题
-     * @param content
-     *              消息内容
-     * @param phones
-     *              艾特人电话集
-     * @return
-     *              响应报文
-     * */
+    @Override
     public DingTalkResult send(MsgTypeEnum msgType, String keyword, String subTitle, String content, List<String> phones) {
         CustomMessage customMessage;
         try {
@@ -110,24 +79,7 @@ public class DingTalkRobot {
     }
 
 
-    /**
-     * 发送预警消息到钉钉-艾特所有人
-     *
-     * <pre>
-     *     markdown不支持艾特全部
-     * </pre>
-     *
-     * @param msgType
-     *              消息类型{@link MsgTypeEnum}, 仅支持{@link MsgTypeEnum#TEXT} AND {@link MsgTypeEnum#MARKDOWN}
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param subTitle
-     *              副标题
-     * @param content
-     *              消息内容
-     * @return
-     *              响应报文
-     * */
+    @Override
     public DingTalkResult sendAll(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
         CustomMessage customMessage;
         try {
@@ -148,60 +100,19 @@ public class DingTalkRobot {
     }
 
 
-    /**
-     * 发送完全自定义消息-对象方式
-     *
-     * <blockquote>
-     *     具体报文体格式参见： <a>https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/e9d991e2</a>
-     * </blockquote>
-     *
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param message
-     *              消息内容
-     * @return
-     *              响应报文
-     */
+    @Override
     public DingTalkResult send(String keyword, Message message) {
         return send(keyword, JSON.toJSONString(message));
     }
 
 
 
-    /**
-     * 发送完全自定义消息-对象方式
-     *
-     * <blockquote>
-     *     具体报文体格式参见： <a>https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/e9d991e2</a>
-     * </blockquote>
-     *
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param message
-     *              消息内容
-     * @param <T>
-     *              T extends {@link MsgType}
-     * @return
-     *              响应报文
-     */
+    @Override
     public <T extends MsgType> DingTalkResult send(String keyword, T message) {
         return send(keyword, JSON.toJSONString(message));
     }
 
-    /**
-     * 发送完全自定义消息-json字符串方式
-     *
-     * <blockquote>
-     *     具体报文体格式参见： <a>https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/e9d991e2</a>
-     * </blockquote>
-     *
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param message
-     *              消息内容
-     * @return
-     *              响应报文
-     */
+    @Override
     public DingTalkResult send(String keyword, String message) {
         String dkid = dingTalkManagerBuilder.dkIdGenerator.dkid();
         if (!dingTalkProperties.isEnabled()) {
@@ -209,7 +120,12 @@ public class DingTalkRobot {
         }
 
         try {
-            String tokenId = dingTalkProperties.getTokenId();
+            String tokenId;
+            if (dingTalkProperties.isDecrypt()) {
+                tokenId = ConfigTools.decrypt(dingTalkProperties.getDecryptKey(), dingTalkProperties.getTokenId());
+            } else {
+                tokenId = dingTalkProperties.getTokenId();
+            }
             StringBuilder webhook = new StringBuilder();
             webhook.append(dingTalkProperties.getRobotUrl()).append("=").append(tokenId);
 
@@ -258,22 +174,6 @@ public class DingTalkRobot {
             dingTalkManagerBuilder.notice.callback(dkExCallable);
             return DingTalkResult.failed(ResultCode.SEND_MESSAGE_FAILED, dkid);
         }
-    }
-
-    /**
-     * 消息类型校验
-     *
-     * @param msgType
-     *              消息类型
-     * @return
-     *              消息生成器
-     */
-    private CustomMessage checkMsgType(MsgTypeEnum msgType) {
-        if (msgType != MsgTypeEnum.TEXT && msgType != MsgTypeEnum.MARKDOWN) {
-            throw new MsgTypeException("暂不支持" + msgType.type() + "类型");
-        }
-
-        return msgType == MsgTypeEnum.TEXT ? dingTalkManagerBuilder.textMessage : dingTalkManagerBuilder.markDownMessage;
     }
 
 }

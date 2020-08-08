@@ -39,5 +39,4 @@ public interface DkConstant {
     String SUCCESS_KEYWORD = "_SUCCESS";
     String FAILED_KEYWORD = "_FAILED";
     String EXIT_KEYWORD = "_EXIT";
-
 }

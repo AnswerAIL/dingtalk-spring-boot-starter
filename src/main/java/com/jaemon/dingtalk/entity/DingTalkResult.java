@@ -65,4 +65,10 @@ public class DingTalkResult {
     public static DingTalkResult failed(ResultCode resultCode, String logid) {
         return new DingTalkResult(resultCode, logid);
     }
+
+    @Override
+    public String toString() {
+        return String.format("[code=%s, message=%s, logid=%s, data=%s]",
+                code, message, logid, data);
+    }
 }

@@ -48,7 +48,7 @@ public class DingTalkConfiguration {
 
 
     @Bean
-    public DingTalkRobot dingTalkRobot(DingTalkConfigurerAdapter dingTalkConfigurerAdapter, DingTalkManagerBuilder dingTalkManagerBuilder){
+    public DingTalkRobot dingTalkSender(DingTalkConfigurerAdapter dingTalkConfigurerAdapter, DingTalkManagerBuilder dingTalkManagerBuilder){
         try {
             dingTalkConfigurerAdapter.configure(dingTalkManagerBuilder);
         } catch (Exception ex) {

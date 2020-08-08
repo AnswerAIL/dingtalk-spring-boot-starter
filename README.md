@@ -12,7 +12,8 @@
 | [1.0.1-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.1) | 2020-07-23 | 初始化版本<br /> + 支持通知消息体自定义<br />+ 支持异常回调 |
 | [1.0.2-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.2) | 2020-07-24 | + 支持markdown消息体 |
 | [1.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.3) | 2020-07-25 | + 支持验签<br /> + 支持异步处理<br /> + 支持异步回调函数 |
-| 1.0.4-RELEASE | 2020-08-01 | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型<br /> + 支持服务状态监控消息通知<br /> + 支持服务状态监控消息通知<br /> + 支持全局开关DingTalk<br /> + 支持个性化整体配置 |
+| [1.0.4-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.4) | 2020-08-01 | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型<br /> + 支持服务状态监控消息通知<br /> + 支持服务状态监控消息通知<br /> + 支持全局开关DingTalk<br /> + 支持个性化整体配置 |
+| 1.0.5-RELEASE | 2020-08-08 | + 支持tokenId加密<br /> + 支持配置属性校验<br /> |
 
 
 &nbsp;
@@ -24,9 +25,9 @@
     <dependency>
         <groupId>com.github.answerail</groupId>
         <artifactId>dingtalk-spring-boot-starter</artifactId>
-        <version>1.0.4-RELEASE</version>
+        <version>1.0.5-RELEASE</version>
         <scope>system</scope>
-        <systemPath>${project.basedir}/lib/dingtalk-spring-boot-starter-1.0.4-RELEASE.jar</systemPath>
+        <systemPath>${project.basedir}/lib/dingtalk-spring-boot-starter-1.0.5-RELEASE.jar</systemPath>
     </dependency>
     
 
@@ -42,6 +43,7 @@
  - 1.0.2-RELEASE
  - 1.0.3-RELEASE
  - 1.0.4-RELEASE
+ - 1.0.5-RELEASE
 
 ***
 &nbsp;
@@ -52,8 +54,8 @@ spring:
   dingtalk:
     # dingtalk功能开关
     enabled: true
-    # 仅支持text和markdown消息类型
-    project-id: oms
+    # 仅支持text和markdown消息类型, 推荐值: ${spring.application.name}
+    project-id: ${spring.application.name}
     token-id: c60d4824e0ba4a30544e81212256789331d68b0085ed1a5b2279715741355fbc
     # 自定义关键字, 仅支持text和markdown消息类型
     title: 消息推送
@@ -63,21 +65,28 @@ spring:
     async: true
     # 服务状态监控通知开关
     monitor:
+      # 服务启动成功通知
       success: true
+      # 服务退出通知, 注意： kill -9 <PID>不会触发通知
       exit: false
+      # 服务启动失败通知
       falied: false
     # 异步处理线程池参数配置, 可选
 #   executor-pool:
     # http客户端配置(优先使用项目中已有的), 可选
 #   ok-http:
 ```
- - enabled： 选填
+ - enabled： 选填, 是否启用dingtalk功能开关
  - token-id： 必填， [获取方式](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/26eaddd5)
- - project-id： 项目名称， 必填
+ - project-id： 必填, 项目名称
  - title： 选填。 默认值(通知)
  - secret： 选填， 需要签名时必填， [获取方式](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/26eaddd5)
  - async： 选填， true | false(默认)
  - monitor： 选填，默认值(false)
+ - decrypt: 选填, 是否需要对tokenId进行加密(默认false)
+ - decryptKey: 选填, tokenId解密秘钥, decrypt为true时必填, 获取方式有以下两种
+   - java -jar dingtalk-spring-boot-starter-[1.0.5]-RELEASE.jar [tokenId]
+   - ConfigTools.encrypt(tokenId);
 
 &nbsp;
 
@@ -86,20 +95,20 @@ spring:
 ```java
     public class Demo {
         @Autowired
-        private DingTalkRobot dingTalkRobot;
+        private DingTalkSender dingTalkSender;
         
         public void test() {
             // text类型
-            dingTalkRobot.send(MsgTypeEnum.TEXT, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。");
+            dingTalkSender.send(MsgTypeEnum.TEXT, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。");
             // text类型带@
-            dingTalkRobot.send(MsgTypeEnum.TEXT, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。", Lists.newArrayList("135XXXXXXXX"));
+            dingTalkSender.send(MsgTypeEnum.TEXT, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。", Lists.newArrayList("135XXXXXXXX"));
             // text类型带全部
-            dingTalkRobot.sendAll(MsgTypeEnum.TEXT, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。");
+            dingTalkSender.sendAll(MsgTypeEnum.TEXT, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。");
 
             // markdown类型
-            dingTalkRobot.send(MsgTypeEnum.MARKDOWN, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。");
+            dingTalkSender.send(MsgTypeEnum.MARKDOWN, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。");
             // markdown类型带@
-            dingTalkRobot.send(MsgTypeEnum.MARKDOWN, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。", Lists.newArrayList("135XXXXXXXX"));
+            dingTalkSender.send(MsgTypeEnum.MARKDOWN, "DYZ3AALTRBD2AIDLL0Y3EQ4TYGLJDUM", "服务启动通知", "服务启动异常啦。。。", Lists.newArrayList("135XXXXXXXX"));
         }         
     }
 ```
@@ -111,7 +120,7 @@ spring:
 ```java
     public class Demo {
         @Autowired
-        private DingTalkRobot dingTalkRobot;
+        private DingTalkSender dingTalkSender;
 
         // 整体跳转ActionCard类型
         public void singleActionCardReq() {
@@ -128,7 +137,7 @@ spring:
             actionCard.setSingleTitle("阅读全文");
             actionCard.setSingleURL("https://github.com/AnswerAIL");
     
-            dingTalkRobot.send(keyword, actionCardReq);
+            dingTalkSender.send(keyword, actionCardReq);
         }
 
         // 独立跳转ActionCard类型
@@ -148,7 +157,7 @@ spring:
             buttons.add(new ActionCardReq.ActionCard.Button("内容不错", "https://github.com/AnswerAIL"));
             buttons.add(new ActionCardReq.ActionCard.Button("不感兴趣", "https://github.com/AnswerAIL"));
     
-            dingTalkRobot.send(keyword, actionCardReq);
+            dingTalkSender.send(keyword, actionCardReq);
         }
     
         // FeedCard类型
@@ -163,7 +172,7 @@ spring:
             links.add(new FeedCardReq.FeedCard.Link("时代的火车向前开1", "https://github.com/AnswerAIL", "https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png"));
             links.add(new FeedCardReq.FeedCard.Link("时代的火车向前开2", "https://github.com/AnswerAIL", "https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png"));
     
-            dingTalkRobot.send(keyword, feedCardReq);
+            dingTalkSender.send(keyword, feedCardReq);
         }
     }
 ```
