@@ -9,11 +9,11 @@
 ## 版本变更说明
 | 版本号        | 日期       | 变更说明                                   |
 | ------------- | ---------- | ------------------------------------------ |
-| [1.0.1-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.1) | 2020-07-23 | 初始化版本<br /> + 支持通知消息体自定义<br />+ 支持异常回调 |
-| [1.0.2-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.2) | 2020-07-24 | + 支持markdown消息体 |
-| [1.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.3) | 2020-07-25 | + 支持验签<br /> + 支持异步处理<br /> + 支持异步回调函数 |
-| [1.0.4-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/1.0.4) | 2020-08-01 | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型<br /> + 支持服务状态监控消息通知<br /> + 支持服务状态监控消息通知<br /> + 支持全局开关DingTalk<br /> + 支持个性化整体配置 |
-| 1.0.5-RELEASE | 2020-08-08 | + 支持tokenId加密<br /> + 支持配置属性校验<br /> |
+| [1.0.1-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.1-RELEASE) | 2020-07-23 | 初始化版本<br /> + 支持通知消息体自定义<br />+ 支持异常回调 |
+| [1.0.2-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.2-RELEASE) | 2020-07-24 | + 支持markdown消息体 |
+| [1.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.3-RELEASE) | 2020-07-25 | + 支持验签<br /> + 支持异步处理<br /> + 支持异步回调函数 |
+| [1.0.4-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.4-RELEASE) | 2020-08-01 | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型<br /> + 支持服务状态监控消息通知<br /> + 支持服务状态监控消息通知<br /> + 支持全局开关DingTalk<br /> + 支持个性化整体配置 |
+| [1.0.5-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.5-RELEASE) | 2020-08-08 | + 支持tokenId加密<br /> + 支持配置属性校验<br /> |
 
 
 &nbsp;

@@ -1,11 +1,3 @@
-/*
- * Copyright(c) 2015-2020, AnswerAIL
- * ShenZhen Answer.AI.L Technology Co., Ltd.
- * All rights reserved.
- *
- * <a>https://github.com/AnswerAIL/</a>
- *
- */
 package com.jaemon.dingtalk.entity;
 
 import lombok.Data;
@@ -22,14 +14,15 @@ import static com.jaemon.dingtalk.constant.DkConstant.DEFAULT_THREAD_NAME_PREFIX
 @Data
 @ConfigurationProperties(prefix = "spring.dingtalk.executor-pool")
 public class DkThreadPoolProperties {
+    private static final int DEFAULT_CORE_SIZE = Runtime.getRuntime().availableProcessors() + 1;
     /**
      * 线程池维护线程的最小数量
      */
-    private int coreSize = 10;
+    private int coreSize = DEFAULT_CORE_SIZE;
     /**
      * 线程池维护线程的最大数量
      */
-    private int maxSize = 50;
+    private int maxSize = DEFAULT_CORE_SIZE * 2;
     /**
      * 空闲线程的存活时间
      */
@@ -37,7 +30,7 @@ public class DkThreadPoolProperties {
     /**
      * 持有等待执行的任务队列
      */
-    private int queueCapacity = 2;
+    private int queueCapacity = 10;
     /**
      * 线程名称前缀
      */

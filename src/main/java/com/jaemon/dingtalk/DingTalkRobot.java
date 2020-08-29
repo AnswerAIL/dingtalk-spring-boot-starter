@@ -1,11 +1,3 @@
-/*
- * Copyright(c) 2015-2020, AnswerAIL
- * ShenZhen Answer.AI.L Technology Co., Ltd.
- * All rights reserved.
- *
- * <a>https://github.com/AnswerAIL/</a>
- *
- */
 package com.jaemon.dingtalk;
 
 
@@ -44,13 +36,7 @@ public class DingTalkRobot extends AbstractDingTalkSender {
         try {
             customMessage = checkMsgType(msgType);
         } catch (MsgTypeException ex) {
-            DkExCallable dkExCallable = DkExCallable.builder()
-                    .dingTalkProperties(dingTalkProperties)
-                    .keyword(keyword)
-                    .message(content)
-                    .ex(ex).build();
-            dingTalkManagerBuilder.notice.callback(dkExCallable);
-            return DingTalkResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
+            return exceptionResult(keyword, content, ex);
         }
         Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, null);
 
@@ -64,13 +50,7 @@ public class DingTalkRobot extends AbstractDingTalkSender {
         try {
             customMessage = checkMsgType(msgType);
         } catch (MsgTypeException ex) {
-            DkExCallable dkExCallable = DkExCallable.builder()
-                    .dingTalkProperties(dingTalkProperties)
-                    .keyword(keyword)
-                    .message(content)
-                    .ex(ex).build();
-            dingTalkManagerBuilder.notice.callback(dkExCallable);
-            return DingTalkResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
+            return exceptionResult(keyword, content, ex);
         }
         Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, phones);;
         message.setAt(new Message.At(phones));
@@ -85,13 +65,7 @@ public class DingTalkRobot extends AbstractDingTalkSender {
         try {
             customMessage = checkMsgType(msgType);
         } catch (MsgTypeException ex) {
-            DkExCallable dkExCallable = DkExCallable.builder()
-                    .dingTalkProperties(dingTalkProperties)
-                    .keyword(keyword)
-                    .message(content)
-                    .ex(ex).build();
-            dingTalkManagerBuilder.notice.callback(dkExCallable);
-            return DingTalkResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
+            return exceptionResult(keyword, content, ex);
         }
         Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, null);
         message.setAt(new Message.At(true));

@@ -1,15 +1,10 @@
-/*
- * Copyright(c) 2015-2020, AnswerAIL
- * ShenZhen Answer.AI.L Technology Co., Ltd.
- * All rights reserved.
- *
- * <a>https://github.com/AnswerAIL/</a>
- *
- */
 package com.jaemon.dingtalk;
 
 import com.jaemon.dingtalk.entity.DingTalkProperties;
+import com.jaemon.dingtalk.entity.DingTalkResult;
+import com.jaemon.dingtalk.entity.DkExCallable;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
+import com.jaemon.dingtalk.entity.enums.ResultCode;
 import com.jaemon.dingtalk.exception.MsgTypeException;
 import com.jaemon.dingtalk.support.CustomMessage;
 
@@ -42,5 +37,23 @@ public abstract class AbstractDingTalkSender implements DingTalkSender {
         }
 
         return msgType == MsgTypeEnum.TEXT ? dingTalkManagerBuilder.textMessage : dingTalkManagerBuilder.markDownMessage;
+    }
+
+    /**
+     * MsgTypeException Result
+     *
+     * @param keyword keyword
+     * @param content content
+     * @param ex ex
+     * @return result
+     */
+    DingTalkResult exceptionResult(String keyword, String content, MsgTypeException ex) {
+        DkExCallable dkExCallable = DkExCallable.builder()
+                .dingTalkProperties(dingTalkProperties)
+                .keyword(keyword)
+                .message(content)
+                .ex(ex).build();
+        dingTalkManagerBuilder.notice.callback(dkExCallable);
+        return DingTalkResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
     }
 }
