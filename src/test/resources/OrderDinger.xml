@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<dinger namespace="com.jaemon.dingtalk.dinger.OrderDinger">
+
+	<message id="orderSuccess">
+		<body>
+			<type>text</type>
+			<content>
+				订单号${orderNum}下单成功啦, 下单金额${amt}
+			</content>
+
+			<phones>
+				<!-- 指定的phone的用户必须在tokenId群中 -->
+				<phone value="13590164327" />
+			</phones>
+		</body>
+
+		<configuration>
+			<token-id secret="SEC84195a1da62bde7b9b1777173bbbebf165c31fccd50fa3645b734a9c36d6dead">
+				2e2e46b32189f3fa64ad91fa8d49022e5575ffa84525b39060b823796c972038
+			</token-id>
+			<async-execute>false</async-execute>
+		</configuration>
+	</message>
+
+
+	<message id="orderFailed">
+		<body>
+			<type>markdown</type>
+			<content>
+				#### 订单号${orderNo}下单失败啦\n
+				- 标识${flag}\n
+				- 数量${num}
+			</content>
+
+			<!-- markdown只支持@全部, 不支持@指定用户 -->
+			<phones atAll="true" />
+		</body>
+	</message>
+</dinger>

@@ -97,6 +97,15 @@ public class DingTalkProperties implements BeanPostProcessor {
      * */
     private String remarks;
 
+    /**
+     * 使用dinger时, 对应的 xml配置路径.
+     *
+     * <blockquote>
+     *     spring.dingtalk.dinger-locations: classpath:dinger/*.xml
+     * </blockquote>
+     * */
+    private String dingerLocations;
+
     @DeprecatedConfigurationProperty(reason = "no longer in use")
     public String getRemarks() {
         return remarks;

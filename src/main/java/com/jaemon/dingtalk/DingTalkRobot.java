@@ -2,6 +2,7 @@ package com.jaemon.dingtalk;
 
 
 import com.alibaba.fastjson.JSON;
+import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.entity.*;
 import com.jaemon.dingtalk.entity.enums.ContentTypeEnum;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
@@ -93,20 +94,43 @@ public class DingTalkRobot extends AbstractDingTalkSender {
             return DingTalkResult.failed(ResultCode.DINGTALK_DISABLED, dkid);
         }
 
+        DingerConfig localDinger = getLocalDinger();
+        // dinger is null? use global configuration and check whether dinger send
+        boolean dingerConfig = localDinger != null;
         try {
             String tokenId;
-            if (dingTalkProperties.isDecrypt()) {
-                tokenId = ConfigTools.decrypt(dingTalkProperties.getDecryptKey(), dingTalkProperties.getTokenId());
+            boolean isDecryptProp = dingTalkProperties.isDecrypt();
+            String decryptKeyProp = dingTalkProperties.getDecryptKey();
+            String tokenIdProp = dingTalkProperties.getTokenId();
+            String secretProp = dingTalkProperties.getSecret();
+            boolean isAsyncProp = dingerConfig ? localDinger.isAsyncExecute() : dingTalkProperties.isAsync();
+
+            // deal with tokenId
+            if (dingerConfig && !StringUtils.isEmpty(localDinger.getTokenId())) {
+                if (!StringUtils.isEmpty(localDinger.getDecryptKey())) {
+                    tokenId = ConfigTools.decrypt(localDinger.getDecryptKey(), localDinger.getTokenId());
+                } else {
+                    tokenId = localDinger.getTokenId();
+                }
             } else {
-                tokenId = dingTalkProperties.getTokenId();
+                // inner decrypt
+                if (isDecryptProp) {
+                    tokenId = ConfigTools.decrypt(decryptKeyProp, tokenIdProp);
+                } else {
+                    tokenId = tokenIdProp;
+                }
             }
+
             StringBuilder webhook = new StringBuilder();
             webhook.append(dingTalkProperties.getRobotUrl()).append("=").append(tokenId);
 
-            String secret = dingTalkProperties.getSecret();
+            if (dingerConfig && !StringUtils.isEmpty(localDinger.getSecret())) {
+                secretProp = localDinger.getSecret();
+            }
+
             // 处理签名问题
-            if (!StringUtils.isEmpty(secret)) {
-                SignBase sign = dingTalkManagerBuilder.dkSignAlgorithm.sign(secret.trim());
+            if (!StringUtils.isEmpty(secretProp)) {
+                SignBase sign = dingTalkManagerBuilder.dkSignAlgorithm.sign(secretProp.trim());
                 webhook.append(sign.transfer());
             }
 
@@ -117,7 +141,7 @@ public class DingTalkRobot extends AbstractDingTalkSender {
             headers.setData(list);
 
             // 异步处理, 直接返回标识id
-            if (dingTalkProperties.isAsync()) {
+            if (isAsyncProp) {
                 dingTalkManagerBuilder.dingTalkExecutor.execute(() -> {
                     try {
                         String result = dingTalkManagerBuilder.httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());

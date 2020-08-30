@@ -1,11 +1,3 @@
-/*
- * Copyright(c) 2015-2020, AnswerAIL
- * ShenZhen Answer.AI.L Technology Co., Ltd.
- * All rights reserved.
- *
- * <a>https://github.com/AnswerAIL/</a>
- *
- */
 package com.jaemon.dingtalk.constant;
 
 /**
@@ -39,4 +31,7 @@ public interface DkConstant {
     String SUCCESS_KEYWORD = "_SUCCESS";
     String FAILED_KEYWORD = "_FAILED";
     String EXIT_KEYWORD = "_EXIT";
+
+    String NEW_LINE = "\r\n";
+    String SPOT_SEPERATOR = ".";
 }

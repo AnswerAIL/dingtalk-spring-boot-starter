@@ -1,5 +1,6 @@
 package com.jaemon.dingtalk;
 
+import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.entity.DingTalkProperties;
 import com.jaemon.dingtalk.entity.DingTalkResult;
 import com.jaemon.dingtalk.entity.DkExCallable;
@@ -15,12 +16,26 @@ import com.jaemon.dingtalk.support.CustomMessage;
  * @version 1.0
  */
 public abstract class AbstractDingTalkSender implements DingTalkSender {
+    private static ThreadLocal<DingerConfig> LOCAL_DINGER = new ThreadLocal<>();
+
     DingTalkProperties dingTalkProperties;
     DingTalkManagerBuilder dingTalkManagerBuilder;
 
     public AbstractDingTalkSender(DingTalkProperties dingTalkProperties, DingTalkManagerBuilder dingTalkManagerBuilder) {
         this.dingTalkProperties = dingTalkProperties;
         this.dingTalkManagerBuilder = dingTalkManagerBuilder;
+    }
+
+    public static void setLocalDinger(DingerConfig config) {
+        LOCAL_DINGER.set(config);
+    }
+
+    protected static DingerConfig getLocalDinger() {
+        return LOCAL_DINGER.get();
+    }
+
+    public static void removeLocalDinger() {
+        LOCAL_DINGER.remove();
     }
 
     /**

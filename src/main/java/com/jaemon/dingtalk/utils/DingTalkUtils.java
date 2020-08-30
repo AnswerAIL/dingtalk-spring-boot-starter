@@ -1,11 +1,3 @@
-/*
- * Copyright(c) 2015-2020, AnswerAIL
- * ShenZhen Answer.AI.L Technology Co., Ltd.
- * All rights reserved.
- *
- * <a>https://github.com/AnswerAIL/</a>
- *
- */
 package com.jaemon.dingtalk.utils;
 
 import java.io.Closeable;
@@ -39,5 +31,10 @@ public class DingTalkUtils {
         } catch (Exception e) {
 
         }
+    }
+
+    public static String replaceHeadTailLineBreak(String str) {
+        String regex = "^(\n|\r\n|\t)+(.*)(\n|\r\n|\t)+$";
+        return str.trim().replaceAll(regex, "$2").replaceAll("\\s{2,}", "");
     }
 }

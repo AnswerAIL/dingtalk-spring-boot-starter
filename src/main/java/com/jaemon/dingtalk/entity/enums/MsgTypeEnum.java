@@ -90,4 +90,14 @@ public enum MsgTypeEnum {
     public String type() {
         return type;
     }
+
+    public static MsgTypeEnum msgType(String msgType) {
+        for (MsgTypeEnum e : MsgTypeEnum.values()) {
+            if (e.type().toLowerCase().equals(msgType.toLowerCase())) {
+                return e;
+            }
+        }
+        return MsgTypeEnum.TEXT;
+
+    }
 }

@@ -11,4 +11,5 @@ org.springframework.context.ApplicationListener=\
 com.jaemon.dingtalk.listeners.StartEventListener,\
 com.jaemon.dingtalk.listeners.SuccessEventListener,\
 com.jaemon.dingtalk.listeners.FailedEventListener,\
-com.jaemon.dingtalk.listeners.ExitEventListener
+com.jaemon.dingtalk.listeners.ExitEventListener,\
+com.jaemon.dingtalk.dinger.DingerXmlPreparedEvent
