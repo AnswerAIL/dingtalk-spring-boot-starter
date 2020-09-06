@@ -34,7 +34,13 @@ public class DingTalkUtils {
     }
 
     public static String replaceHeadTailLineBreak(String str) {
-        String regex = "^(\n|\r\n|\t)+(.*)(\n|\r\n|\t)+$";
-        return str.trim().replaceAll(regex, "$2").replaceAll("\\s{2,}", "");
+        String preRegex = "^(\\s*| | |\t)(\\S*)";
+        String suffixRegex = "(\\S*)(\\s*| | |\t)$";
+        String regex = "[\t| ]{2,}";
+
+        return str
+                .replaceAll(preRegex, "$2")
+                .replaceAll(suffixRegex, "$1")
+                .replaceAll(regex, " ");
     }
 }

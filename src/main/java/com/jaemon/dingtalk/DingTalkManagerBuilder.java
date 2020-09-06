@@ -6,15 +6,12 @@ import com.jaemon.dingtalk.support.CustomMessage;
 import com.jaemon.dingtalk.support.DkCallable;
 import com.jaemon.dingtalk.support.DkIdGenerator;
 import com.jaemon.dingtalk.support.Notice;
-import lombok.Builder;
-import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.concurrent.Executor;
 
-import static com.jaemon.dingtalk.constant.DkConstant.MARKDOWN_MESSAGE;
-import static com.jaemon.dingtalk.constant.DkConstant.TEXT_MESSAGE;
+import static com.jaemon.dingtalk.constant.DkConstant.*;
 
 /**
  *  DingTalk Manager Builder
@@ -22,8 +19,6 @@ import static com.jaemon.dingtalk.constant.DkConstant.TEXT_MESSAGE;
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-@Builder
-@ToString
 public class DingTalkManagerBuilder {
     @Autowired
     HttpClient httpClient;
@@ -40,9 +35,13 @@ public class DingTalkManagerBuilder {
     @Autowired
     DkIdGenerator dkIdGenerator;
     @Autowired
+    @Qualifier(DINGTALK_EXECUTOR)
     Executor dingTalkExecutor;
     @Autowired
     DkCallable dkCallable;
+
+    public DingTalkManagerBuilder() {
+    }
 
     /**
      * custom http client
@@ -51,7 +50,9 @@ public class DingTalkManagerBuilder {
      * @return this
      */
     public DingTalkManagerBuilder httpClient(HttpClient httpClient) {
-        this.httpClient = httpClient;
+        if (httpClient != null) {
+            this.httpClient = httpClient;
+        }
         return this;
     }
 
@@ -62,7 +63,9 @@ public class DingTalkManagerBuilder {
      * @return this
      */
     public DingTalkManagerBuilder notice(Notice notice) {
-        this.notice = notice;
+        if (notice != null) {
+            this.notice = notice;
+        }
         return this;
     }
 
@@ -73,7 +76,9 @@ public class DingTalkManagerBuilder {
      * @return this
      */
     public DingTalkManagerBuilder textMessage(CustomMessage textMessage) {
-        this.textMessage = textMessage;
+        if (textMessage != null) {
+            this.textMessage = textMessage;
+        }
         return this;
     }
 
@@ -84,7 +89,9 @@ public class DingTalkManagerBuilder {
      * @return this
      */
     public DingTalkManagerBuilder markDownMessage(CustomMessage markDownMessage) {
-        this.markDownMessage = markDownMessage;
+        if (markDownMessage != null) {
+            this.markDownMessage = markDownMessage;
+        }
         return this;
     }
 
@@ -95,7 +102,9 @@ public class DingTalkManagerBuilder {
      * @return this
      */
     public DingTalkManagerBuilder dkSignAlgorithm(DkSignAlgorithm dkSignAlgorithm) {
-        this.dkSignAlgorithm = dkSignAlgorithm;
+        if (dkSignAlgorithm != null) {
+            this.dkSignAlgorithm = dkSignAlgorithm;
+        }
         return this;
     }
 
@@ -106,7 +115,9 @@ public class DingTalkManagerBuilder {
      * @return this
      */
     public DingTalkManagerBuilder dkIdGenerator(DkIdGenerator dkIdGenerator) {
-        this.dkIdGenerator = dkIdGenerator;
+        if (dkIdGenerator != null) {
+            this.dkIdGenerator = dkIdGenerator;
+        }
         return this;
     }
 
@@ -117,7 +128,9 @@ public class DingTalkManagerBuilder {
      * @return this
      */
     public DingTalkManagerBuilder dingTalkExecutor(Executor dingTalkExecutor) {
-        this.dingTalkExecutor = dingTalkExecutor;
+        if (dingTalkExecutor != null) {
+            this.dingTalkExecutor = dingTalkExecutor;
+        }
         return this;
     }
 
@@ -128,7 +141,9 @@ public class DingTalkManagerBuilder {
      * @return this
      */
     public DingTalkManagerBuilder dkCallable(DkCallable dkCallable) {
-        this.dkCallable = dkCallable;
+        if (dkCallable != null) {
+            this.dkCallable = dkCallable;
+        }
         return this;
     }
 }

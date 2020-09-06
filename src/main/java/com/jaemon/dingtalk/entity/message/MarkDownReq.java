@@ -31,7 +31,7 @@ public class MarkDownReq extends Message {
     @AllArgsConstructor
     public static class MarkDown {
         /**
-         * 首屏会话透出的展示内容
+         * 首屏会话透出的展示内容, 不会展示在具体的显示内容上
          */
         private String title;
         /**

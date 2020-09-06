@@ -35,7 +35,7 @@ public class DingTalkConfiguration {
 
     @Bean
     public DingTalkManagerBuilder dingTalkManagerBuilder() {
-        return DingTalkManagerBuilder.builder().build();
+        return new DingTalkManagerBuilder();
     }
 
 

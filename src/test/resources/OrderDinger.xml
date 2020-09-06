@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!--
+	spring.dingtalk.dinger-locations: classpath*:dinger/*.xml
+-->
+
 <dinger namespace="com.jaemon.dingtalk.dinger.OrderDinger">
 
 	<message id="orderSuccess">
 		<body>
+			<!-- 发送消息类型， 默认text -->
 			<type>text</type>
 			<content>
 				订单号${orderNum}下单成功啦, 下单金额${amt}
 			</content>
 
-			<phones>
-				<!-- 指定的phone的用户必须在tokenId群中 -->
-				<phone value="13590164327" />
-			</phones>
+			<!-- @所有人 -->
+			<phones atAll="true" />
 		</body>
 
+		<!-- 个性化指定： 当前发送消息体的tokenid， 默认情况下采用全局配置的tokenId -->
 		<configuration>
-			<token-id secret="SEC84195a1da62bde7b9b1777173bbbebf165c31fccd50fa3645b734a9c36d6dead">
-				2e2e46b32189f3fa64ad91fa8d49022e5575ffa84525b39060b823796c972038
+			<!--
+				secret： 当钉钉机器人需要加签时，填写对应的秘钥值
+				decrypt-key： 系统内部对tokenId进行加密的解密秘钥
+			 -->
+			<token-id
+					secret="SEQ84195a1da62bde7b9b1135173cccbf16532sfccd50fa3645b888a9c36d6aqsc"
+					decrypt-key="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCeSpqEVuq2NVNDu2lJbhdbEotkVPBzcXlBvR4IaB6J8boCz7FMfRFIP4BogfMqs3UC6I01Y1YbqcIcXSTkJKt95JqNKpe4+hAxFYd0IioM2z+1Lx3D0CKi79S0UsXfe+iTY+v0H5">
+				3e3a46b32135f3fa64ad91fa8d90162e9398ffa84327b39060b823796c972038
 			</token-id>
+
+			<!-- 是否发送异步消息 -->
 			<async-execute>false</async-execute>
 		</configuration>
 	</message>
@@ -27,14 +39,22 @@
 	<message id="orderFailed">
 		<body>
 			<type>markdown</type>
-			<content>
-				#### 订单号${orderNo}下单失败啦\n
-				- 标识${flag}\n
-				- 数量${num}
+			<!-- 注意:
+					1. 当发送消息类型为markdown时, title 属性必填
+					2. 如果需要@指定成员，markdown消息内容中必须带@成员, eg: @13520200906
+			-->
+			<content title="下单结果反馈">
+				#### 下单失败啦 @13520200906
+				- 订单号： ${orderNo}
+				- 标识： ${flag}
+				- 数量： ${num}
 			</content>
 
-			<!-- markdown只支持@全部, 不支持@指定用户 -->
-			<phones atAll="true" />
+			<!-- @指定成员， markdown不支持@全部, 只支持@指定用户 -->
+			<phones>
+				<!-- 指定的phone的用户必须在tokenId群中 -->
+				<phone value="13520200906" />
+			</phones>
 		</body>
 	</message>
 </dinger>

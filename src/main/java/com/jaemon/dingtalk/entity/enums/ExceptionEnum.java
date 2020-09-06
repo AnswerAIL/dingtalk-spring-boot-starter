@@ -19,6 +19,11 @@ public enum ExceptionEnum implements Pairs<Integer, String> {
      */
     PROPERTIES_ERROR(5000, "配置文件异常"),
 
+    DINER_XML_ANALYSIS_EXCEPTION(6000, "Dinger xml解析异常"),
+    DINGERSCAN_REPEATED_EXCEPTION(6001, "DingerScan注解重复配置"),
+    /** 注定DingerText和Dinger xml重复配置也会抛出该异常 */
+    DINGER_CONFIG_REPEATED_EXCEPTION(6002, "重复的DingerId对象"),
+
     UNKNOWN(9999, "未知异常")
     ;
 

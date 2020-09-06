@@ -14,7 +14,7 @@
 | [1.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.3-RELEASE) | 2020-07-25 | + 支持验签<br /> + 支持异步处理<br /> + 支持异步回调函数 | - |
 | [1.0.4-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.4-RELEASE) | 2020-08-01 | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型<br /> + 支持服务状态监控消息通知<br /> + 支持服务状态监控消息通知<br /> + 支持全局开关DingTalk<br /> + 支持个性化整体配置 | - |
 | [1.0.5-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.5-RELEASE) | 2020-08-08 | + 支持tokenId加密<br /> + 支持配置属性校验<br /> | - |
-| [2.0.0](https://github.com/AnswerAIL/dingtalk-spring-boot-starter) | 2020-08-30 | + 支持 XXXDinger.xml 配置 | 开始于2020/08/29 |
+| [2.0.0](https://github.com/AnswerAIL/dingtalk-spring-boot-starter) | 2020-09-06 | + 支持 XXXDinger.xml xml方式消息配置<br /> + 支持@DingerText&@DingerMarkdown注解方式消息配置 | 开始于2020/08/29 |
 
 
 &nbsp;
@@ -45,6 +45,8 @@
  - 1.0.3-RELEASE
  - 1.0.4-RELEASE
  - 1.0.5-RELEASE
+
+> **开发测试springboot版本说明**： 2.0.3.RELEASE
 
 ***
 &nbsp;
@@ -317,7 +319,7 @@ spring:
         }    
     }
 ```
-> 注意开启异步处理时使用内置线程池， 如果项目中有定义其他线程池配置, 注入线程池对象时请指定线程池名称。 如： `@Qualifier("executor")`
+
 
 &nbsp;
 
@@ -333,6 +335,8 @@ spring:
         }
     }
 ```
+> 注意开启异步处理时使用内置线程池， 如果项目中有定义其他线程池配置, 注入线程池对象时请指定线程池名称。 如： `@Qualifier("executor")`
+
 
 &nbsp;
 

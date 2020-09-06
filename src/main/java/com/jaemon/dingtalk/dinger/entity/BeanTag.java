@@ -1,7 +1,5 @@
 package com.jaemon.dingtalk.dinger.entity;
 
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
@@ -15,7 +13,6 @@ import java.util.List;
  * @version 2.0
  */
 @XmlRootElement(name="dinger")
-@Setter
 public class BeanTag {
     private String namespace;
     private List<MessageTag> messages;
@@ -32,4 +29,11 @@ public class BeanTag {
         return messages;
     }
 
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
+    public void setMessages(List<MessageTag> messages) {
+        this.messages = messages;
+    }
 }

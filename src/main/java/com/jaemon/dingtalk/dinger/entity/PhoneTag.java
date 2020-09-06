@@ -1,7 +1,5 @@
 package com.jaemon.dingtalk.dinger.entity;
 
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,12 +10,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 2.0
  */
 @XmlRootElement(name = "phone")
-@Setter
 public class PhoneTag {
     private String value;
 
     @XmlAttribute(required = true, name = "value")
     public String getValue() {
         return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

@@ -1,7 +1,5 @@
 package com.jaemon.dingtalk.dinger.entity;
 
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jaemon@answer_ljm@163.com
  * @version 2.0
  */
-@Setter
 @XmlRootElement(name = "configuration")
 public class ConfigurationTag {
     private TokenId tokenId;
@@ -22,8 +19,16 @@ public class ConfigurationTag {
         return tokenId;
     }
 
-    @XmlElement(type = Boolean.class)
+    @XmlElement(name = "async-execute", type = Boolean.class)
     public boolean getAsyncExecute() {
         return asyncExecute;
+    }
+
+    public void setTokenId(TokenId tokenId) {
+        this.tokenId = tokenId;
+    }
+
+    public void setAsyncExecute(boolean asyncExecute) {
+        this.asyncExecute = asyncExecute;
     }
 }

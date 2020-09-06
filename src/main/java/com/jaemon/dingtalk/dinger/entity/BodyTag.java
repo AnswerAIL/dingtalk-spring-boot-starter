@@ -1,7 +1,6 @@
 package com.jaemon.dingtalk.dinger.entity;
 
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
-import lombok.Setter;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 2.0
  */
 @XmlRootElement(name="body")
-@Setter
 public class BodyTag {
     private String type = MsgTypeEnum.TEXT.type();
     private ContentTag content;
@@ -29,5 +27,17 @@ public class BodyTag {
 
     public PhonesTag getPhones() {
         return phones;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setContent(ContentTag content) {
+        this.content = content;
+    }
+
+    public void setPhones(PhonesTag phones) {
+        this.phones = phones;
     }
 }

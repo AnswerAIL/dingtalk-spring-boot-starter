@@ -14,8 +14,8 @@ public class AsyncCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         String enabled = context.getEnvironment().getProperty("spring.dingtalk.enabled");
-        String async = context.getEnvironment().getProperty("spring.dingtalk.async");
-        return (enabled == null  || "true".equals(enabled))
-                && "true".equals(async);
+//        String async = context.getEnvironment().getProperty("spring.dingtalk.async");
+        return (enabled == null  || "true".equals(enabled))/*
+                && "true".equals(async)*/;
     }
 }

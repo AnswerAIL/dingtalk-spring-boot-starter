@@ -5,7 +5,8 @@ import com.jaemon.dingtalk.entity.DingTalkProperties;
 import com.jaemon.dingtalk.entity.DingTalkResult;
 import com.jaemon.dingtalk.entity.message.MsgType;
 import com.jaemon.dingtalk.support.Notification;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -19,12 +20,16 @@ import static com.jaemon.dingtalk.constant.DkConstant.FAILED_KEYWORD;
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-@Slf4j
 public class FailedEventListener implements ApplicationListener<ApplicationFailedEvent> {
+    private static final Logger log = LoggerFactory.getLogger(FailedEventListener.class);
 
     @Override
     public void onApplicationEvent(ApplicationFailedEvent event) {
         ApplicationContext applicationContext = event.getApplicationContext();
+        if (applicationContext == null) {
+            return;
+        }
+
         DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
 
         if (properties.isEnabled()

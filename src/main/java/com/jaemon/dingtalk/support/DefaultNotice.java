@@ -1,7 +1,9 @@
 package com.jaemon.dingtalk.support;
 
 import com.jaemon.dingtalk.entity.DkExCallable;
-import lombok.extern.slf4j.Slf4j;
+import com.jaemon.dingtalk.exception.DingTalkException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 默认消息通知
@@ -9,10 +11,17 @@ import lombok.extern.slf4j.Slf4j;
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-@Slf4j
 public class DefaultNotice implements Notice {
+    private static final Logger log = LoggerFactory.getLogger(DefaultNotice.class);
+
     @Override
     public void callback(DkExCallable dkExCallable) {
-      log.info("异常静默处理");
+        DingTalkException ex = dkExCallable.getEx();
+
+        log.error("异常静默处理{}-{}->{}.",
+                ex.getPairs().code(),
+                ex.getPairs().desc(),
+                ex.getMessage()
+        );
     }
 }

@@ -17,11 +17,11 @@ public class DingerSession {
         this.dingTalkSender = dingTalkSender;
     }
 
-    public <T> T  getMapper(Class<T> type) {
+    public <T> T getDinger(Class<T> type) {
         return (T) Proxy.newProxyInstance(
                 DingerSession.class.getClassLoader(),
                 new Class[]{type},
-                new DingerInvocationHandler(dingTalkSender)
+                new DingerHandleProxy(dingTalkSender)
         );
     }
 

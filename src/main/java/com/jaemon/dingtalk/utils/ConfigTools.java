@@ -37,9 +37,9 @@ public class ConfigTools {
         System.out.println("privateKey: " + arr[0]);
         System.out.println("decryptKey: " + arr[1]);
         String encrypt = encrypt(arr[0], password);
-        System.out.println("tokenId: " + encrypt);
+        System.out.println("encrypt tokenId: " + encrypt);
         String decrypt = decrypt(arr[1], encrypt);
-        System.out.println("tokenId:" + decrypt);
+        System.out.println("decrypt tokenId:" + decrypt);
     }
 
     public static String decrypt(String cipherText) throws Exception {

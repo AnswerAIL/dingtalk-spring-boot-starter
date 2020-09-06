@@ -1,4 +1,4 @@
-package com.jaemon.dingtalk.dinger;
+package com.jaemon.dingtalk.dinger.annatations;
 
 import java.lang.annotation.*;
 

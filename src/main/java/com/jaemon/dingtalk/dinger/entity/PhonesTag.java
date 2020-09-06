@@ -1,7 +1,5 @@
 package com.jaemon.dingtalk.dinger.entity;
 
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
@@ -15,7 +13,6 @@ import java.util.List;
  * @version 2.0
  */
 @XmlRootElement(name = "phones")
-@Setter
 public class PhonesTag {
     private boolean atAll = false;
     private List<PhoneTag> phones;
@@ -28,5 +25,13 @@ public class PhonesTag {
     @XmlAttribute
     public boolean getAtAll() {
         return atAll;
+    }
+
+    public void setAtAll(boolean atAll) {
+        this.atAll = atAll;
+    }
+
+    public void setPhones(List<PhoneTag> phones) {
+        this.phones = phones;
     }
 }

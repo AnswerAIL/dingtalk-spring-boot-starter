@@ -1,7 +1,8 @@
 package com.jaemon.dingtalk.config;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.jaemon.dingtalk.entity.RequestHeader;
 
@@ -11,8 +12,8 @@ import com.jaemon.dingtalk.entity.RequestHeader;
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-@Slf4j
 public class HttpClient {
+    private static final Logger log = LoggerFactory.getLogger(HttpClient.class);
 
     @Autowired
     private OkHttpClient okHttpClient;

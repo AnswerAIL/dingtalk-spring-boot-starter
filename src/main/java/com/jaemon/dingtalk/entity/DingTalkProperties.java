@@ -101,7 +101,8 @@ public class DingTalkProperties implements BeanPostProcessor {
      * 使用dinger时, 对应的 xml配置路径.
      *
      * <blockquote>
-     *     spring.dingtalk.dinger-locations: classpath:dinger/*.xml
+     *     spring.dingtalk.dinger-locations: classpath*:dinger/*.xml
+     *     spring.dingtalk.dinger-locations: classpath*:dinger/*\/*.xml
      * </blockquote>
      * */
     private String dingerLocations;

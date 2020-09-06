@@ -1,7 +1,5 @@
 package com.jaemon.dingtalk.dinger.entity;
 
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 2.0
  */
 @XmlRootElement(name = "message")
-@Setter
 public class MessageTag {
     private String identityId;
     private BodyTag body;
@@ -29,5 +26,17 @@ public class MessageTag {
 
     public ConfigurationTag getConfiguration() {
         return configuration;
+    }
+
+    public void setIdentityId(String identityId) {
+        this.identityId = identityId;
+    }
+
+    public void setBody(BodyTag body) {
+        this.body = body;
+    }
+
+    public void setConfiguration(ConfigurationTag configuration) {
+        this.configuration = configuration;
     }
 }

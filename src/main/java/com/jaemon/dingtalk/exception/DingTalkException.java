@@ -11,8 +11,11 @@ import lombok.Getter;
  */
 public class DingTalkException extends RuntimeException {
     @Getter
-    private Pairs pairs;
+    private Pairs<Integer, String> pairs;
 
+    public DingTalkException(Pairs pairs) {
+        super(pairs.desc().toString());
+    }
 
     public DingTalkException(String msg, Pairs pairs) {
         super(msg);

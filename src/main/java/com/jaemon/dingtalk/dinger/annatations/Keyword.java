@@ -1,9 +1,9 @@
-package com.jaemon.dingtalk.dinger;
+package com.jaemon.dingtalk.dinger.annatations;
 
 import java.lang.annotation.*;
 
 /**
- * Parameter
+ * Keyword(quick locate to servive log)
  *
  * @author Jaemon#answer_ljm@163.com
  * @version 2.0

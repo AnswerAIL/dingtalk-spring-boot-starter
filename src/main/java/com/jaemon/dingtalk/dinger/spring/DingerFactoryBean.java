@@ -12,23 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @version 2.0
  */
 public class DingerFactoryBean<T> implements FactoryBean<T> {
-    private Class<T> mapperInterface;
+    private Class<T> dingerInterface;
 
     @Autowired
     private DingTalkSender dingTalkSender;
 
-    public DingerFactoryBean(Class mapperInterface) {
-        this.mapperInterface = mapperInterface;
+    public DingerFactoryBean(Class dingerInterface) {
+        this.dingerInterface = dingerInterface;
     }
 
     @Override
     public T getObject() throws Exception {
-        return new DingerSession(dingTalkSender).getMapper(this.mapperInterface);
+        return new DingerSession(dingTalkSender).getDinger(this.dingerInterface);
     }
 
     @Override
     public Class<?> getObjectType() {
-        return mapperInterface;
+        return dingerInterface;
     }
 
     @Override

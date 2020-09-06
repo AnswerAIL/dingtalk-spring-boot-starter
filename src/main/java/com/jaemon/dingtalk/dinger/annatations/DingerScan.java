@@ -1,5 +1,6 @@
-package com.jaemon.dingtalk.dinger.spring;
+package com.jaemon.dingtalk.dinger.annatations;
 
+import com.jaemon.dingtalk.dinger.spring.DingerScannerRegistrar;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -13,7 +14,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-/* 把 MapperScannerRegistrar 导入到IOC容器中 */
 @Import(DingerScannerRegistrar.class)
 public @interface DingerScan {
     String[] basePackages();
