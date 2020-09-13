@@ -35,6 +35,12 @@ public interface DingerResolver<T> {
      */
     DingerDefinition resolveDingerDefinition(String keyName, T dinger);
 
+    /**
+     * dingerConfig
+     *
+     * @param dingerTokenId dingerTokenId
+     * @return dingerConfig
+     */
     default DingerConfig dingerConfig(DingerTokenId dingerTokenId) {
         DingerConfig dingerConfig = new DingerConfig();
         dingerConfig.setTokenId(dingerTokenId.value());

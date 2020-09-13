@@ -15,7 +15,8 @@
  */
 package com.jaemon.dingtalk.dinger;
 
-import org.springframework.util.StringUtils;
+import static com.jaemon.dingtalk.utils.DingTalkUtils.isEmpty;
+import static com.jaemon.dingtalk.utils.DingTalkUtils.isNotEmpty;
 
 /**
  * DingerConfig
@@ -30,16 +31,56 @@ public class DingerConfig {
     /** dingtalk签名秘钥 */
     private String secret;
     /** 异步执行 */
-    private boolean asyncExecute;
+    private Boolean asyncExecute;
 
+    /**
+     * do check dinger config
+     */
     public void check() {
-        if (StringUtils.isEmpty(
-                this.tokenId.trim()
+        if (isEmpty(
+                this.tokenId
         )) {
             this.tokenId = null;
             this.decryptKey = null;
             this.secret = null;
         }
+    }
+
+    /**
+     * checkEmpty
+     *
+     * @return true | false
+     */
+    public boolean checkEmpty() {
+        if (isEmpty(this.tokenId)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * merge
+     *
+     * @param dingerConfig merge
+     * @return dingerConfig
+     */
+    public DingerConfig merge(DingerConfig dingerConfig) {
+        // first this
+        if (isEmpty(this.tokenId) &&
+                isNotEmpty(dingerConfig.tokenId)) {
+            this.tokenId = dingerConfig.tokenId;
+
+            // tokenId & decryptKey & secret 需配套出现
+            this.decryptKey = dingerConfig.decryptKey;
+            this.secret = dingerConfig.secret;
+        }
+
+        if (this.asyncExecute == null) {
+            this.asyncExecute = dingerConfig.asyncExecute;
+        }
+        this.check();
+
+        return this;
     }
 
     public String getTokenId() {
@@ -66,11 +107,11 @@ public class DingerConfig {
         this.secret = secret;
     }
 
-    public boolean getAsyncExecute() {
+    public Boolean getAsyncExecute() {
         return asyncExecute;
     }
 
-    public void setAsyncExecute(boolean asyncExecute) {
+    public void setAsyncExecute(Boolean asyncExecute) {
         this.asyncExecute = asyncExecute;
     }
 

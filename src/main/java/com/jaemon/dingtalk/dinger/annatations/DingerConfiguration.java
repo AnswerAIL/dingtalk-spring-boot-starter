@@ -13,42 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.constant;
+package com.jaemon.dingtalk.dinger.annatations;
+
+import java.lang.annotation.*;
 
 /**
- *  常量类
+ * DingerConfiguration
  *
  * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @version 2.0
  */
-public interface DkConstant {
-
-    String DK_PREFIX = "DK";
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+public @interface DingerConfiguration {
     /**
-     * 默认线程池中线程名称前缀
+     * dingtalk tokenId
+     *
+     * @return tokenId
      */
-    String DEFAULT_THREAD_NAME_PREFIX = "dkt-";
-
+    String tokenId();
 
     /**
-     * bean name
+     * internal decryptKey for tokenId
+     *
+     * @return decryptKey
      */
-    String TEXT_MESSAGE = "textMessage";
+    String decryptKey() default "";
+
     /**
-     * bean name
+     * dingtalk secret
+     *
+     * @return secret
      */
-    String MARKDOWN_MESSAGE = "markDownMessage";
-    /**
-     * bean name
-     */
-    String DINGTALK_EXECUTOR = "dingTalkExecutor";
+    String secret() default "";
 
-    String SUCCESS_KEYWORD = "_SUCCESS";
-    String FAILED_KEYWORD = "_FAILED";
-    String EXIT_KEYWORD = "_EXIT";
-
-    String NEW_LINE = "\r\n";
-    String SPOT_SEPERATOR = ".";
-
-    String DINGTALK_PROPERTIES_PREFIX = "spring.dingtalk.";
 }

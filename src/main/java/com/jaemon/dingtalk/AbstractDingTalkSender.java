@@ -25,13 +25,13 @@ import com.jaemon.dingtalk.exception.MsgTypeException;
 import com.jaemon.dingtalk.support.CustomMessage;
 
 /**
- * DingTalk Template
+ * AbstractDingTalkSender
  *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
 public abstract class AbstractDingTalkSender implements DingTalkSender {
-    private static ThreadLocal<DingerConfig> LOCAL_DINGER = new ThreadLocal<>();
+    private static ThreadLocal<DingerConfig> local_dinger = new ThreadLocal<>();
 
     DingTalkProperties dingTalkProperties;
     DingTalkManagerBuilder dingTalkManagerBuilder;
@@ -42,15 +42,15 @@ public abstract class AbstractDingTalkSender implements DingTalkSender {
     }
 
     public static void setLocalDinger(DingerConfig config) {
-        LOCAL_DINGER.set(config);
+        local_dinger.set(config);
     }
 
     protected static DingerConfig getLocalDinger() {
-        return LOCAL_DINGER.get();
+        return local_dinger.get();
     }
 
     public static void removeLocalDinger() {
-        LOCAL_DINGER.remove();
+        local_dinger.remove();
     }
 
     /**

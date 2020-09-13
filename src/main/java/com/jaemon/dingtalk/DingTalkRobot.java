@@ -29,7 +29,7 @@ import com.jaemon.dingtalk.exception.MsgTypeException;
 import com.jaemon.dingtalk.exception.SendMsgException;
 import com.jaemon.dingtalk.support.CustomMessage;
 import com.jaemon.dingtalk.utils.ConfigTools;
-import org.springframework.util.StringUtils;
+import com.jaemon.dingtalk.utils.DingTalkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,8 +121,8 @@ public class DingTalkRobot extends AbstractDingTalkSender {
             boolean isAsyncProp = dingerConfig ? localDinger.getAsyncExecute() : dingTalkProperties.isAsync();
 
             // deal with tokenId
-            if (dingerConfig && !StringUtils.isEmpty(localDinger.getTokenId())) {
-                if (!StringUtils.isEmpty(localDinger.getDecryptKey())) {
+            if (dingerConfig && !DingTalkUtils.isEmpty(localDinger.getTokenId())) {
+                if (!DingTalkUtils.isEmpty(localDinger.getDecryptKey())) {
                     tokenId = ConfigTools.decrypt(localDinger.getDecryptKey(), localDinger.getTokenId());
                 } else {
                     tokenId = localDinger.getTokenId();
@@ -139,12 +139,12 @@ public class DingTalkRobot extends AbstractDingTalkSender {
             StringBuilder webhook = new StringBuilder();
             webhook.append(dingTalkProperties.getRobotUrl()).append("=").append(tokenId);
 
-            if (dingerConfig && !StringUtils.isEmpty(localDinger.getSecret())) {
+            if (dingerConfig && !DingTalkUtils.isEmpty(localDinger.getSecret())) {
                 secretProp = localDinger.getSecret();
             }
 
             // 处理签名问题
-            if (!StringUtils.isEmpty(secretProp)) {
+            if (!DingTalkUtils.isEmpty(secretProp)) {
                 SignBase sign = dingTalkManagerBuilder.dkSignAlgorithm.sign(secretProp.trim());
                 webhook.append(sign.transfer());
             }

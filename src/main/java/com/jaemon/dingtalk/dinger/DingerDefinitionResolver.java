@@ -15,11 +15,14 @@
  */
 package com.jaemon.dingtalk.dinger;
 
+import com.jaemon.dingtalk.dinger.annatations.AsyncExecute;
+import com.jaemon.dingtalk.dinger.annatations.DingerConfiguration;
 import com.jaemon.dingtalk.dinger.annatations.DingerMarkdown;
 import com.jaemon.dingtalk.dinger.annatations.DingerText;
 import com.jaemon.dingtalk.dinger.entity.BeanTag;
 import com.jaemon.dingtalk.dinger.entity.MessageTag;
 import com.jaemon.dingtalk.exception.DingerConfigRepeatedException;
+import com.jaemon.dingtalk.utils.DingTalkUtils;
 import com.jaemon.dingtalk.utils.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,7 @@ import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_PROPERTIES_PREFIX;
 import static com.jaemon.dingtalk.constant.DkConstant.SPOT_SEPERATOR;
 import static com.jaemon.dingtalk.dinger.AbstractDingerDefinitionResolver.Container.INSTANCE;
 
@@ -42,6 +46,7 @@ import static com.jaemon.dingtalk.dinger.AbstractDingerDefinitionResolver.Contai
  */
 public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
     private static final Logger log = LoggerFactory.getLogger(DingerDefinitionResolver.class);
+    protected static final String DINGER_PROPERTIES_PREFIX = DINGTALK_PROPERTIES_PREFIX;
 
     @Override
     synchronized
@@ -72,6 +77,10 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                     throw new DingerConfigRepeatedException("Dinger[" + keyName + "]消息对象重复定义了.");
                 }
                 INSTANCE.put(keyName, dingerDefinition);
+
+                if (dingerDefinition.dingerConfig().checkEmpty()) {
+                    defaultDingerConfigSet.add(keyName);
+                }
             }
         }
     }
@@ -79,16 +88,19 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
 
     @Override
     synchronized
-    protected void analysisDingerAnnotation(List<Class<?>> dingerClasses) throws Exception {
+    protected void analysisDingerAnnotation(List<Class<?>> dingerClasses, DingerConfig defaultDingerConfig) throws Exception {
         for (Class<?> dingerClass : dingerClasses) {
+            // dinger 层钉钉机器人配置
+            DingerConfig dingerConfiguration = dingerConfiguration(dingerClass);
+
             String namespace = dingerClass.getName();
             Method[] methods = dingerClass.getMethods();
             for (Method method : methods) {
+                String keyName = namespace + SPOT_SEPERATOR + method.getName();
                 boolean isDingerText = method.isAnnotationPresent(DingerText.class);
                 boolean isDingerMarkdown = method.isAnnotationPresent(DingerMarkdown.class);
-                if (isDingerText || isDingerMarkdown) {
-                    String keyName = namespace + SPOT_SEPERATOR + method.getName();
 
+                if (isDingerText || isDingerMarkdown) {
                     DingerDefinition dingerDefinition;
                     // either dingerText or dingerMarkdown
                     if (isDingerText) {
@@ -108,13 +120,48 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                     if (INSTANCE.contains(keyName)) {
                         throw new DingerConfigRepeatedException("Dinger[" + keyName + "]消息对象重复定义了.");
                     }
+
+                    dingerDefinition.dingerConfig()
+                            .merge(dingerConfiguration)
+                            .merge(defaultDingerConfig);
+
                     INSTANCE.put(keyName, dingerDefinition);
+                } else {
+                    if (defaultDingerConfigSet.contains(keyName)) {
+                        INSTANCE.get(keyName).dingerConfig()
+                                .merge(dingerConfiguration)
+                                .merge(defaultDingerConfig);
+                    }
                 }
             }
 
         }
     }
 
+    /**
+     * analysis dinger config annotation.
+     *
+     * @param dingerClass dingerClass
+     * @return dingerConfig
+     */
+    private DingerConfig dingerConfiguration(Class<?> dingerClass) {
+        DingerConfig dingerConfig = new DingerConfig();
+
+        if (dingerClass.isAnnotationPresent(DingerConfiguration.class)) {
+            DingerConfiguration dingerConfiguration = dingerClass.getAnnotation(DingerConfiguration.class);
+            String tokenId = dingerConfiguration.tokenId();
+            if (DingTalkUtils.isNotEmpty(tokenId)) {
+                dingerConfig.setTokenId(dingerConfiguration.tokenId());
+                dingerConfig.setDecryptKey(dingerConfiguration.decryptKey());
+                dingerConfig.setSecret(dingerConfiguration.secret());
+            }
+        }
+
+        if (dingerClass.isAnnotationPresent(AsyncExecute.class)) {
+            dingerConfig.setAsyncExecute(true);
+        }
+        return dingerConfig;
+    }
 
 
 }

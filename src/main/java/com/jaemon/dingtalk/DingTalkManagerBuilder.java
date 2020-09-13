@@ -49,7 +49,7 @@ public class DingTalkManagerBuilder {
     DkSignAlgorithm dkSignAlgorithm;
     @Autowired
     DkIdGenerator dkIdGenerator;
-    @Autowired
+    @Autowired(required = false)
     @Qualifier(DINGTALK_EXECUTOR)
     Executor dingTalkExecutor;
     @Autowired

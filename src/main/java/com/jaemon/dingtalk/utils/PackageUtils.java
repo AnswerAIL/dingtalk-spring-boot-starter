@@ -22,7 +22,6 @@ import org.springframework.boot.system.ApplicationHome;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -58,7 +57,7 @@ public class PackageUtils {
      * @param filterAnnotations filterAnnotations
      */
     public static void classNames(String packageName, List<Class<?>> classNames, Class<? extends Annotation>... filterAnnotations) {
-        if (StringUtils.isEmpty(packageName)) {
+        if (DingTalkUtils.isEmpty(packageName)) {
             return;
         }
         ApplicationHome applicationHome = ApplicationEventTimeTable.applicationHome();

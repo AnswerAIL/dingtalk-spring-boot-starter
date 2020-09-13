@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingtalk.dinger;
 
+import com.jaemon.dingtalk.dinger.entity.DingerType;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import com.jaemon.dingtalk.entity.message.Message;
 
@@ -82,5 +83,19 @@ public interface DingerDefinition {
      * @param dingerConfig dingerConfig
      */
     void setDingerConfig(DingerConfig dingerConfig);
+
+    /**
+     * dingerType
+     *
+     * @return dingerType
+     */
+    DingerType dingerType();
+
+    /**
+     * setDingerType
+     *
+     * @param dingerType dingerType
+     */
+    void setDingerType(DingerType dingerType);
 
 }

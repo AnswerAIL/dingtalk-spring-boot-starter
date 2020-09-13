@@ -115,8 +115,10 @@ public class DingerMessageHandler implements MessageTransfer, ParamHandle, Resul
             }
             params.put(paramName, values[i]);
         }
-        String keyword = (keyWordIndex == -1) ? "" : keywordValue;
-        params.put(KEYWORD, keyword);
+
+        if (keyWordIndex != -1) {
+            params.put(KEYWORD, keywordValue);
+        }
 
         return params;
     }

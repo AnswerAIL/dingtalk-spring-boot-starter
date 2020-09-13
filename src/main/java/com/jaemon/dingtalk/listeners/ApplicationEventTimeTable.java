@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Event
+ * ApplicationEventTimeTable
  *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0

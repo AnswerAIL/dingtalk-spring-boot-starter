@@ -1,13 +1,28 @@
+/*
+ * Copyright 2015-2020 Jaemon(answer_ljm@163.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.jaemon.dingtalk.entity;
 
 
 import com.jaemon.dingtalk.exception.InvalidPropertiesFormatException;
+import com.jaemon.dingtalk.utils.DingTalkUtils;
 import lombok.Data;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
-import org.springframework.util.StringUtils;
 
 
 /**
@@ -131,7 +146,7 @@ public class DingTalkProperties implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         {
-            if (StringUtils.isEmpty(this.tokenId)) {
+            if (DingTalkUtils.isEmpty(this.tokenId)) {
                 throw new InvalidPropertiesFormatException(
                         "spring.dingtalk.token-id is empty."
                 );
@@ -139,7 +154,7 @@ public class DingTalkProperties implements BeanPostProcessor {
         }
 
         {
-            if (StringUtils.isEmpty(this.projectId)) {
+            if (DingTalkUtils.isEmpty(this.projectId)) {
                 throw new InvalidPropertiesFormatException(
                         "spring.dingtalk.project-id is empty."
                 );
@@ -148,7 +163,7 @@ public class DingTalkProperties implements BeanPostProcessor {
 
         {
             boolean check = decrypt
-                    && StringUtils.isEmpty(decryptKey);
+                    && DingTalkUtils.isEmpty(decryptKey);
             if (check) {
                 throw new InvalidPropertiesFormatException(
                         "spring.dingtalk.decrypt is true but spring.dingtalk.decrypt-key is empty."

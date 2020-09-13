@@ -7,7 +7,7 @@
     <groupId>com.github.answerail</groupId>
     <artifactId>dingtalk-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <version>2.0.0-RELEASE</version>
+    <version>2.0.1-RELEASE</version>
 
     <name>dingtalk-spring-boot-starter</name>
     <description>集成钉钉机器人实现消息通知</description>
@@ -82,9 +82,9 @@
 
     <developers>
         <developer>
-            <name>jaemon</name>
+            <name>Jaemon</name>
             <email>answer_ljm@163.com</email>
-            <organization>Answer.AI.L</organization>
+            <organization>AnswerAIL</organization>
             <organizationUrl>https://github.com/AnswerAIL/dingtalk-spring-boot-starter</organizationUrl>
             <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter</url>
         </developer>
@@ -109,7 +109,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
 
     <profiles>
         <profile>

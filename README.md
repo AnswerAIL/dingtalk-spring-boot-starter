@@ -14,7 +14,8 @@
 | [1.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.3-RELEASE) | 2020-07-25 | + 支持验签<br /> + 支持异步处理<br /> + 支持异步回调函数 | - |
 | [1.0.4-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.4-RELEASE) | 2020-08-01 | + 新增支持以下消息类型<br /> (1). 独立跳转ActionCard类型<br />(2). 整体跳转ActionCard类型<br />(3). FeedCard类型<br /> + 支持服务状态监控消息通知<br /> + 支持服务状态监控消息通知<br /> + 支持全局开关DingTalk<br /> + 支持个性化整体配置 | - |
 | [1.0.5-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/1.0.5-RELEASE) | 2020-08-08 | + 支持tokenId加密<br /> + 支持配置属性校验<br /> | - |
-| [2.0.0-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter) | 2020-09-06 | + 支持 XXXDinger.xml xml方式消息配置<br /> + 支持@DingerText&@DingerMarkdown注解方式消息配置 | [使用文档](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master/docs/V2.0.md) |
+| [2.0.0-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.0-RELEASE) | 2020-09-06 | + 支持 XXXDinger.xml xml方式消息配置<br /> + 支持@DingerText&@DingerMarkdown注解方式消息配置 | [使用文档](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master/docs/V2.0.md) |
+| [2.0.1-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter) | 2020-09-13 | + 支持 @DingerConfiguration 注解支持Dinger层级别钉钉机器人信息配置<br /> + 新增 @AsyncExecute 支持Dinger层级别设置异步发送 | 同上 |
 
 
 &nbsp;
@@ -23,6 +24,12 @@
 
 ## 使用说明
 > **`以下为 1.0.X 版本使用说明文档`** 
+
+***
+**开发环境说明**
+- SpringBoot版本： 2.0.3.RELEASE
+- JDK1.8
+***
 
 &nbsp;
 
@@ -37,12 +44,19 @@
         <systemPath>${project.basedir}/lib/dingtalk-spring-boot-starter-1.0.5-RELEASE.jar</systemPath>
     </dependency>
     
-
     <!-- 方式2： 拉取maven仓库获取jar -->
     <dependency>
         <groupId>com.github.answerail</groupId>
         <artifactId>dingtalk-spring-boot-starter</artifactId>
         <version>${answerail-dingtalk.version}</version>
+    </dependency>
+
+
+    <!-- 同时需引入okhttp3依赖 -->
+    <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>3.10.0</version>
     </dependency>
 ```
 **answerail-dingtalk.version目前支持版本**
@@ -51,9 +65,8 @@
  - 1.0.3-RELEASE
  - 1.0.4-RELEASE
  - 1.0.5-RELEASE
- - 2.0.0-RELEASE [使用文档](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master/docs/V2.0.0.md)
-
-> **开发测试springboot版本说明**： 2.0.3.RELEASE
+ - 2.0.0-RELEASE [使用文档](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master/docs/V2.0.md)
+ - 2.0.1-RELEASE
 
 ***
 &nbsp;
@@ -64,7 +77,7 @@ spring:
   dingtalk:
     # dingtalk功能开关
     enabled: true
-    # 仅支持text和markdown消息类型, 推荐值: ${spring.application.name}
+    # 项目id， 推荐值: ${spring.application.name}
     project-id: ${spring.application.name}
     token-id: c60d4824e0ba4a30544e81212256789331d68b0085ed1a5b2279715741355fbc
     # 自定义关键字, 仅支持text和markdown消息类型
@@ -88,7 +101,7 @@ spring:
 ```
  - enabled： 选填, 是否启用dingtalk功能开关
  - token-id： 必填， [获取方式](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/26eaddd5)
- - project-id： 必填, 项目名称
+ - project-id： 必填, 项目名称。 建议： 可以用 project-id 作为 钉钉机器人设置安全策略-自定义关键词(自定义关键词有长度限制，可自行截取前缀或后缀)
  - title： 选填。 默认值(通知)
  - secret： 选填， 需要签名时必填， [获取方式](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/26eaddd5)
  - async： 选填， true | false(默认)
@@ -97,6 +110,7 @@ spring:
  - decryptKey: 选填, tokenId解密秘钥, decrypt为true时必填, 获取方式有以下两种
    - java -jar dingtalk-spring-boot-starter-[1.0.5]-RELEASE.jar [tokenId]
    - ConfigTools.encrypt(tokenId);
+ - dinger-locations: 选填， 定义 XXXDinger.xml 文件存放路径(使用xml方式定义消息体时则必填)
 
 &nbsp;
 
@@ -310,7 +324,7 @@ spring:
         }  
     }
 ```
-> 注意ID最好保证全局唯一
+> 注意ID最好保证全局唯一，**`同步调用直接返回响应结果，异步操作返回处理id(dkid)`**。
 
 &nbsp;
 
@@ -327,6 +341,7 @@ spring:
     }
 ```
 
+>  此处方法形参(dkid, result)，其中： dkid也就是异步通知的返回结果， result为请求实际的响应报文字符串。
 
 &nbsp;
 

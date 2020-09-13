@@ -17,6 +17,8 @@ package com.jaemon.dingtalk.dinger;
 
 import com.jaemon.dingtalk.dinger.annatations.DingerText;
 import com.jaemon.dingtalk.dinger.annatations.DingerTokenId;
+import com.jaemon.dingtalk.dinger.entity.DingerType;
+import com.jaemon.dingtalk.dinger.enums.AsyncExecuteType;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import com.jaemon.dingtalk.entity.message.Message;
 import com.jaemon.dingtalk.entity.message.TextReq;
@@ -38,11 +40,15 @@ public class DingerAnotationTextResolver implements DingerResolver<DingerText> {
         TextReq textReq = new TextReq(new TextReq.Text(dinger.value()));
         textReq.setAt(new Message.At(Arrays.asList(dinger.phones()), dinger.atAll()));
 
+        dingerDefinition.setDingerType(DingerType.ANNOTATION);
         dingerDefinition.setMsgType(MsgTypeEnum.TEXT);
         dingerDefinition.setMessage(textReq);
         dingerDefinition.setKeyName(keyName);
         DingerConfig dingerConfig = dingerConfig(dingerTokenId);
-        dingerConfig.setAsyncExecute(dinger.asyncExecute());
+        dingerConfig.setAsyncExecute(
+                dinger.asyncExecute() == AsyncExecuteType.NONE ?
+                        null : dinger.asyncExecute().type()
+        );
         dingerDefinition.setDingerConfig(dingerConfig);
 
         return dingerDefinition;

@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingtalk.listeners;
 
+import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.dinger.DingerDefinitionResolver;
 import com.jaemon.dingtalk.dinger.annatations.Dinger;
 import com.jaemon.dingtalk.dinger.annatations.DingerScan;
@@ -24,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -34,7 +36,7 @@ import java.util.List;
 import static com.jaemon.dingtalk.utils.PackageUtils.classNames;
 
 /**
- * DingerXmlAmalysis
+ * DingerXmlPreparedEvent
  *
  * @author Jaemon#answer_ljm@163.com
  * @version 2.0
@@ -49,8 +51,10 @@ public class DingerXmlPreparedEvent
         boolean isTraceEnabled = log.isTraceEnabled();
         boolean isDebugEnabled = log.isDebugEnabled();
 
-        String propName = "spring.dingtalk.dinger-locations";
-        String dingerLocations = event.getEnvironment().getProperty(propName);
+        String DingerLocationsProp = DINGER_PROPERTIES_PREFIX + "dinger-locations";
+        String dingerLocations = event.getEnvironment().getProperty(DingerLocationsProp);
+
+        DingerConfig defaultDingerConfig = defaultDingerConfig(event.getEnvironment());
 
         try {
             // deal with xml
@@ -64,7 +68,7 @@ public class DingerXmlPreparedEvent
                 Resource[] resources = resolver.getResources(dingerLocations);
                 if (resources.length == 0) {
                     if (isDebugEnabled) {
-                        log.debug("dinger xml is empty under {}:{}.", dingerLocations, propName);
+                        log.debug("dinger xml is empty under {}:{}.", dingerLocations, DingerLocationsProp);
                     }
                 } else {
                     analysisDingerXml(dingerLocations, resources);
@@ -113,7 +117,7 @@ public class DingerXmlPreparedEvent
             }
 
             // 处理类信息转为dingerDefinition
-            analysisDingerAnnotation(dingerClasses);
+            analysisDingerAnnotation(dingerClasses, defaultDingerConfig);
             ApplicationEventTimeTable.dingerClasses = dingerClasses;
         } catch (DingTalkException ex) {
             throw ex;
@@ -122,10 +126,56 @@ public class DingerXmlPreparedEvent
                 log.error("dinger exception=", ex);
             } else {
                 log.error("when analysis {}:{} dinger xml and annotation catch exception={}.",
-                        dingerLocations, propName, ex.getMessage());
+                        dingerLocations, DingerLocationsProp, ex.getMessage());
             }
+        } finally {
+            defaultDingerConfigSet.clear();
+            defaultDingerConfigSet = null;
         }
 
+    }
+
+    /**
+     * defaultDingerConfig
+     *
+     * @param environment environment
+     * @return defaultDingerConfig
+     */
+    private DingerConfig defaultDingerConfig(Environment environment) {
+        String tokenIdProp = DINGER_PROPERTIES_PREFIX + "token-id";
+        String secretProp = DINGER_PROPERTIES_PREFIX + "secret";
+        String decryptProp = DINGER_PROPERTIES_PREFIX + "decrypt";
+        String decryptKeyProp = DINGER_PROPERTIES_PREFIX + "decryptKey";
+        String asyncExecuteProp = DINGER_PROPERTIES_PREFIX + "async";
+        String tokenId = environment.getProperty(tokenIdProp);
+        String secret = environment.getProperty(secretProp);
+        boolean decrypt = getProperty(environment, decryptProp);
+        String decryptKey = environment.getProperty(decryptKeyProp);
+        boolean async = getProperty(environment, asyncExecuteProp);
+        DingerConfig defaultDingerConfig = new DingerConfig();
+        defaultDingerConfig.setTokenId(tokenId);
+        defaultDingerConfig.setSecret(secret);
+        if (decrypt) {
+            defaultDingerConfig.setDecryptKey(decryptKey);
+        }
+        defaultDingerConfig.setAsyncExecute(async);
+
+        defaultDingerConfig.check();
+        return defaultDingerConfig;
+    }
+
+    /**
+     * getProperty
+     *
+     * @param environment  environment
+     * @param prop prop
+     * @return prop value
+     */
+    private boolean getProperty(Environment environment, String prop) {
+        if (environment.getProperty(prop) != null) {
+            return environment.getProperty(prop, boolean.class);
+        }
+        return false;
     }
 
 }

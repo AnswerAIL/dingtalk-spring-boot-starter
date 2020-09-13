@@ -17,6 +17,8 @@ package com.jaemon.dingtalk.dinger;
 
 import com.jaemon.dingtalk.dinger.annatations.DingerMarkdown;
 import com.jaemon.dingtalk.dinger.annatations.DingerTokenId;
+import com.jaemon.dingtalk.dinger.entity.DingerType;
+import com.jaemon.dingtalk.dinger.enums.AsyncExecuteType;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import com.jaemon.dingtalk.entity.message.MarkDownReq;
 import com.jaemon.dingtalk.entity.message.Message;
@@ -39,11 +41,15 @@ public class DingerAnotationMarkdownResolver implements DingerResolver<DingerMar
         // markdown not support at all members
         markDownReq.setAt(new Message.At(Arrays.asList(dinger.phones()), false));
 
+        dingerDefinition.setDingerType(DingerType.ANNOTATION);
         dingerDefinition.setMsgType(MsgTypeEnum.MARKDOWN);
         dingerDefinition.setMessage(markDownReq);
         dingerDefinition.setKeyName(keyName);
         DingerConfig dingerConfig = dingerConfig(dingerTokenId);
-        dingerConfig.setAsyncExecute(dinger.asyncExecute());
+        dingerConfig.setAsyncExecute(
+                dinger.asyncExecute() == AsyncExecuteType.NONE ?
+                        null : dinger.asyncExecute().type()
+        );
         dingerDefinition.setDingerConfig(dingerConfig);
 
         return dingerDefinition;

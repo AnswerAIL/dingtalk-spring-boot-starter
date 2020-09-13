@@ -15,6 +15,8 @@
  */
 package com.jaemon.dingtalk.dinger.annatations;
 
+import com.jaemon.dingtalk.dinger.enums.AsyncExecuteType;
+
 import java.lang.annotation.*;
 
 /**
@@ -73,5 +75,5 @@ public @interface DingerMarkdown {
      *
      * @return async execute send
      */
-    boolean asyncExecute() default false;
+    AsyncExecuteType asyncExecute() default AsyncExecuteType.NONE;
 }

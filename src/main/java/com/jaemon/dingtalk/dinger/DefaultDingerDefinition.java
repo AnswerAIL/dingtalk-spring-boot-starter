@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingtalk.dinger;
 
+import com.jaemon.dingtalk.dinger.entity.DingerType;
 import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import com.jaemon.dingtalk.entity.message.Message;
 
@@ -30,6 +31,7 @@ public class DefaultDingerDefinition implements DingerDefinition {
     private MsgTypeEnum msgType;
     private Message message;
     private DingerConfig dingerConfig;
+    private DingerType dingerType;
 
     @Override
     public String keyName() {
@@ -70,5 +72,15 @@ public class DefaultDingerDefinition implements DingerDefinition {
     @Override
     public void setDingerConfig(DingerConfig dingerConfig) {
         this.dingerConfig = dingerConfig;
+    }
+
+    @Override
+    public DingerType dingerType() {
+        return dingerType;
+    }
+
+    @Override
+    public void setDingerType(DingerType dingerType) {
+        this.dingerType = dingerType;
     }
 }

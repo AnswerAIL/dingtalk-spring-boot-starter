@@ -89,6 +89,7 @@ public class DingerXmlResolver implements DingerResolver<MessageTag> {
 
         // send msg info...
         dingerDefinition.setMessage(msg);
+        dingerDefinition.setDingerType(DingerType.XML);
 
         Optional<PhonesTag> phonesTag = body.map(e -> e.getPhones());
         Boolean atAll = phonesTag.map(e -> e.getAtAll()).orElse(false);

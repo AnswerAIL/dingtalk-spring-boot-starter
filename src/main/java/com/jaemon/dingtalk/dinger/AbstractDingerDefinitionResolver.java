@@ -17,9 +17,7 @@ package com.jaemon.dingtalk.dinger;
 
 import org.springframework.core.io.Resource;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * AbstractDingerDefinitionResolver
@@ -28,6 +26,7 @@ import java.util.Map;
  * @version 2.0
  */
 public abstract class AbstractDingerDefinitionResolver {
+    protected Set<String> defaultDingerConfigSet;
     protected DingerResolver dingerXmlResolver;
     protected DingerResolver dingerAnotationTextResolver;
     protected DingerResolver dingerAnotationMarkdownResolver;
@@ -36,6 +35,7 @@ public abstract class AbstractDingerDefinitionResolver {
         this.dingerXmlResolver = new DingerXmlResolver();
         this.dingerAnotationTextResolver = new DingerAnotationTextResolver();
         this.dingerAnotationMarkdownResolver = new DingerAnotationMarkdownResolver();
+        this.defaultDingerConfigSet = new HashSet<>();
     }
 
     /**
@@ -51,9 +51,10 @@ public abstract class AbstractDingerDefinitionResolver {
      * analysisDingerAnnotation
      *
      * @param dingerClasses dingerClasses
+     * @param defaultDingerConfig defaultDingerConfig
      * @throws Exception ex
      */
-    protected abstract void analysisDingerAnnotation(List<Class<?>> dingerClasses) throws Exception;
+    protected abstract void analysisDingerAnnotation(List<Class<?>> dingerClasses, DingerConfig defaultDingerConfig) throws Exception;
 
     /**
      * Container for DingerDefinition
