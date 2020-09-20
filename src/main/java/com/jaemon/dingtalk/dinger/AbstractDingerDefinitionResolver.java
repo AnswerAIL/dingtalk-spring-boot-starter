@@ -96,4 +96,16 @@ public abstract class AbstractDingerDefinitionResolver {
             return container.containsKey(key);
         }
     }
+
+    /**
+     * transferXml
+     *
+     * solve -Djavax.xml.accessExternalSchema=all
+     *
+     * @param sourceXml sourceXml
+     * @return xml
+     */
+    String transferXml(String sourceXml) {
+        return sourceXml.replaceAll("<!DOCTYPE.*>", "");
+    }
 }

@@ -15,7 +15,6 @@
  */
 package com.jaemon.dingtalk.entity;
 
-
 import com.jaemon.dingtalk.exception.InvalidPropertiesFormatException;
 import com.jaemon.dingtalk.utils.DingTalkUtils;
 import lombok.Data;

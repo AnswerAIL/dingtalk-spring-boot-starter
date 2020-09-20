@@ -15,7 +15,6 @@
  */
 package com.jaemon.dingtalk;
 
-
 import com.alibaba.fastjson.JSON;
 import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.entity.*;

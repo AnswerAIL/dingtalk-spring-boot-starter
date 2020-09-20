@@ -15,6 +15,8 @@
  */
 package com.jaemon.dingtalk.dinger.entity;
 
+import com.jaemon.dingtalk.dinger.annatations.PriorityColumn;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,12 +29,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "message")
 public class MessageTag {
     private String identityId;
+    @PriorityColumn(clazz = BodyTag.class, column = "type", priority = true)
+    private String dingerType;
     private BodyTag body;
     private ConfigurationTag configuration;
 
     @XmlAttribute(required = true, name = "id")
     public String getIdentityId() {
         return identityId;
+    }
+
+    @XmlAttribute(name = "type")
+    public String getDingerType() {
+        return dingerType;
     }
 
     public BodyTag getBody() {
@@ -45,6 +54,10 @@ public class MessageTag {
 
     public void setIdentityId(String identityId) {
         this.identityId = identityId;
+    }
+
+    public void setDingerType(String dingerType) {
+        this.dingerType = dingerType;
     }
 
     public void setBody(BodyTag body) {

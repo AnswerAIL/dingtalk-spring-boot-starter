@@ -62,7 +62,8 @@ public class DingerXmlResolver implements DingerResolver<MessageTag> {
             }
 
             dingerConfig.setAsyncExecute(
-                    configuration.map(e -> e.getAsyncExecute()).orElse(false)
+                    configuration.map(e -> (e.getAsync() == null)
+                            ? e.getAsyncExecute() : e.getAsync()).orElse(false)
             );
             // do check dingtalk config by person
             dingerConfig.check();
@@ -70,7 +71,11 @@ public class DingerXmlResolver implements DingerResolver<MessageTag> {
 
         Message msg;
         Optional<BodyTag> body = Optional.ofNullable(message.getBody());
-        String msgType = body.map(e -> e.getType()).orElse(MsgTypeEnum.TEXT.type());
+        String msgType = message.getDingerType();
+        if (msgType == null) {
+            msgType = body.map(e -> e.getType()).orElse(MsgTypeEnum.TEXT.type());
+        }
+
         MsgTypeEnum msgTypeEnum = MsgTypeEnum.msgType(msgType);
         // msgtype
         dingerDefinition.setMsgType(msgTypeEnum);
@@ -93,6 +98,10 @@ public class DingerXmlResolver implements DingerResolver<MessageTag> {
 
         Optional<PhonesTag> phonesTag = body.map(e -> e.getPhones());
         Boolean atAll = phonesTag.map(e -> e.getAtAll()).orElse(false);
+        // markdown diner not supported at all members
+        if (msgTypeEnum == MsgTypeEnum.MARKDOWN && atAll == true) {
+            atAll = false;
+        }
         List<PhoneTag> phoneTags = phonesTag.map(e -> e.getPhones()).orElse(null);
         List<String> phones;
         if (phoneTags != null) {

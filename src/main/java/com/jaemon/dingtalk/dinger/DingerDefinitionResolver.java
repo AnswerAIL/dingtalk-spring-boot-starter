@@ -54,6 +54,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
         for (Resource resource : resources) {
             File file = resource.getFile();
             String xml = FileCopyUtils.copyToString(new FileReader(file));
+            xml = transferXml(xml);
             BeanTag dingerBean = XmlUtils.xmlToJavaBean(xml, BeanTag.class);
             if (dingerBean == null) {
                 if (log.isDebugEnabled()) {

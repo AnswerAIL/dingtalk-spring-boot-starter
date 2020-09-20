@@ -15,7 +15,6 @@
  */
 package com.jaemon.dingtalk.entity;
 
-
 import com.jaemon.dingtalk.entity.enums.ResultCode;
 import lombok.Data;
 

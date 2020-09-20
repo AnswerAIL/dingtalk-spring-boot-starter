@@ -5,13 +5,7 @@
 <dependency>
     <groupId>com.github.answerail</groupId>
     <artifactId>dingtalk-spring-boot-starter</artifactId>
-    <version>2.0.1-RELEASE</version>
-</dependency>
-
-<dependency>
-    <groupId>com.squareup.okhttp3</groupId>
-    <artifactId>okhttp</artifactId>
-    <version>3.10.0</version>
+    <version>2.0.2-RELEASE</version>
 </dependency>
 ```
 

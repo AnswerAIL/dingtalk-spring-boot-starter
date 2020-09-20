@@ -15,6 +15,9 @@
  */
 package com.jaemon.dingtalk.dinger.entity;
 
+import com.jaemon.dingtalk.dinger.annatations.PriorityColumn;
+
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,8 +29,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "configuration")
 public class ConfigurationTag {
+    @PriorityColumn(column = "asyncExecute", priority = true)
+    private Boolean async;
     private TokenId tokenId;
+    @PriorityColumn(column = "async")
     private boolean asyncExecute;
+
+    @XmlAttribute(name = "async")
+    public Boolean getAsync() {
+        return async;
+    }
 
     @XmlElement(name = "token-id")
     public TokenId getTokenId() {
@@ -37,6 +48,10 @@ public class ConfigurationTag {
     @XmlElement(name = "async-execute", type = Boolean.class)
     public boolean getAsyncExecute() {
         return asyncExecute;
+    }
+
+    public void setAsync(Boolean async) {
+        this.async = async;
     }
 
     public void setTokenId(TokenId tokenId) {

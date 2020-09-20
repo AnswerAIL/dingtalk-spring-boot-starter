@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE dinger SYSTEM "dingtalk-dinger.dtd">
+<!DOCTYPE dinger PUBLIC "-//AnswerAIL//DTD Dinger 2.0//EN" "dingtalk-dinger.dtd">
 
 <!--
 	spring.dingtalk.dinger-locations: classpath*:dinger/*.xml
@@ -6,10 +8,10 @@
 
 <dinger namespace="com.jaemon.dingtalk.dinger.OrderDinger">
 
-	<message id="orderSuccess">
+	<message id="orderSuccess" type="TEXT">
 		<body>
 			<!-- 发送消息类型， 默认text -->
-			<type>text</type>
+			<!--<type>text</type>-->
 			<content>
 				订单号${orderNum}下单成功啦, 下单金额${amt}
 			</content>
@@ -19,7 +21,7 @@
 		</body>
 
 		<!-- 个性化指定： 当前发送消息体的tokenid， 默认情况下采用全局配置的tokenId -->
-		<configuration>
+		<configuration async="false">
 			<!--
 				secret： 当钉钉机器人需要加签时，填写对应的秘钥值
 				decrypt-key： 系统内部对tokenId进行加密的解密秘钥
@@ -31,14 +33,14 @@
 			</token-id>
 
 			<!-- 是否发送异步消息 -->
-			<async-execute>false</async-execute>
+			<!--<async-execute>false</async-execute>-->
 		</configuration>
 	</message>
 
 
-	<message id="orderFailed">
+	<message id="orderFailed" type="MARKDOWN">
 		<body>
-			<type>markdown</type>
+			<!--<type>markdown</type>-->
 			<!-- 注意:
 					1. 当发送消息类型为markdown时, title 属性必填
 					2. 如果需要@指定成员，markdown消息内容中必须带@成员, eg: @13520200906
