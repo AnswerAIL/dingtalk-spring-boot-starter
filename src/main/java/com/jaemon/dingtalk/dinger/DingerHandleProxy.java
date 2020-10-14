@@ -19,6 +19,7 @@ import com.jaemon.dingtalk.AbstractDingTalkSender;
 import com.jaemon.dingtalk.DingTalkSender;
 import com.jaemon.dingtalk.dinger.annatations.DingerClose;
 import com.jaemon.dingtalk.entity.DingTalkResult;
+import com.jaemon.dingtalk.entity.message.Message;
 import com.jaemon.dingtalk.listeners.DingerXmlPreparedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +77,7 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
             }
 
             AbstractDingTalkSender.setLocalDinger(dingerDefinition.dingerConfig());
-            transfer(dingerDefinition, params);
+            Message message = transfer(dingerDefinition, params);
 
             // when keyword is null, use methodName + timestamps
             String keyword = params.getOrDefault(
@@ -84,8 +85,7 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
                     keyName + CONNECTOR + System.currentTimeMillis()
             ).toString();
             DingTalkResult dingTalkResult = dingTalkSender.send(
-                    keyword,
-                    dingerDefinition.message()
+                    keyword, message
             );
 
             // return...

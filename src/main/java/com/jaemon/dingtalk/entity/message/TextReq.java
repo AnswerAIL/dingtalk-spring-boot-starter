@@ -21,6 +21,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * Text 消息格式实体
  *
@@ -29,12 +31,16 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class TextReq extends Message {
+public class TextReq extends Message implements Serializable {
 
     /**
      * 消息内容
      * */
     private Text text;
+
+    public TextReq() {
+        setMsgtype(MsgTypeEnum.TEXT.type());
+    }
 
     public TextReq(Text text) {
         setMsgtype(MsgTypeEnum.TEXT.type());
@@ -44,7 +50,7 @@ public class TextReq extends Message {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Text {
+    public static class Text implements Serializable {
         private String content;
     }
 }

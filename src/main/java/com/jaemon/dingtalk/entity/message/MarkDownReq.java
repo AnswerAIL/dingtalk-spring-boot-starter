@@ -21,6 +21,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * Markdown 消息格式实体
  *
@@ -29,12 +31,16 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MarkDownReq extends Message {
+public class MarkDownReq extends Message implements Serializable {
 
     /**
      * {@link MarkDown}
      */
     private MarkDown markdown;
+
+    public MarkDownReq() {
+        setMsgtype(MsgTypeEnum.MARKDOWN.type());
+    }
 
     public MarkDownReq(MarkDown markdown) {
         setMsgtype(MsgTypeEnum.MARKDOWN.type());
@@ -44,7 +50,7 @@ public class MarkDownReq extends Message {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MarkDown {
+    public static class MarkDown implements Serializable {
         /**
          * 首屏会话透出的展示内容, 不会展示在具体的显示内容上
          */

@@ -15,6 +15,8 @@
  */
 package com.jaemon.dingtalk.dinger;
 
+import com.jaemon.dingtalk.entity.message.Message;
+
 import java.util.Map;
 
 /**
@@ -30,6 +32,7 @@ public interface MessageTransfer {
      *
      * @param dingerDefinition dingerDefinition
      * @param params params
+     * @return Message
      */
-    void transfer(DingerDefinition dingerDefinition, Map<String, Object> params);
+    Message transfer(DingerDefinition dingerDefinition, Map<String, Object> params);
 }

@@ -23,7 +23,12 @@ import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import com.jaemon.dingtalk.entity.message.MarkDownReq;
 import com.jaemon.dingtalk.entity.message.Message;
 import com.jaemon.dingtalk.entity.message.TextReq;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +40,7 @@ import java.util.Optional;
  * @author Jaemon#answer_ljm@163.com
  * @version 2.0
  */
+@Slf4j
 public class DingerMessageHandler implements MessageTransfer, ParamHandle, ResultHandle<DingTalkResult> {
     private static final String PREFIX_TAG = "\\$\\{";
     private static final String SUFFIX_TAG = "}";
@@ -44,21 +50,25 @@ public class DingerMessageHandler implements MessageTransfer, ParamHandle, Resul
     protected DingTalkSender dingTalkSender;
 
     @Override
-    public void transfer(DingerDefinition dingerDefinition, Map<String, Object> params) {
+    public Message transfer(DingerDefinition dingerDefinition, Map<String, Object> params) {
         MsgTypeEnum msgType = dingerDefinition.msgType();
         Message message = dingerDefinition.message();
+        // bugfix #2
         if (msgType == MsgTypeEnum.TEXT) {
-            TextReq textReq = (TextReq) message;
+            TextReq textReq = copyProperties(message);;
             String text = textReq.getText().getContent();
             String content = replaceContent(text, params);
             textReq.getText().setContent(content);
+            return textReq;
         } else if (msgType == MsgTypeEnum.MARKDOWN) {
-            MarkDownReq markDownReq = (MarkDownReq) message;
+            MarkDownReq markDownReq = copyProperties(message);
             String text = markDownReq.getMarkdown().getText();
             String content = replaceContent(text, params);
             markDownReq.getMarkdown().setText(content);
+            return markDownReq;
         } else {
-
+            log.warn("invalid msgType {}.", msgType);
+            return null;
         }
     }
 
@@ -78,6 +88,32 @@ public class DingerMessageHandler implements MessageTransfer, ParamHandle, Resul
         }
 
         return content;
+    }
+
+    /**
+     * copyProperties
+     *
+     * @param src src
+     * @param <T> T extends Message
+     * @return msg
+     */
+    private <T extends Message> T copyProperties(Message src) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(src);
+
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(byteIn);
+            T dest = (T) in.readObject();
+            return dest;
+        } catch (Exception e) {
+            //
+            if (log.isDebugEnabled()) {
+                log.debug("copy properties error:", e);
+            }
+            return null;
+        }
     }
 
     @Override

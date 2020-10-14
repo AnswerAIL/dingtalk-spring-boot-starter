@@ -17,13 +17,15 @@ package com.jaemon.dingtalk.entity.message;
 
 import lombok.Getter;
 
+import java.io.Serializable;
+
 /**
  * 消息类型实体
  *
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-public class MsgType {
+public class MsgType implements Serializable {
     /**
      * 消息类型
      * */

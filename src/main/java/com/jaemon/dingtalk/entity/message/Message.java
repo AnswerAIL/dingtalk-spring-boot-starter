@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -30,13 +31,13 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Message extends MsgType {
+public class Message extends MsgType implements Serializable {
     private At at;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class At {
+    public static class At implements Serializable {
         /**
          * 被@人的手机号(在content里添加@人的手机号)
          * */
