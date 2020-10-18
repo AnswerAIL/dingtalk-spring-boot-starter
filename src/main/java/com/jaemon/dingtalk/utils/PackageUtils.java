@@ -103,20 +103,28 @@ public class PackageUtils {
                 if (f.isFile()) {
                     String className = packageName + SPOT + name.substring(0, name.lastIndexOf(SPOT));
                     Class<?> clazz = Class.forName(className);
-                    if (filterAnnotations.length > 0) {
-                        for (Class<? extends Annotation> annotation : filterAnnotations) {
-                            if (clazz.isAnnotationPresent(annotation)) {
-                                if (!repeatCheck.contains(className)) {
-                                    classNames.add(clazz);
+                    // XXXDinger.java must be an interface
+                    if (clazz.isInterface()) {
+                        if (filterAnnotations.length > 0) {
+                            for (Class<? extends Annotation> annotation : filterAnnotations) {
+                                if (clazz.isAnnotationPresent(annotation)) {
+                                    if (!repeatCheck.contains(className)) {
+                                        classNames.add(clazz);
+                                    }
+                                    break;
                                 }
-                                break;
+                            }
+                        } else {
+                            if (!repeatCheck.contains(className)) {
+                                classNames.add(clazz);
                             }
                         }
                     } else {
-                        if (!repeatCheck.contains(className)) {
-                            classNames.add(clazz);
+                        if (log.isDebugEnabled()) {
+                            log.debug("skip class {}.", clazz.getName());
                         }
                     }
+
                 } else {
                     forClassNames(packageName + SPOT + name, classNames, filterAnnotations);
                 }
@@ -164,6 +172,10 @@ public class PackageUtils {
                             if (!repeatCheck.contains(className)) {
                                 classNames.add(clazz);
                             }
+                        }
+                    } else {
+                        if (log.isDebugEnabled()) {
+                            log.debug("skip class {}.", clazz.getName());
                         }
                     }
                 }

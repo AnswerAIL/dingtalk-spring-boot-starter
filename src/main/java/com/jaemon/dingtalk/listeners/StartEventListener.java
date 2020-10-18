@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingtalk.listeners;
 
+import com.jaemon.dingtalk.dinger.annatations.DingerScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
@@ -35,13 +36,20 @@ public class StartEventListener implements ApplicationListener<ApplicationStarti
 
     @Override
     public void onApplicationEvent(ApplicationStartingEvent event) {
+        if (ApplicationEventTimeTable.startTime > 0) {
+            log.info("dingtalk has already been initialized.");
+            return;
+        }
         ApplicationEventTimeTable.startTime = event.getTimestamp();
 
         Set<Object> allSources = event.getSpringApplication().getAllSources();
         Set<Class<?>> primarySources = new HashSet<>();
-        for (Object object : allSources) {
-            if (Class.class.isInstance(object)) {
-                primarySources.add((Class<?>) object);
+        for (Object source : allSources) {
+            if (Class.class.isInstance(source)) {
+                Class<?> clazz = (Class<?>) source;
+                if (clazz.isAnnotationPresent(DingerScan.class)) {
+                    primarySources.add(clazz);
+                }
             }
         }
         ApplicationEventTimeTable.primarySources = primarySources;

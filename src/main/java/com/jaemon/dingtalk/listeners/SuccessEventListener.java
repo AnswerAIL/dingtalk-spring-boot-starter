@@ -23,8 +23,10 @@ import com.jaemon.dingtalk.support.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.Ordered;
 
 import static com.jaemon.dingtalk.constant.DkConstant.DK_PREFIX;
 import static com.jaemon.dingtalk.constant.DkConstant.SUCCESS_KEYWORD;
@@ -35,30 +37,45 @@ import static com.jaemon.dingtalk.constant.DkConstant.SUCCESS_KEYWORD;
  * @author Jaemon@answer_ljm@163.com
  * @version 1.0
  */
-public class SuccessEventListener implements ApplicationListener<ApplicationReadyEvent> {
+public class SuccessEventListener implements ApplicationListener<ApplicationReadyEvent>, Ordered {
     private static final Logger log = LoggerFactory.getLogger(SuccessEventListener.class);
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        ApplicationEventTimeTable.successTime = event.getTimestamp();
+        ConfigurableApplicationContext applicationContext = event.getApplicationContext();
+        // fixed #3
+        if (/*applicationContext.getParent() == null
+                && */AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
+                && ApplicationEventTimeTable.successTime == 0) {
 
-        ApplicationContext applicationContext = event.getApplicationContext();
-        DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
+            ApplicationEventTimeTable.successTime = event.getTimestamp();
 
-        if (properties.isEnabled()
-                && properties.getMonitor().isSuccess()) {
-            DingTalkSender dingTalkRobot = applicationContext.getBean(DingTalkSender.class);
-            Notification notification = applicationContext.getBean(Notification.class);
-            String projectId = properties.getProjectId();
-            projectId = projectId == null ? DK_PREFIX : projectId;
+            DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
 
-            MsgType message = notification.success(event, projectId);
-            String keyword = projectId + SUCCESS_KEYWORD;
-            DingTalkResult result = dingTalkRobot.send(keyword, message);
+            if (properties.isEnabled()
+                    && properties.getMonitor().isSuccess()) {
+                DingTalkSender dingTalkRobot = applicationContext.getBean(DingTalkSender.class);
+                Notification notification = applicationContext.getBean(Notification.class);
+                String projectId = properties.getProjectId();
+                projectId = projectId == null ? DK_PREFIX : projectId;
+
+                MsgType message = notification.success(event, projectId);
+                String keyword = projectId + SUCCESS_KEYWORD;
+                DingTalkResult result = dingTalkRobot.send(keyword, message);
+                if (log.isDebugEnabled()) {
+                    log.debug("keyword={}, result={}.", keyword, result.toString());
+                }
+            }
+        } else {
             if (log.isDebugEnabled()) {
-                log.debug("keyword={}, result={}.", keyword, result.toString());
+                log.debug("dingtalk success listener skip, context={}.", applicationContext.getClass().getName());
             }
         }
 
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }

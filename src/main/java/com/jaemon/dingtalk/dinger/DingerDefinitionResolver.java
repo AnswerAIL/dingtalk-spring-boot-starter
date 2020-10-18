@@ -128,6 +128,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
 
                     INSTANCE.put(keyName, dingerDefinition);
                 } else {
+                    // xml dingerConfig adapt
                     if (defaultDingerConfigSet.contains(keyName)) {
                         INSTANCE.get(keyName).dingerConfig()
                                 .merge(dingerConfiguration)

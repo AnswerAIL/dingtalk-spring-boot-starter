@@ -23,6 +23,7 @@ import com.jaemon.dingtalk.support.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
+import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 
@@ -45,24 +46,27 @@ public class FailedEventListener implements ApplicationListener<ApplicationFaile
             return;
         }
 
-        DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
-
-        if (properties.isEnabled()
-                && properties.getMonitor().isFalied()) {
-            DingTalkSender dingTalkRobot = applicationContext.getBean(DingTalkSender.class);
-            Notification notification = applicationContext.getBean(Notification.class);
-            String projectId = properties.getProjectId();
-            projectId = projectId == null ? DK_PREFIX : projectId;
-
+        if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
+                && ApplicationEventTimeTable.failedTime == 0) {
             ApplicationEventTimeTable.failedTime = event.getTimestamp();
+            DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
 
-            MsgType message = notification.failed(event, projectId);
-            String keyword = projectId + FAILED_KEYWORD;
-            DingTalkResult result = dingTalkRobot.send(keyword, message);
-            if (log.isDebugEnabled()) {
-                log.debug("keyword={}, result={}.", keyword, result.toString());
+            if (properties.isEnabled()
+                    && properties.getMonitor().isFalied()) {
+                DingTalkSender dingTalkRobot = applicationContext.getBean(DingTalkSender.class);
+                Notification notification = applicationContext.getBean(Notification.class);
+                String projectId = properties.getProjectId();
+                projectId = projectId == null ? DK_PREFIX : projectId;
+
+                MsgType message = notification.failed(event, projectId);
+                String keyword = projectId + FAILED_KEYWORD;
+                DingTalkResult result = dingTalkRobot.send(keyword, message);
+                if (log.isDebugEnabled()) {
+                    log.debug("keyword={}, result={}.", keyword, result.toString());
+                }
             }
         }
+
     }
 
 }

@@ -5,7 +5,7 @@
 <dependency>
     <groupId>com.github.answerail</groupId>
     <artifactId>dingtalk-spring-boot-starter</artifactId>
-    <version>2.0.3-RELEASE</version>
+    <version>2.0.4-RELEASE</version>
 </dependency>
 ```
 

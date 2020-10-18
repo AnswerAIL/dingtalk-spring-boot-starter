@@ -33,7 +33,7 @@ public class DefaultNotice implements Notice {
     public void callback(DkExCallable dkExCallable) {
         DingTalkException ex = dkExCallable.getEx();
 
-        log.error("异常静默处理{}-{}->{}.",
+        log.error("异常静默处理:{}-{}->{}.",
                 ex.getPairs().code(),
                 ex.getPairs().desc(),
                 ex.getMessage()

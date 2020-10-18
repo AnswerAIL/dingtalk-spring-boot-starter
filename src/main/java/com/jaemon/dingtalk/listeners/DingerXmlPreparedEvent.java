@@ -53,7 +53,7 @@ public class DingerXmlPreparedEvent
 
         String DingerLocationsProp = DINGER_PROPERTIES_PREFIX + "dinger-locations";
         String dingerLocations = event.getEnvironment().getProperty(DingerLocationsProp);
-
+        // application.xml dinger config
         DingerConfig defaultDingerConfig = defaultDingerConfig(event.getEnvironment());
 
         try {
@@ -120,12 +120,17 @@ public class DingerXmlPreparedEvent
             analysisDingerAnnotation(dingerClasses, defaultDingerConfig);
             ApplicationEventTimeTable.dingerClasses = dingerClasses;
         } catch (DingTalkException ex) {
-            throw ex;
+            if (isTraceEnabled) {
+                log.error("dinger dingTalkException=", ex);
+            } else {
+                log.warn("when analysis {}:{} dinger xml and annotation catch {}-{} exception={}.",
+                        dingerLocations, DingerLocationsProp, ex.getPairs().code(), ex.getPairs().desc(), ex.getMessage());
+            }
         } catch (Exception ex) {
             if (isTraceEnabled) {
                 log.error("dinger exception=", ex);
             } else {
-                log.error("when analysis {}:{} dinger xml and annotation catch exception={}.",
+                log.warn("when analysis {}:{} dinger xml and annotation catch exception={}.",
                         dingerLocations, DingerLocationsProp, ex.getMessage());
             }
         } finally {

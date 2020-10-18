@@ -101,4 +101,17 @@ public class DingTalkUtils {
                 .replaceAll(suffixRegex, "$1")
                 .replaceAll(regex, " ");
     }
+
+
+    /**
+     * classPackageName
+     *
+     * @param className className
+     * @return packageName
+     */
+    public static String classPackageName(String className) {
+        return className.substring(0, className.lastIndexOf("."));
+    }
+
+
 }

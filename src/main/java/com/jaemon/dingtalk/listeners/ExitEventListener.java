@@ -22,6 +22,7 @@ import com.jaemon.dingtalk.entity.message.MsgType;
 import com.jaemon.dingtalk.support.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
@@ -41,25 +42,29 @@ public class ExitEventListener implements ApplicationListener<ContextClosedEvent
     @Override
     public void onApplicationEvent(ContextClosedEvent event) {
         ApplicationContext applicationContext = event.getApplicationContext();
-        DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
 
-        if (properties.isEnabled()
-                && properties.getMonitor().isExit()
-                // exclude start-up failed
-                && ApplicationEventTimeTable.successTime() > 0) {
-            DingTalkSender dingTalkRobot = applicationContext.getBean(DingTalkSender.class);
-            Notification notification = applicationContext.getBean(Notification.class);
-            String projectId = properties.getProjectId();
-            projectId = projectId == null ? DK_PREFIX : projectId;
-
+        if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
+                && ApplicationEventTimeTable.exitTime == 0) {
             ApplicationEventTimeTable.exitTime = event.getTimestamp();
+            DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
 
-            MsgType message = notification.exit(event, projectId);
-            String keyword = projectId + EXIT_KEYWORD;
-            DingTalkResult result = dingTalkRobot.send(keyword, message);
-            if (log.isDebugEnabled()) {
-                log.debug("keyword={}, result={}.", keyword, result.toString());
+            if (properties.isEnabled()
+                    && properties.getMonitor().isExit()
+                    // exclude start-up failed
+                    && ApplicationEventTimeTable.successTime() > 0) {
+                DingTalkSender dingTalkRobot = applicationContext.getBean(DingTalkSender.class);
+                Notification notification = applicationContext.getBean(Notification.class);
+                String projectId = properties.getProjectId();
+                projectId = projectId == null ? DK_PREFIX : projectId;
+
+                MsgType message = notification.exit(event, projectId);
+                String keyword = projectId + EXIT_KEYWORD;
+                DingTalkResult result = dingTalkRobot.send(keyword, message);
+                if (log.isDebugEnabled()) {
+                    log.debug("keyword={}, result={}.", keyword, result.toString());
+                }
             }
         }
+
     }
 }

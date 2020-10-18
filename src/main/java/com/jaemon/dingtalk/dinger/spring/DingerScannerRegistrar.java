@@ -17,7 +17,10 @@ package com.jaemon.dingtalk.dinger.spring;
 
 import com.jaemon.dingtalk.dinger.annatations.Dinger;
 import com.jaemon.dingtalk.dinger.annatations.DingerScan;
+import com.jaemon.dingtalk.entity.enums.ExceptionEnum;
+import com.jaemon.dingtalk.exception.DingTalkException;
 import com.jaemon.dingtalk.listeners.ApplicationEventTimeTable;
+import com.jaemon.dingtalk.utils.DingTalkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -55,6 +58,10 @@ public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar {
                     log.debug("dinger class is empty in primarySources, ready to reanalysis from DingerScan.");
                 }
 
+                if (!importingClassMetadata.hasAnnotation(DingerScan.class.getName())) {
+                    log.warn("import class can't find DingerScan annotation.");
+                    return;
+                }
                 AnnotationAttributes annoAttrs = AnnotationAttributes.fromMap(
                         importingClassMetadata.getAnnotationAttributes(DingerScan.class.getName())
                 );
@@ -66,14 +73,12 @@ public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar {
                 }
 
                 // just to obtain interface that defined by Dinger annotation
-                for (Class<?> primarySource : ApplicationEventTimeTable.primarySources()) {
-                    classNames(primarySource.getPackage().getName(), dingerClasses, Dinger.class);
-                }
+                classNames(DingTalkUtils.classPackageName(importingClassMetadata.getClassName()), dingerClasses, Dinger.class);
 
                 if (!dingerClasses.isEmpty()) {
                     registerBeanDefinition(registry, dingerClasses);
                 } else {
-                    log.warn("dinger class is empty.");
+                    throw new DingTalkException("dinger class is empty.", ExceptionEnum.CONFIG_ERROR);
                 }
             }
         } finally {

@@ -17,7 +17,8 @@
 | [2.0.0-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.0-RELEASE) | 2020-09-06 | + 支持 XXXDinger.xml xml方式消息配置<br /> + 支持@DingerText&@DingerMarkdown注解方式消息配置 | [V2.0.X使用文档](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master/docs/V2.0.md) |
 | [2.0.1-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.1-RELEASE) | 2020-09-13 | + 新增 @DingerConfiguration 注解支持Dinger层级别钉钉机器人信息配置<br /> + 新增 @AsyncExecute 注解支持Dinger层级别设置异步发送 | - |
 | [2.0.2-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.2-RELEASE) | 2020-09-20 | + 新增dinger xml文件编写约束<br /> M 修复部分存在缺陷  | - |
-| [2.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter) | 2020-10-14 | M fixed #2  | - |
+| [2.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.3-RELEASE) | 2020-10-14 | M fixed #2  | - |
+| [2.0.4-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter) | 2020-10-18 | M fixed #3 && 部分存在缺陷  | - |
 
 &nbsp;
 
@@ -31,7 +32,11 @@
 &nbsp;
 
 ***
-> [有问题欢迎提Issue](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues)
+> 有问题欢迎提Issue
+>
+> [github issues](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues)
+>
+> [gitee issues](https://gitee.com/jaemon/dingtalk-spring-boot-starter/issues)
 ***
 
 &nbsp;
