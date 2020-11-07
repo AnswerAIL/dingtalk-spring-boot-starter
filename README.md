@@ -1,8 +1,7 @@
 # dingtalk-spring-boot-starter
 
-[toc]
 
-集成钉钉机器人实现消息通知
+springboot集成钉钉机器人实现消息通知中间件。项目基于[钉钉开放平台-群机器人](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5) API的基础上做了一层封装，让使用更简单便捷。
 
 &nbsp;
 

@@ -15,7 +15,6 @@
  */
 package com.jaemon.dingtalk.dinger;
 
-import com.jaemon.dingtalk.AbstractDingTalkSender;
 import com.jaemon.dingtalk.DingTalkSender;
 import com.jaemon.dingtalk.dinger.annatations.DingerClose;
 import com.jaemon.dingtalk.entity.DingTalkResult;
@@ -56,15 +55,15 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
             return null;
         }
 
+        final String classPackage = method.getDeclaringClass().getName();
+        final String methodName = method.getName();
+        String keyName = classPackage + SPOT_SEPERATOR + methodName;
+
+        if (DEFAULT_STRING_METHOD.equals(keyName)) {
+            return null;
+        }
+
         try {
-            final String classPackage = method.getDeclaringClass().getName();
-            final String methodName = method.getName();
-            String keyName = classPackage + SPOT_SEPERATOR + methodName;
-
-            if (DEFAULT_STRING_METHOD.equals(keyName)) {
-                return null;
-            }
-
             // method params map
             Map<String, Object> params = paramsHandle(method.getParameters(), args);
 
@@ -76,7 +75,10 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
                 return null;
             }
 
-            AbstractDingTalkSender.setLocalDinger(dingerDefinition.dingerConfig());
+            DingerConfig localDinger = DingerHelper.getLocalDinger();
+            if (localDinger == null) {
+                DingerHelper.assignDinger(dingerDefinition.dingerConfig());
+            }
             Message message = transfer(dingerDefinition, params);
 
             // when keyword is null, use methodName + timestamps
@@ -91,7 +93,7 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
             // return...
             return resultHandle(method.getReturnType(), dingTalkResult);
         } finally {
-            AbstractDingTalkSender.removeLocalDinger();
+            DingerHelper.clearDinger();
         }
     }
 
