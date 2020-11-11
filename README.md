@@ -17,7 +17,8 @@ springboot集成钉钉机器人实现消息通知中间件。项目基于[钉钉
 | [2.0.1-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.1-RELEASE) | 2020-09-13 | + 新增 @DingerConfiguration 注解支持Dinger层级别钉钉机器人信息配置<br /> + 新增 @AsyncExecute 注解支持Dinger层级别设置异步发送 | - |
 | [2.0.2-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.2-RELEASE) | 2020-09-20 | + 新增dinger xml文件编写约束<br /> M 修复部分存在缺陷  | - |
 | [2.0.3-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.3-RELEASE) | 2020-10-14 | M fixed #2  | - |
-| [2.0.4-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter) | 2020-10-18 | M fixed #3 && 部分存在缺陷  | - |
+| [2.0.4-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases/tag/2.0.4-RELEASE) | 2020-10-18 | M fixed #3 && 部分存在缺陷  | - |
+| [2.0.5-RELEASE](https://github.com/AnswerAIL/dingtalk-spring-boot-starter) | 2020-11-11 | + 支持动态配置机器人信息  | - |
 
 &nbsp;
 
