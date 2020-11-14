@@ -54,9 +54,15 @@ public class PackageUtils {
      *
      * @param packageName packageName
      * @param classNames classNames
+     * @param isInterface isInterface
      * @param filterAnnotations filterAnnotations
      */
-    public static void classNames(String packageName, List<Class<?>> classNames, Class<? extends Annotation>... filterAnnotations) {
+    public static void classNames(
+            String packageName,
+            List<Class<?>> classNames,
+            boolean isInterface,
+            Class<? extends Annotation>... filterAnnotations
+    ) {
         if (DingTalkUtils.isEmpty(packageName)) {
             return;
         }
@@ -65,12 +71,12 @@ public class PackageUtils {
         if (applicationHomeSource != null) {
             String absolutePath = applicationHomeSource.getAbsolutePath();
             if (absolutePath.endsWith(JAR_FILE_SUFFIX)) {
-                jarClassNames(absolutePath, packageName, classNames, filterAnnotations);
+                jarClassNames(absolutePath, packageName, classNames, isInterface, filterAnnotations);
                 return;
             }
         }
 
-        forClassNames(packageName, classNames, filterAnnotations);
+        forClassNames(packageName, classNames, isInterface, filterAnnotations);
     }
 
     /**
@@ -78,9 +84,15 @@ public class PackageUtils {
      *
      * @param packageName packageName
      * @param classNames classNames
+     * @param isInterface isInterface
      * @param filterAnnotations filterAnnotations
      */
-    public static void forClassNames(String packageName, List<Class<?>> classNames, Class<? extends Annotation>... filterAnnotations) {
+    public static void forClassNames(
+            String packageName,
+            List<Class<?>> classNames,
+            boolean isInterface,
+            Class<? extends Annotation>... filterAnnotations)
+    {
         // 处理过滤掉dingerScan和Dinger解析时重复的类
         List<String> repeatCheck = classNames.stream().map(e -> e.getName()).collect(Collectors.toList());
         try {
@@ -103,8 +115,9 @@ public class PackageUtils {
                 if (f.isFile()) {
                     String className = packageName + SPOT + name.substring(0, name.lastIndexOf(SPOT));
                     Class<?> clazz = Class.forName(className);
-                    // XXXDinger.java must be an interface
-                    if (clazz.isInterface()) {
+                    // clazz.isInterface(): XXXDinger.java must be an interface
+                    boolean check = isInterface ? clazz.isInterface() : true;
+                    if (check) {
                         if (filterAnnotations.length > 0) {
                             for (Class<? extends Annotation> annotation : filterAnnotations) {
                                 if (clazz.isAnnotationPresent(annotation)) {
@@ -126,7 +139,7 @@ public class PackageUtils {
                     }
 
                 } else {
-                    forClassNames(packageName + SPOT + name, classNames, filterAnnotations);
+                    forClassNames(packageName + SPOT + name, classNames, isInterface, filterAnnotations);
                 }
             }
         } catch (Exception ex) {
@@ -141,9 +154,16 @@ public class PackageUtils {
      * @param jarPath jarPath
      * @param packageName packageName
      * @param classNames classNames
+     * @param isInterface isInterface
      * @param filterAnnotations filterAnnotations
      */
-    public static void jarClassNames(String jarPath, String packageName, List<Class<?>> classNames, Class<? extends Annotation>... filterAnnotations) {
+    public static void jarClassNames(
+            String jarPath,
+            String packageName,
+            List<Class<?>> classNames,
+            boolean isInterface,
+            Class<? extends Annotation>... filterAnnotations)
+    {
         // 处理过滤掉dingerScan和Dinger解析时重复的类
         List<String> repeatCheck = classNames.stream().map(e -> e.getName()).collect(Collectors.toList());
         packageName = packageName.replace(SPOT, SLANT);
@@ -158,7 +178,8 @@ public class PackageUtils {
                     namePath = namePath.substring(namePath.indexOf(packageName));
                     String className = namePath.replaceAll("/", ".").replace(".class", "");
                     Class clazz = Class.forName(className);
-                    if (clazz.isInterface()) {
+                    boolean check = isInterface ? clazz.isInterface() : true;
+                    if (check) {
                         if (filterAnnotations.length > 0) {
                             for (Class<? extends Annotation> annotation : filterAnnotations) {
                                 if (clazz.isAnnotationPresent(annotation)) {
@@ -196,7 +217,11 @@ public class PackageUtils {
      * @param filterAnnotations filterAnnotations
      * @throws Exception ex
      */
-    private static void doScan(String packageName, List<Class<?>> classNames, Class<? extends Annotation>... filterAnnotations) {
+    private static void doScan(
+            String packageName,
+            List<Class<?>> classNames,
+            Class<? extends Annotation>... filterAnnotations)
+    {
         List<String> repeatCheck = classNames.stream().map(e -> e.getName()).collect(Collectors.toList());
         String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
                 packageName.replace(SPOT, SLANT) + '/' + DEFAULT_RESOURCE_PATTERN;
@@ -236,7 +261,7 @@ public class PackageUtils {
 
     public static void main(String[] args) {
         List<Class<?>> classNames = new ArrayList<>();
-        classNames("com.jaemon.dingtalk", classNames);
+        classNames("com.jaemon.dingtalk", classNames, false);
 
         classNames.forEach(e -> System.out.println(e.getName()));
 

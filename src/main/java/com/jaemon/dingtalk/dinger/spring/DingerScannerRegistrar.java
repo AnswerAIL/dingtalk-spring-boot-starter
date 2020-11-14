@@ -28,6 +28,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -41,7 +42,7 @@ import static com.jaemon.dingtalk.utils.PackageUtils.classNames;
  * @author Jaemon@answer_ljm@163.com
  * @version 2.0
  */
-public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar {
+public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Ordered {
     private static final Logger log = LoggerFactory.getLogger(DingerScannerRegistrar.class);
 
     @Override
@@ -69,11 +70,11 @@ public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar {
                 String[] basePackages = annoAttrs.getStringArray("basePackages");
                 // traversing all classes under the package: basePackage
                 for (String basePackage : basePackages) {
-                    classNames(basePackage, dingerClasses);
+                    classNames(basePackage, dingerClasses, true);
                 }
 
                 // just to obtain interface that defined by Dinger annotation
-                classNames(DingTalkUtils.classPackageName(importingClassMetadata.getClassName()), dingerClasses, Dinger.class);
+                classNames(DingTalkUtils.classPackageName(importingClassMetadata.getClassName()), dingerClasses, true, Dinger.class);
 
                 if (!dingerClasses.isEmpty()) {
                     registerBeanDefinition(registry, dingerClasses);
@@ -82,7 +83,7 @@ public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar {
                 }
             }
         } finally {
-            ApplicationEventTimeTable.emptyDingerClasses();
+//            ApplicationEventTimeTable.emptyDingerClasses();
         }
 
     }
@@ -107,5 +108,10 @@ public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar {
                 log.debug("the beanDefinition[{}] is already registered.", dingerClass.getSimpleName());
             }
         }
+    }
+
+    @Override
+    public int getOrder() {
+        return LOWEST_PRECEDENCE - 2;
     }
 }

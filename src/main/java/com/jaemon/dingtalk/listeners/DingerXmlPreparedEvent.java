@@ -93,7 +93,7 @@ public class DingerXmlPreparedEvent
                         throw new DingerScanRepeatedException();
                     }
                 }
-                classNames(primarySource.getPackage().getName(), dingerClasses, Dinger.class);
+                classNames(primarySource.getPackage().getName(), dingerClasses, true, Dinger.class);
             }
 
             // 获取dingerScan下所有类信息
@@ -103,7 +103,7 @@ public class DingerXmlPreparedEvent
                     if (isDebugEnabled) {
                         log.debug("ready to scan package[{}] for Dinger.", basePackage);
                     }
-                    classNames(basePackage, dingerClasses);
+                    classNames(basePackage, dingerClasses, true);
                 }
             } else {
                 log.warn("annotation dingerScan is not configured.");
