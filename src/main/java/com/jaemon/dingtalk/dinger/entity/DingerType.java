@@ -19,7 +19,7 @@ package com.jaemon.dingtalk.dinger.entity;
  * DingerType
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public enum DingerType {
     /** xml dinger msg */

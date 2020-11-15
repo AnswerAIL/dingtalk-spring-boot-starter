@@ -24,8 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * ConfigurationTag
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 @XmlRootElement(name = "configuration")
 public class ConfigurationTag {

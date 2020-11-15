@@ -22,7 +22,7 @@ import static com.jaemon.dingtalk.utils.DingTalkUtils.isNotEmpty;
  * DingerConfig
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public class DingerConfig {
     private String tokenId;

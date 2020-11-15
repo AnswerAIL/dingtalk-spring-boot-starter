@@ -39,7 +39,7 @@ import static com.jaemon.dingtalk.utils.PackageUtils.classNames;
  * DingerXmlPreparedEvent
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public class DingerXmlPreparedEvent
         extends DingerDefinitionResolver

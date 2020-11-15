@@ -21,7 +21,7 @@ import com.jaemon.dingtalk.multi.DingerConfigHandler;
  * MultiDinger
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 3.0
+ * @since 3.0
  */
 public class MultiDinger {
     private String key;

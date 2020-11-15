@@ -22,8 +22,8 @@ import java.util.List;
 /**
  * 自定义消息接口
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public interface CustomMessage {
 

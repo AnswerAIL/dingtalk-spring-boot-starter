@@ -42,7 +42,7 @@ import static com.jaemon.dingtalk.dinger.AbstractDingerDefinitionResolver.Contai
  * DingerDefinitionResolver
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
     private static final Logger log = LoggerFactory.getLogger(DingerDefinitionResolver.class);

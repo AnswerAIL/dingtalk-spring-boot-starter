@@ -33,8 +33,8 @@ import static com.jaemon.dingtalk.constant.DkConstant.FAILED_KEYWORD;
 /**
  * Failed Listener
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class FailedEventListener implements ApplicationListener<ApplicationFailedEvent> {
     private static final Logger log = LoggerFactory.getLogger(FailedEventListener.class);

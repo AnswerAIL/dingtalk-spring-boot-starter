@@ -27,8 +27,8 @@ import java.lang.annotation.*;
  *     void method(@Keyword String keyword, String date) {...}
  * </code>
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})

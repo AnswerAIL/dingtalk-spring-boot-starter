@@ -21,8 +21,8 @@ import lombok.Data;
 /**
  * 签名返回体
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Data
 @AllArgsConstructor

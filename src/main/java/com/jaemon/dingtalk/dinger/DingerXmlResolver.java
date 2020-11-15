@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * DingerDefinitionResolve
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public class DingerXmlResolver implements DingerResolver<MessageTag> {
     private static final Logger log = LoggerFactory.getLogger(DingerXmlResolver.class);

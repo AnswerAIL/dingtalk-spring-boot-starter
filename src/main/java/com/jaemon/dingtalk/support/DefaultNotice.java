@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 /**
  * 默认消息通知
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class DefaultNotice implements Notice {
     private static final Logger log = LoggerFactory.getLogger(DefaultNotice.class);

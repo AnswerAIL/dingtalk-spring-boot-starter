@@ -24,7 +24,7 @@ import com.jaemon.dingtalk.entity.message.Message;
  * DefaultDingerDefinition
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public class DefaultDingerDefinition implements DingerDefinition {
     private String keyName;

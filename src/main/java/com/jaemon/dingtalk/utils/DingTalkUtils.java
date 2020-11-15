@@ -21,8 +21,8 @@ import java.util.Base64;
 /**
  * DingTalk Utils
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class DingTalkUtils {
 

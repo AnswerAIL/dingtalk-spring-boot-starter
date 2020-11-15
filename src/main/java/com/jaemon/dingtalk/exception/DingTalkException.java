@@ -21,8 +21,8 @@ import lombok.Getter;
 /**
  * 异常类
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class DingTalkException extends RuntimeException {
     @Getter

@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Dinger钉钉机器人算法
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 3.0
+ * @since 3.0
  */
 public class DingerHandler implements AlgorithmHandler {
     private static final String SECONDS_KEY = "DINGER_SECONDS";

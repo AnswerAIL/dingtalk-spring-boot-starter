@@ -24,8 +24,8 @@ import org.springframework.context.event.ContextClosedEvent;
 /**
  * Notification
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public abstract class Notification {
 

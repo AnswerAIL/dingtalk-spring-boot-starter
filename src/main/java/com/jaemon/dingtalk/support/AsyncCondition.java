@@ -24,8 +24,8 @@ import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_PROPERTIES_PREFIX
 /**
  * 异步处理条件类
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class AsyncCondition implements Condition {
     @Override

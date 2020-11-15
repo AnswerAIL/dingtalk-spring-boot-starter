@@ -20,8 +20,8 @@ import com.jaemon.dingtalk.entity.SignResult;
 /**
  * 默认签名算法
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class DefaultSignAlgorithm implements DkSignAlgorithm<SignResult> {
     @Override

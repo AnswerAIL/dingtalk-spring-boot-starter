@@ -21,8 +21,8 @@ import lombok.Data;
 /**
  * DingTalk Result
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Data
 public class DingTalkResult {

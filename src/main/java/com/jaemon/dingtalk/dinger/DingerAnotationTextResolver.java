@@ -29,7 +29,7 @@ import java.util.Arrays;
  * DingerAnotationTextResolver
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public class DingerAnotationTextResolver implements DingerResolver<DingerText> {
 

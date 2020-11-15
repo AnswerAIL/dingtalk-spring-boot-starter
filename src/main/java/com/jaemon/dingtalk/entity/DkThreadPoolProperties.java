@@ -23,8 +23,8 @@ import static com.jaemon.dingtalk.constant.DkConstant.DEFAULT_THREAD_NAME_PREFIX
 /**
  * DINGTALK线程池参数配置-用于异步处理
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Data
 @ConfigurationProperties(prefix = "spring.dingtalk.executor-pool")

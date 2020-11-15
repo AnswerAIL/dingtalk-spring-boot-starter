@@ -28,8 +28,8 @@ import static com.jaemon.dingtalk.constant.DkConstant.TEXT_MESSAGE;
 /**
  *  实例化bean配置
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Configuration
 public class BeanConfiguration {

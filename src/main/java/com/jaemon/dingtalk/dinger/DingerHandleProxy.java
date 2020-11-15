@@ -35,7 +35,7 @@ import static com.jaemon.dingtalk.constant.DkConstant.SPOT_SEPERATOR;
  * Dinger Handle Proxy
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public class DingerHandleProxy extends DingerMessageHandler implements InvocationHandler {
     private static final Logger log = LoggerFactory.getLogger(DingerHandleProxy.class);

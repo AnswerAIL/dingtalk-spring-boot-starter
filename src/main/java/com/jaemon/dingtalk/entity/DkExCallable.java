@@ -22,8 +22,8 @@ import lombok.Data;
 /**
  *  异常回调信息实体
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Data
 @Builder

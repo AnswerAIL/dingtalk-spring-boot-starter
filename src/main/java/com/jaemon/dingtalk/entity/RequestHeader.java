@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * 请求头
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Data
 public class RequestHeader {

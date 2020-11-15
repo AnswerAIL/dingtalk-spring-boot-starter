@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * DingerConfigHandlerService
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 3.0
+ * @since 3.0
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

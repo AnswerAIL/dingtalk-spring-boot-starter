@@ -18,8 +18,8 @@ package com.jaemon.dingtalk.dinger.enums;
 /**
  * AsyncExecuteType
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 public enum AsyncExecuteType {
     TRUE(true),

@@ -24,8 +24,8 @@ import com.jaemon.dingtalk.entity.RequestHeader;
 /**
  * HttpClient
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class HttpClient {
     private static final Logger log = LoggerFactory.getLogger(HttpClient.class);

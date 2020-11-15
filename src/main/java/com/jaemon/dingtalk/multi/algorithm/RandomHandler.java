@@ -24,7 +24,7 @@ import java.util.List;
  * 随机选择算法
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 3.0
+ * @since 3.0
  */
 public class RandomHandler implements AlgorithmHandler {
     @Override

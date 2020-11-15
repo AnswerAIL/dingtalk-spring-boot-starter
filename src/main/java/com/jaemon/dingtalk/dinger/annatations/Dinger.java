@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 /**
  * Dinger
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

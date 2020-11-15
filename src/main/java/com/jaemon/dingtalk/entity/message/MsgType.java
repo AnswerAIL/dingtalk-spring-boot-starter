@@ -22,8 +22,8 @@ import java.io.Serializable;
 /**
  * 消息类型实体
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class MsgType implements Serializable {
     /**

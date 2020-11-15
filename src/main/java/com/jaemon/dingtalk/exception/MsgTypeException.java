@@ -20,8 +20,8 @@ import com.jaemon.dingtalk.entity.enums.ExceptionEnum;
 /**
  * 类型异常
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class MsgTypeException extends DingTalkException {
     public MsgTypeException(String msg) {

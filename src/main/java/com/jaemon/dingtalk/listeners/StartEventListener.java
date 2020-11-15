@@ -28,8 +28,8 @@ import java.util.Set;
 /**
  * Start Listener
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class StartEventListener implements ApplicationListener<ApplicationStartingEvent> {
     private static final Logger log = LoggerFactory.getLogger(StartEventListener.class);

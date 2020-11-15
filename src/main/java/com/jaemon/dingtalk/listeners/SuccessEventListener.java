@@ -33,8 +33,8 @@ import static com.jaemon.dingtalk.constant.DkConstant.SUCCESS_KEYWORD;
 /**
  * Success Listener
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class SuccessEventListener implements ApplicationListener<ApplicationReadyEvent>, Ordered {
     private static final Logger log = LoggerFactory.getLogger(SuccessEventListener.class);

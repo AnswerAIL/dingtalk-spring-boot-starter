@@ -39,7 +39,7 @@ import static com.jaemon.dingtalk.utils.PackageUtils.classNames;
  * MultiDingerScannerRegistrar
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 3.0
+ * @since 3.0
  */
 public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Ordered {
     private static final Logger log = LoggerFactory.getLogger(MultiDingerScannerRegistrar.class);

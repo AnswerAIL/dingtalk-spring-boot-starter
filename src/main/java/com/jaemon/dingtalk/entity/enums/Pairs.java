@@ -18,8 +18,8 @@ package com.jaemon.dingtalk.entity.enums;
 /**
  * K-V对
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public interface Pairs<K, V> {
 

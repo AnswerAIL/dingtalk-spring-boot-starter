@@ -18,8 +18,8 @@ package com.jaemon.dingtalk.dinger;
 /**
  * DingerHelper
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 public abstract class DingerHelper {
     protected static final ThreadLocal<DingerConfig> LOCAL_DINGER = new ThreadLocal<>();

@@ -27,8 +27,8 @@ import org.springframework.boot.context.properties.DeprecatedConfigurationProper
 /**
  * 属性配置类
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Data
 @ConfigurationProperties(prefix = "spring.dingtalk")

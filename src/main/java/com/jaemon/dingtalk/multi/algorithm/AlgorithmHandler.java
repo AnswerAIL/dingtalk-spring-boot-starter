@@ -23,7 +23,7 @@ import java.util.List;
  * AlgorithmHandler
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 3.0
+ * @since 3.0
  */
 public interface AlgorithmHandler {
     int DEFAULT_INDEX = 0;

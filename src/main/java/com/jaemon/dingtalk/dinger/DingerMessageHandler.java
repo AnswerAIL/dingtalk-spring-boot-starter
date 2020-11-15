@@ -39,7 +39,7 @@ import java.util.Optional;
  * DingerMessageHandler
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public class DingerMessageHandler implements MessageTransfer, ParamHandle, ResultHandle<DingTalkResult> {
     private static final Logger log = LoggerFactory.getLogger(DingerMessageHandler.class);

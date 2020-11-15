@@ -24,8 +24,8 @@ import lombok.NoArgsConstructor;
 /**
  * 整体跳转ActionCard类型
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

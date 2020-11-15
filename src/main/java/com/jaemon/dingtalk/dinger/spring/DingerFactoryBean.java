@@ -23,8 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * DingerFactoryBean
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 public class DingerFactoryBean<T> implements FactoryBean<T> {
     private Class<T> dingerInterface;

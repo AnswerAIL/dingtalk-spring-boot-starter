@@ -33,8 +33,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * OkHttpClient 配置
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Data
 @Configuration

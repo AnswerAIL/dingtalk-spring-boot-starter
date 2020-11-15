@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * 默认markdown消息格式
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class MarkDownMessage implements CustomMessage {
 

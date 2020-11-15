@@ -39,8 +39,8 @@ import static com.jaemon.dingtalk.utils.PackageUtils.classNames;
 /**
  * DingerScannerRegistrar
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Ordered {
     private static final Logger log = LoggerFactory.getLogger(DingerScannerRegistrar.class);

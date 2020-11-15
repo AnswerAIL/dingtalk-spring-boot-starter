@@ -33,8 +33,8 @@ import static com.jaemon.dingtalk.constant.DkConstant.EXIT_KEYWORD;
 /**
  * Exit Listener
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class ExitEventListener implements ApplicationListener<ContextClosedEvent> {
     private static final Logger log = LoggerFactory.getLogger(ExitEventListener.class);

@@ -24,7 +24,7 @@ import java.util.List;
  * MultiDingerConfig
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 3.0
+ * @since 3.0
  */
 public class MultiDingerConfig {
     private AlgorithmHandler algorithmHandler;

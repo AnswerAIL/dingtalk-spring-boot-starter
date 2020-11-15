@@ -22,7 +22,7 @@ import com.jaemon.dingtalk.dinger.annatations.DingerTokenId;
  * DingerResolver
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public interface DingerResolver<T> {
 

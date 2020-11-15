@@ -18,8 +18,8 @@ package com.jaemon.dingtalk.entity.enums;
 /**
  * 异常枚举
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public enum ExceptionEnum implements Pairs<Integer, String> {
     SEND_MSG(1000, "发送消息异常"),

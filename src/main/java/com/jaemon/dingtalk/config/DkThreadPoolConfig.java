@@ -32,8 +32,8 @@ import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_EXECUTOR;
 /**
  * DINGTALK线程池配置类
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 @Configuration
 @Conditional(AsyncCondition.class)

@@ -43,8 +43,8 @@ import static com.jaemon.dingtalk.multi.MultiDingerConfigContainer.GLOABL_KEY;
 /**
  * MultiDingerEvent
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 1.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 1.0
  */
 public class MultiDingerEvent
         implements ApplicationListener<ApplicationPreparedEvent>, Ordered {

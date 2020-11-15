@@ -24,8 +24,8 @@ import static com.jaemon.dingtalk.utils.DingTalkUtils.replaceHeadTailLineBreak;
 /**
  * TokenId
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 @XmlRootElement(name = "token-id")
 public class TokenId {

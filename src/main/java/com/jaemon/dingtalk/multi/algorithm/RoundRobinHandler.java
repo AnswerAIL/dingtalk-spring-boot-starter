@@ -23,7 +23,7 @@ import java.util.List;
  * 轮询算法
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 3.0
+ * @since 3.0
  */
 public class RoundRobinHandler implements AlgorithmHandler {
     /** 索引值 */

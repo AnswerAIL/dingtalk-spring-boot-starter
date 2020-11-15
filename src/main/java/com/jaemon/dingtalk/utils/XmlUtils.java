@@ -26,8 +26,8 @@ import static com.jaemon.dingtalk.constant.DkConstant.NEW_LINE;
 /**
  * XML字符串JavaBean对象互转工具类
  *
- * @author Jaemon@answer_ljm@163.com
- * @version 2.0
+ * @author Jaemon#answer_ljm@163.com
+ * @since 2.0
  */
 public class XmlUtils {
 

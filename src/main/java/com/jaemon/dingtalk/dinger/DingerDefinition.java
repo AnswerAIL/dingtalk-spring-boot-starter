@@ -24,7 +24,7 @@ import com.jaemon.dingtalk.entity.message.Message;
  * DingerDefinition
  *
  * @author Jaemon#answer_ljm@163.com
- * @version 2.0
+ * @since 2.0
  */
 public interface DingerDefinition {
 
