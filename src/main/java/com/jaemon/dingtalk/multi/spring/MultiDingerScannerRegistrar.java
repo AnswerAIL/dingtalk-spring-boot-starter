@@ -17,7 +17,6 @@ package com.jaemon.dingtalk.multi.spring;
 
 import com.jaemon.dingtalk.listeners.ApplicationEventTimeTable;
 import com.jaemon.dingtalk.multi.DingerConfigHandler;
-import com.jaemon.dingtalk.multi.MultiDingerContainer;
 import com.jaemon.dingtalk.multi.annotations.DingerConfigHandlerService;
 import com.jaemon.dingtalk.multi.annotations.MultiDinger;
 import com.jaemon.dingtalk.utils.DingTalkUtils;
@@ -55,9 +54,15 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
 
             if (!dingerConfigHandlerServices.isEmpty()) {
                 for (Class<?> dingerConfigHandlerService : dingerConfigHandlerServices) {
-                    if (dingerConfigHandlerService.isAnnotationPresent(DingerConfigHandlerService.class)) {
+                    if (
+                            dingerConfigHandlerService.isAnnotationPresent(DingerConfigHandlerService.class)
+                    ) {
                         String beanName = dingerConfigHandlerService.getSimpleName();
-                        DingerConfigHandlerService dingerConfigHandlerServiceAnnotation = dingerConfigHandlerService.getAnnotation(DingerConfigHandlerService.class);               if (DingTalkUtils.isNotEmpty(dingerConfigHandlerServiceAnnotation.value())) {
+                        DingerConfigHandlerService dingerConfigHandlerServiceAnnotation =
+                                dingerConfigHandlerService.getAnnotation(DingerConfigHandlerService.class);
+                        if (
+                                DingTalkUtils.isNotEmpty(dingerConfigHandlerServiceAnnotation.value())
+                        ) {
                             beanName = dingerConfigHandlerServiceAnnotation.value();
                         }
 
@@ -67,7 +72,8 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
                         registry.registerBeanDefinition(beanName, beanDefinition);
 
                         if (debugEnabled) {
-                            log.debug("the beanDefinition[{}] is already registered.", dingerConfigHandlerService.getSimpleName());
+                            log.debug("the beanDefinition[{}] is already registered.",
+                                    dingerConfigHandlerService.getSimpleName());
                         }
                     }
                 }
@@ -78,6 +84,7 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
 
 
 
+            // 处理需要执行Multi逻辑的dingerClass
             List<Class<?>> dingerClasses = ApplicationEventTimeTable.dingerClasses();
             if (dingerClasses.isEmpty()) {
                 return;
@@ -90,7 +97,10 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
                     }
                     MultiDinger multiDinger = dingerClass.getAnnotation(MultiDinger.class);
                     Class<? extends DingerConfigHandler> dingerConfigHandler = multiDinger.value();
-                    MultiDingerContainer.INSTANCE.add(dingerConfigHandler);
+                    String key = dingerClass.getName();
+                    MultiDingerContainer.INSTANCE.add(
+                            new com.jaemon.dingtalk.multi.entity.MultiDinger(key, dingerConfigHandler)
+                    );
                 }
 
             }
@@ -103,5 +113,34 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
     @Override
     public int getOrder() {
         return LOWEST_PRECEDENCE - 1;
+    }
+
+    /**
+     * MultiDingerContainer
+     *
+     * @author Jaemon#answer_ljm@163.com
+     * @since 3.0
+     */
+    public enum MultiDingerContainer {
+        INSTANCE;
+
+        private List<com.jaemon.dingtalk.multi.entity.MultiDinger> container;
+
+        MultiDingerContainer() {
+            this.container = new ArrayList<>();
+        }
+
+        private boolean add(com.jaemon.dingtalk.multi.entity.MultiDinger multiDinger) {
+            return this.container.add(multiDinger);
+        }
+
+        public boolean isEmpty() {
+            return this.container.isEmpty();
+        }
+
+        public List<com.jaemon.dingtalk.multi.entity.MultiDinger> container() {
+            return this.container;
+        }
+
     }
 }

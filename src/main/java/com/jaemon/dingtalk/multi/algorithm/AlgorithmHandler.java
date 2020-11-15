@@ -13,44 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.multi;
+package com.jaemon.dingtalk.multi.algorithm;
 
 import com.jaemon.dingtalk.dinger.DingerConfig;
-import com.jaemon.dingtalk.multi.algorithm.AlgorithmHandler;
 
 import java.util.List;
 
 /**
- * DingerConfigHandler
+ * AlgorithmHandler
  *
  * @author Jaemon#answer_ljm@163.com
  * @version 3.0
  */
-public interface DingerConfigHandler {
+public interface AlgorithmHandler {
+    int DEFAULT_INDEX = 0;
 
     /**
-     * dingerConfigs
+     * execute
      *
-     * @return dingerConfigs
+     * @param dingerConfigs dingerConfigs
+     * @return dingerConfig {@link DingerConfig}
      * */
-    List<DingerConfig> dingerConfigs();
+    DingerConfig execute(List<DingerConfig> dingerConfigs);
 
     /**
-     * algorithmHandler
+     * dingerConfig
      *
-     * @return algorithmHandler {@link AlgorithmHandler}
+     * @param dingerConfigs dingerConfigs
+     * @return dingerConfig {@link DingerConfig}
      * */
-    default Class<? extends AlgorithmHandler> algorithmHandler() {
-        return AlgorithmHandler.class;
-    }
+    default DingerConfig dingerConfig(List<DingerConfig> dingerConfigs) {
+        if (dingerConfigs == null || dingerConfigs.isEmpty()) {
+            return null;
+        }
 
-    /**
-     * global
-     *
-     * @return boolean
-     *
-     * */
-    default boolean global() {
-        return false;
+        return execute(dingerConfigs);
     }
 }

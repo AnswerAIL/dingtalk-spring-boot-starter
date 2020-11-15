@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.multi;
+package com.jaemon.dingtalk.multi.entity;
 
 import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.multi.algorithm.AlgorithmHandler;
@@ -21,36 +21,33 @@ import com.jaemon.dingtalk.multi.algorithm.AlgorithmHandler;
 import java.util.List;
 
 /**
- * DingerConfigHandler
+ * MultiDingerConfig
  *
  * @author Jaemon#answer_ljm@163.com
  * @version 3.0
  */
-public interface DingerConfigHandler {
+public class MultiDingerConfig {
+    private AlgorithmHandler algorithmHandler;
+    private List<DingerConfig> dingerConfigs;
 
-    /**
-     * dingerConfigs
-     *
-     * @return dingerConfigs
-     * */
-    List<DingerConfig> dingerConfigs();
-
-    /**
-     * algorithmHandler
-     *
-     * @return algorithmHandler {@link AlgorithmHandler}
-     * */
-    default Class<? extends AlgorithmHandler> algorithmHandler() {
-        return AlgorithmHandler.class;
+    public MultiDingerConfig(AlgorithmHandler algorithmHandler, List<DingerConfig> dingerConfigs) {
+        this.algorithmHandler = algorithmHandler;
+        this.dingerConfigs = dingerConfigs;
     }
 
-    /**
-     * global
-     *
-     * @return boolean
-     *
-     * */
-    default boolean global() {
-        return false;
+    public AlgorithmHandler getAlgorithmHandler() {
+        return algorithmHandler;
+    }
+
+    public void setAlgorithmHandler(AlgorithmHandler algorithmHandler) {
+        this.algorithmHandler = algorithmHandler;
+    }
+
+    public List<DingerConfig> getDingerConfigs() {
+        return dingerConfigs;
+    }
+
+    public void setDingerConfigs(List<DingerConfig> dingerConfigs) {
+        this.dingerConfigs = dingerConfigs;
     }
 }

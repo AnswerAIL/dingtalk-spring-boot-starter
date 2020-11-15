@@ -13,16 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.multi;
+package com.jaemon.dingtalk.multi.algorithm;
+
+import com.jaemon.dingtalk.dinger.DingerConfig;
+
+import java.util.List;
 
 /**
- * AlgorithmType
+ * 轮询算法
  *
  * @author Jaemon#answer_ljm@163.com
  * @version 3.0
  */
-public enum AlgorithmType {
-    RANDOM,
+public class RoundRobinHandler implements AlgorithmHandler {
+    /** 索引值 */
+    private volatile int index = DEFAULT_INDEX;
 
-    ROUND_ROBIN
+    @Override
+    public DingerConfig execute(List<DingerConfig> dingerConfigs) {
+        int size = dingerConfigs.size();
+        int idx = index;
+
+        synchronized (this) {
+            index++;
+            index = index >= size ? DEFAULT_INDEX : index;
+        }
+
+        return dingerConfigs.get(idx);
+    }
 }

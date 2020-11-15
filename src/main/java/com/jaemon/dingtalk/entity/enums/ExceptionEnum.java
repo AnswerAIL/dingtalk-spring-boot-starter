@@ -38,6 +38,7 @@ public enum ExceptionEnum implements Pairs<Integer, String> {
     DINGERSCAN_REPEATED_EXCEPTION(6001, "DingerScan注解重复配置"),
     /** 注定DingerText和Dinger xml重复配置也会抛出该异常 */
     DINGER_CONFIG_REPEATED_EXCEPTION(6002, "重复的DingerId对象"),
+    MULTI_GLOBAL_DINGER_CONFIG_REPEATED_EXCEPTION(6003, "定义多个全局MultiDingerConfig异常"),
 
     UNKNOWN(9999, "未知异常")
     ;

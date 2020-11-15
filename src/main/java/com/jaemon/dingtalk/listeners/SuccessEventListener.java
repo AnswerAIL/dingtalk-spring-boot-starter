@@ -16,17 +16,10 @@
 package com.jaemon.dingtalk.listeners;
 
 import com.jaemon.dingtalk.DingTalkSender;
-import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.entity.DingTalkProperties;
 import com.jaemon.dingtalk.entity.DingTalkResult;
 import com.jaemon.dingtalk.entity.message.MsgType;
-import com.jaemon.dingtalk.multi.AlgorithmType;
-import com.jaemon.dingtalk.multi.DingerConfigHandler;
-import com.jaemon.dingtalk.multi.MultiDingerContainer;
-import com.jaemon.dingtalk.multi.annotations.DingerConfigHandlerService;
-import com.jaemon.dingtalk.multi.annotations.MultiDinger;
 import com.jaemon.dingtalk.support.Notification;
-import com.jaemon.dingtalk.utils.DingTalkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -34,10 +27,6 @@ import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebSe
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.jaemon.dingtalk.constant.DkConstant.DK_PREFIX;
 import static com.jaemon.dingtalk.constant.DkConstant.SUCCESS_KEYWORD;
 
@@ -74,27 +63,6 @@ public class SuccessEventListener implements ApplicationListener<ApplicationRead
                 DingTalkResult result = dingTalkRobot.send(keyword, message);
                 if (log.isDebugEnabled()) {
                     log.debug("keyword={}, result={}.", keyword, result.toString());
-                }
-            }
-
-            // 获取所有 MultiDinger 注解的注解值
-            List<Class<? extends DingerConfigHandler>> multiDingers = MultiDingerContainer.INSTANCE.dingerConfigHandlerClasses();
-            for (Class<? extends DingerConfigHandler> multiDinger : multiDingers) {
-                String beanName = multiDinger.getSimpleName();
-                if (multiDinger.isAnnotationPresent(DingerConfigHandlerService.class)) {
-                    DingerConfigHandlerService dingerConfigHandlerService = multiDinger.getAnnotation(DingerConfigHandlerService.class);
-                    if (DingTalkUtils.isNotEmpty(dingerConfigHandlerService.value())) {
-                        beanName = dingerConfigHandlerService.value();
-                    }
-                }
-                if (applicationContext.containsBean(beanName)) {
-                    DingerConfigHandler dingerConfigHandler = (DingerConfigHandler) applicationContext.getBean(beanName);
-                    AlgorithmType algorithm = dingerConfigHandler.algorithm();
-                    List<DingerConfig> dingerConfigs = dingerConfigHandler.dingerConfigs();
-                    boolean global = dingerConfigHandler.global();
-
-                    // 构造对象存储到内存中
-                    log.info("algorithm={},dingerConfigs={},global={}", algorithm, dingerConfigs.size(), global);
                 }
             }
 

@@ -13,44 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.multi;
+package com.jaemon.dingtalk.multi.algorithm;
 
 import com.jaemon.dingtalk.dinger.DingerConfig;
-import com.jaemon.dingtalk.multi.algorithm.AlgorithmHandler;
+import com.jaemon.dingtalk.utils.RandomUtils;
 
 import java.util.List;
 
 /**
- * DingerConfigHandler
+ * 随机选择算法
  *
  * @author Jaemon#answer_ljm@163.com
  * @version 3.0
  */
-public interface DingerConfigHandler {
-
-    /**
-     * dingerConfigs
-     *
-     * @return dingerConfigs
-     * */
-    List<DingerConfig> dingerConfigs();
-
-    /**
-     * algorithmHandler
-     *
-     * @return algorithmHandler {@link AlgorithmHandler}
-     * */
-    default Class<? extends AlgorithmHandler> algorithmHandler() {
-        return AlgorithmHandler.class;
-    }
-
-    /**
-     * global
-     *
-     * @return boolean
-     *
-     * */
-    default boolean global() {
-        return false;
+public class RandomHandler implements AlgorithmHandler {
+    @Override
+    public DingerConfig execute(List<DingerConfig> dingerConfigs) {
+        int size = dingerConfigs.size();
+        int index = RandomUtils.nextInt(size);
+        return dingerConfigs.get(index);
     }
 }

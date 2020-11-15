@@ -20,6 +20,8 @@ import com.jaemon.dingtalk.dinger.annatations.DingerClose;
 import com.jaemon.dingtalk.entity.DingTalkResult;
 import com.jaemon.dingtalk.entity.message.Message;
 import com.jaemon.dingtalk.listeners.DingerXmlPreparedEvent;
+import com.jaemon.dingtalk.multi.MultiDingerConfigContainer;
+import com.jaemon.dingtalk.multi.entity.MultiDingerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,9 +77,26 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
                 return null;
             }
 
+            // 优先使用用户设定 dingerConfig
             DingerConfig localDinger = DingerHelper.getLocalDinger();
             if (localDinger == null) {
-                DingerHelper.assignDinger(dingerDefinition.dingerConfig());
+                MultiDingerConfig multiDingerConfig =
+                        MultiDingerConfigContainer
+                                .INSTANCE.get(classPackage);
+                DingerConfig dingerConfig;
+                if (multiDingerConfig == null) {
+                    dingerConfig = dingerDefinition.dingerConfig();
+                } else {
+                    dingerConfig = multiDingerConfig.getAlgorithmHandler()
+                            .dingerConfig(
+                                    multiDingerConfig.getDingerConfigs()
+                            );
+
+                    if (dingerConfig == null) {
+                        dingerConfig = dingerDefinition.dingerConfig();
+                    }
+                }
+                DingerHelper.assignDinger(dingerConfig);
             }
             Message message = transfer(dingerDefinition, params);
 

@@ -23,7 +23,8 @@ import com.jaemon.dingtalk.entity.enums.MsgTypeEnum;
 import com.jaemon.dingtalk.entity.message.MarkDownReq;
 import com.jaemon.dingtalk.entity.message.Message;
 import com.jaemon.dingtalk.entity.message.TextReq;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,8 +41,8 @@ import java.util.Optional;
  * @author Jaemon#answer_ljm@163.com
  * @version 2.0
  */
-@Slf4j
 public class DingerMessageHandler implements MessageTransfer, ParamHandle, ResultHandle<DingTalkResult> {
+    private static final Logger log = LoggerFactory.getLogger(DingerMessageHandler.class);
     private static final String PREFIX_TAG = "\\$\\{";
     private static final String SUFFIX_TAG = "}";
     protected static final String KEYWORD = "DINGTALK_DINGER_METHOD_SENDER_KEYWORD";

@@ -10,9 +10,11 @@ springboot集成钉钉机器人实现消息通知中间件。项目基于[钉钉
 
 
 ## Why
-- **`上手简单`**： 配置简单，无需花费太多精力在群机器人的使用上；
-- **`代码解耦`**： 插板式功能组件，和业务代码解耦；
-- **`扩展性强`**： 核心功能面向接口编程, 可以据具体业务对功能进行定制化；
+ - **`上手简单`**： 配置简单，无需花费太多精力在群机器人的使用上；
+ - **`代码解耦`**： 插拔式功能组件，和业务代码解耦；
+ - **`扩展性强`**： 核心功能面向接口编程, 可以据具体业务对功能进行定制化；
+ - **`用法多样`**： 消息体支持[V1.X](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master/docs/Getting%20Started%20V1.0.md)的完全自定义和[V2.X](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master/docs/Getting%20Started%20V2.0.md)的XML方式配置及注解方式定义；
+
 
 &nbsp;
 
