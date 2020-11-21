@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class RandomHandler implements AlgorithmHandler {
     @Override
-    public DingerConfig execute(List<DingerConfig> dingerConfigs) {
+    public DingerConfig handler(List<DingerConfig> dingerConfigs, DingerConfig defaultDingerConfig) {
         int size = dingerConfigs.size();
         int index = RandomUtils.nextInt(size);
         return dingerConfigs.get(index);

@@ -50,7 +50,7 @@ public final class JVMRandom extends Random {
      * Unsupported in 2.0.
      *
      * @param seed ignored
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException unsupportedOperationException
      */
     @Override
     public synchronized void setSeed(long seed) {
@@ -63,7 +63,7 @@ public final class JVMRandom extends Random {
      * Unsupported in 2.0.
      *
      * @return Nothing, this method always throws an UnsupportedOperationException.
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException unsupportedOperationException
      */
     @Override
     public synchronized double nextGaussian() {
@@ -74,7 +74,7 @@ public final class JVMRandom extends Random {
      * Unsupported in 2.0.
      *
      * @param byteArray ignored
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException unsupportedOperationException
      */
     @Override
     public void nextBytes(byte[] byteArray) {

@@ -1,4 +1,20 @@
 # dingtalk-spring-boot-starter
+# dingtalk-spring-boot-starter ![GitHub license](https://img.shields.io/github/license/AnswerAIL/dingtalk-spring-boot-starter)
+![Maven Central](https://img.shields.io/maven-central/v/com.github.answerail/dingtalk-spring-boot-starter)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/AnswerAIL/dingtalk-spring-boot-starter)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/AnswerAIL/dingtalk-spring-boot-starter)
+
+
+[![GitHub stars](https://img.shields.io/github/stars/AnswerAIL/dingtalk-spring-boot-starter.svg?style=social)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)
+![GitHub all releases](https://img.shields.io/github/downloads/AnswerAIL/dingtalk-spring-boot-starter/total?style=social)
+[![Gitee stars](https://gitee.com/jaemon/dingtalk-spring-boot-starter/badge/star.svg?theme=dark)](https://gitee.com/jaemon/dingtalk-spring-boot-starter)
+
+
+[![GitHub issues](https://img.shields.io/github/issues/AnswerAIL/dingtalk-spring-boot-starter)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues?q=is%3Aopen+is%3Aissue)
+[![GitHub closed issues](https://img.shields.io/github/issues-closed/AnswerAIL/dingtalk-spring-boot-starter)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues?q=is%3Aissue+is%3Aclosed)
+
+
+[![Read the Docs](https://img.shields.io/readthedocs/pip)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki)
 
 
 ## What

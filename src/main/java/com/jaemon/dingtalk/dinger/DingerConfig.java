@@ -33,6 +33,31 @@ public class DingerConfig {
     /** 异步执行 */
     private Boolean asyncExecute;
 
+    public DingerConfig() {
+    }
+
+    public DingerConfig(String tokenId) {
+        this.tokenId = tokenId;
+    }
+
+    public DingerConfig(String tokenId, String secret) {
+        this.tokenId = tokenId;
+        this.secret = secret;
+    }
+
+    public DingerConfig(String tokenId, String secret, String decryptKey) {
+        this.tokenId = tokenId;
+        this.decryptKey = decryptKey;
+        this.secret = secret;
+    }
+
+    public DingerConfig(String tokenId, String secret, String decryptKey, Boolean asyncExecute) {
+        this.tokenId = tokenId;
+        this.decryptKey = decryptKey;
+        this.secret = secret;
+        this.asyncExecute = asyncExecute;
+    }
+
     /**
      * do check dinger config
      */

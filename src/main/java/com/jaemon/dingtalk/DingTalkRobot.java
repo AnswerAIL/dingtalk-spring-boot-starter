@@ -117,7 +117,9 @@ public class DingTalkRobot extends AbstractDingTalkSender {
             String decryptKeyProp = dingTalkProperties.getDecryptKey();
             String tokenIdProp = dingTalkProperties.getTokenId();
             String secretProp = dingTalkProperties.getSecret();
-            boolean isAsyncProp = dingerConfig ? localDinger.getAsyncExecute() : dingTalkProperties.isAsync();
+            boolean isAsyncProp = dingerConfig ?
+                    (localDinger.getAsyncExecute() == null) ?
+                            false : localDinger.getAsyncExecute() : dingTalkProperties.isAsync();
 
             // deal with tokenId
             if (dingerConfig && !DingTalkUtils.isEmpty(localDinger.getTokenId())) {

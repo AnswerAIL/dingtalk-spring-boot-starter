@@ -12,5 +12,4 @@ com.jaemon.dingtalk.listeners.StartEventListener,\
 com.jaemon.dingtalk.listeners.SuccessEventListener,\
 com.jaemon.dingtalk.listeners.FailedEventListener,\
 com.jaemon.dingtalk.listeners.ExitEventListener,\
-com.jaemon.dingtalk.listeners.DingerXmlPreparedEvent,\
-com.jaemon.dingtalk.listeners.MultiDingerEvent
+com.jaemon.dingtalk.listeners.DingerXmlPreparedEvent

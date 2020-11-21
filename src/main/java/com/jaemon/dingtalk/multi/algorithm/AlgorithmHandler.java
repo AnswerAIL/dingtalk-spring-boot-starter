@@ -26,27 +26,43 @@ import java.util.List;
  * @since 3.0
  */
 public interface AlgorithmHandler {
+    /** 默认索引号从0开始 */
     int DEFAULT_INDEX = 0;
 
     /**
-     * execute
+     * 具体算法处理逻辑
      *
-     * @param dingerConfigs dingerConfigs
+     * @param dingerConfigs         dingerConfigs
+     * @param defaultDingerConfig   defaultDingerConfig
      * @return dingerConfig {@link DingerConfig}
      * */
-    DingerConfig execute(List<DingerConfig> dingerConfigs);
+    DingerConfig handler(List<DingerConfig> dingerConfigs, DingerConfig defaultDingerConfig);
 
     /**
      * dingerConfig
      *
-     * @param dingerConfigs dingerConfigs
+     * @param dingerConfigs         dingerConfigs
+     * @param defaultDingerConfig   defaultDingerConfig
      * @return dingerConfig {@link DingerConfig}
      * */
-    default DingerConfig dingerConfig(List<DingerConfig> dingerConfigs) {
+    default DingerConfig dingerConfig(List<DingerConfig> dingerConfigs, DingerConfig defaultDingerConfig) {
         if (dingerConfigs == null || dingerConfigs.isEmpty()) {
-            return null;
+            return defaultDingerConfig;
         }
 
-        return execute(dingerConfigs);
+        if (dingerConfigs.size() == 1) {
+            return dingerConfigs.get(0);
+        }
+
+        return handler(dingerConfigs, defaultDingerConfig);
+    }
+
+    /**
+     * 算法ID
+     *
+     * @return algorithmId
+     */
+    default String algorithmId() {
+        return this.getClass().getSimpleName();
     }
 }

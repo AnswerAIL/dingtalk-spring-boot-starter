@@ -17,6 +17,7 @@ package com.jaemon.dingtalk.utils;
 
 import java.io.Closeable;
 import java.util.Base64;
+import java.util.UUID;
 
 /**
  * DingTalk Utils
@@ -113,5 +114,14 @@ public class DingTalkUtils {
         return className.substring(0, className.lastIndexOf("."));
     }
 
+
+    /**
+     * generate uuid
+     *
+     * @return uuid {@link UUID}
+     */
+    public static String uuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
+    }
 
 }

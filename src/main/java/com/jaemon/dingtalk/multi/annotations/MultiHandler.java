@@ -16,13 +16,11 @@
 package com.jaemon.dingtalk.multi.annotations;
 
 import com.jaemon.dingtalk.multi.DingerConfigHandler;
-import com.jaemon.dingtalk.multi.MultiDingerScannerRegistrar;
-import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
 /**
- * EnableMultiDinger
+ * MultiHandler, 作用于 XXXDinger层，标识当前Dinger为多Dinger接口
  *
  * @author Jaemon#answer_ljm@163.com
  * @since 3.0
@@ -30,13 +28,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(MultiDingerScannerRegistrar.class)
-public @interface EnableMultiDinger {
+public @interface MultiHandler {
 
-    /**
-     * global dingerHandler
-     *
-     * @return {@link DingerConfigHandler}
-     */
-    Class<? extends DingerConfigHandler> value() default DingerConfigHandler.class;
+    Class<? extends DingerConfigHandler> value();
 }

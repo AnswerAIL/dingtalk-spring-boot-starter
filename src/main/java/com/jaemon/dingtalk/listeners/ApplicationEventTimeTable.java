@@ -95,4 +95,5 @@ public class ApplicationEventTimeTable {
     public static ApplicationHome applicationHome() {
         return applicationHome == null ? new ApplicationHome() : applicationHome;
     }
+
 }

@@ -49,6 +49,7 @@ public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Or
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         boolean isTraceEnabled = log.isTraceEnabled();
         boolean isDebugEnabled = log.isDebugEnabled();
+        log.info("ready to execute dingerScanner...");
         try {
             List<Class<?>> dingerClasses = ApplicationEventTimeTable.dingerClasses();
 

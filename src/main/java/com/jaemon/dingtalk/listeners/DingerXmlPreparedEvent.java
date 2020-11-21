@@ -50,6 +50,7 @@ public class DingerXmlPreparedEvent
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         boolean isTraceEnabled = log.isTraceEnabled();
         boolean isDebugEnabled = log.isDebugEnabled();
+        log.info("ready to execute dinger analysis.");
 
         String DingerLocationsProp = DINGER_PROPERTIES_PREFIX + "dinger-locations";
         String dingerLocations = event.getEnvironment().getProperty(DingerLocationsProp);

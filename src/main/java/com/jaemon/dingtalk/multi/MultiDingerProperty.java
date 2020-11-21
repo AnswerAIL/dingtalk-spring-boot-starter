@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.multi.annotations;
-
-import java.lang.annotation.*;
+package com.jaemon.dingtalk.multi;
 
 /**
- * DingerConfigHandlerService
+ * MultiDingerProperty
  *
  * @author Jaemon#answer_ljm@163.com
  * @since 3.0
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface DingerConfigHandlerService {
-    String value() default "";
+public class MultiDingerProperty {
+    /** app start at multiDinger */
+    static boolean multiDinger = false;
+
+    public static boolean multiDinger() {
+        return multiDinger;
+    }
 }

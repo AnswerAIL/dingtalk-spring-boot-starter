@@ -22,6 +22,7 @@ import com.jaemon.dingtalk.entity.message.Message;
 import com.jaemon.dingtalk.listeners.DingerXmlPreparedEvent;
 import com.jaemon.dingtalk.multi.MultiDingerConfigContainer;
 import com.jaemon.dingtalk.multi.entity.MultiDingerConfig;
+import com.jaemon.dingtalk.multi.MultiDingerProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +63,7 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
         String keyName = classPackage + SPOT_SEPERATOR + methodName;
 
         if (DEFAULT_STRING_METHOD.equals(keyName)) {
-            return null;
+            return this.toString();
         }
 
         try {
@@ -80,23 +81,29 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
             // 优先使用用户设定 dingerConfig
             DingerConfig localDinger = DingerHelper.getLocalDinger();
             if (localDinger == null) {
-                MultiDingerConfig multiDingerConfig =
-                        MultiDingerConfigContainer
-                                .INSTANCE.get(classPackage);
-                DingerConfig dingerConfig;
-                if (multiDingerConfig == null) {
-                    dingerConfig = dingerDefinition.dingerConfig();
-                } else {
-                    dingerConfig = multiDingerConfig.getAlgorithmHandler()
-                            .dingerConfig(
-                                    multiDingerConfig.getDingerConfigs()
-                            );
-
-                    if (dingerConfig == null) {
+                if (MultiDingerProperty.multiDinger()) {
+                    MultiDingerConfig multiDingerConfig =
+                            MultiDingerConfigContainer
+                                    .INSTANCE.get(classPackage);
+                    DingerConfig dingerConfig;
+                    if (multiDingerConfig == null) {
                         dingerConfig = dingerDefinition.dingerConfig();
+                    } else {
+                        dingerConfig = multiDingerConfig.getAlgorithmHandler()
+                                .dingerConfig(
+                                        multiDingerConfig.getDingerConfigs(),
+                                        dingerDefinition.dingerConfig()
+                                );
+
+                        if (dingerConfig == null) {
+                            dingerConfig = dingerDefinition.dingerConfig();
+                        }
                     }
+                    DingerHelper.assignDinger(dingerConfig);
+                } else {
+                    DingerHelper.assignDinger(dingerDefinition.dingerConfig());
                 }
-                DingerHelper.assignDinger(dingerConfig);
+
             }
             Message message = transfer(dingerDefinition, params);
 

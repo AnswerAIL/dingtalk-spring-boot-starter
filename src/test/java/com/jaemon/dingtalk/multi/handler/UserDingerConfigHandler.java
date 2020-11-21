@@ -13,40 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.multi;
+package com.jaemon.dingtalk.multi.handler;
 
 import com.jaemon.dingtalk.dinger.DingerConfig;
+import com.jaemon.dingtalk.multi.DingerConfigHandler;
 import com.jaemon.dingtalk.multi.algorithm.AlgorithmHandler;
-import com.jaemon.dingtalk.multi.algorithm.DefaultHandler;
+import com.jaemon.dingtalk.multi.algorithm.DingerHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DingerConfigHandler
+ * UserDingerConfigHandler
  *
  * @author Jaemon#answer_ljm@163.com
  * @since 3.0
  */
-public interface DingerConfigHandler {
-
-    /**
-     * 多钉钉机器人配置
-     *
-     * @return dingerConfigs
-     * */
-    List<DingerConfig> dingerConfigs();
-
-    /**
-     * 执行逻辑处理器
-     *
-     * <blockquote>
-     *     default algorithmHandler {@link DefaultHandler}
-     * </blockquote>
-     *
-     * @return algorithmHandler {@link AlgorithmHandler}
-     * */
-    default Class<? extends AlgorithmHandler> algorithmHandler() {
-        return DefaultHandler.class;
+public class UserDingerConfigHandler implements DingerConfigHandler {
+    @Override
+    public List<DingerConfig> dingerConfigs() {
+        ArrayList<DingerConfig> dingerConfigs = new ArrayList<>();
+        dingerConfigs.add(new DingerConfig("tokenId1", "secret1"));
+        dingerConfigs.add(new DingerConfig("tokenId2", "secret2"));
+        // 如需配置更多机器人信息，可继续添加...
+        return dingerConfigs;
     }
 
+    @Override
+    public Class<? extends AlgorithmHandler> algorithmHandler() {
+        // 采用钉钉发送频率限制算法
+        return DingerHandler.class;
+    }
 }

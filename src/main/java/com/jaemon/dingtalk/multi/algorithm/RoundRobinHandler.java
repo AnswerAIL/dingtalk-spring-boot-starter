@@ -16,6 +16,8 @@
 package com.jaemon.dingtalk.multi.algorithm;
 
 import com.jaemon.dingtalk.dinger.DingerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -26,17 +28,23 @@ import java.util.List;
  * @since 3.0
  */
 public class RoundRobinHandler implements AlgorithmHandler {
+    private static final Logger log = LoggerFactory.getLogger(RoundRobinHandler.class);
     /** 索引值 */
     private volatile int index = DEFAULT_INDEX;
 
     @Override
-    public DingerConfig execute(List<DingerConfig> dingerConfigs) {
+    public DingerConfig handler(List<DingerConfig> dingerConfigs, DingerConfig defaultDingerConfig) {
         int size = dingerConfigs.size();
         int idx = index;
 
         synchronized (this) {
             index++;
             index = index >= size ? DEFAULT_INDEX : index;
+
+            if (log.isDebugEnabled()) {
+                log.debug("#{}# 当前使用第{}个机器人", algorithmId(), idx);
+            }
+//            System.out.println(String.format("#%s# 当前使用第%d个机器人", algorithmId(), idx));
         }
 
         return dingerConfigs.get(idx);

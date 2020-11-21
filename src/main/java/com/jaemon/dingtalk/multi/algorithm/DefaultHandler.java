@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.multi.annotations;
+package com.jaemon.dingtalk.multi.algorithm;
 
-import com.jaemon.dingtalk.multi.DingerConfigHandler;
+import com.jaemon.dingtalk.dinger.DingerConfig;
 
-import java.lang.annotation.*;
+import java.util.List;
 
 /**
- * MultiDinger
+ * DefaultHandler
+ *
+ * <blockquote>
+ *     {@link com.jaemon.dingtalk.multi.DingerConfigHandler}
+ * </blockquote>
  *
  * @author Jaemon#answer_ljm@163.com
  * @since 3.0
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface MultiDinger {
-
-    Class<? extends DingerConfigHandler> value();
+public class DefaultHandler implements AlgorithmHandler {
+    @Override
+    public DingerConfig handler(List<DingerConfig> dingerConfigs, DingerConfig defaultDingerConfig) {
+        return defaultDingerConfig;
+    }
 }
