@@ -53,15 +53,15 @@ springboot集成钉钉机器人实现消息通知中间件。项目基于[钉钉
 &nbsp;
 
 
-## 版本变更日志
-- [Dingtalk Upgrade Log](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dingtalk-Upgrade-Log)
+## Upgrade Log
+- [版本变更日志](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dingtalk-Upgrade-Log)
 
 
 
 &nbsp;
 
 
-## 问题反馈
+## Feedback
 ***
 > 有问题欢迎提Issue
 >
