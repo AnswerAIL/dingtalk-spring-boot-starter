@@ -28,6 +28,7 @@ public enum ResultCode {
 
     MESSAGE_TYPE_UNSUPPORTED("DK201", "无法支持的消息类型"),
     SEND_MESSAGE_FAILED("DK202", "消息发送失败"),
+    MESSAGE_PROCESSING_FAILED("DK203", "消息处理异常"),
     FAILED("DK999", "failed")
 
     ;

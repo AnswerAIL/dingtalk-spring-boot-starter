@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingtalk;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaemon.dingtalk.dinger.DingerHelper;
 import com.jaemon.dingtalk.entity.DingTalkProperties;
 import com.jaemon.dingtalk.entity.DingTalkResult;
@@ -36,10 +37,12 @@ public abstract class AbstractDingTalkSender
 
     DingTalkProperties dingTalkProperties;
     DingTalkManagerBuilder dingTalkManagerBuilder;
+    ObjectMapper objectMapper;
 
-    public AbstractDingTalkSender(DingTalkProperties dingTalkProperties, DingTalkManagerBuilder dingTalkManagerBuilder) {
+    public AbstractDingTalkSender(DingTalkProperties dingTalkProperties, DingTalkManagerBuilder dingTalkManagerBuilder, ObjectMapper objectMapper) {
         this.dingTalkProperties = dingTalkProperties;
         this.dingTalkManagerBuilder = dingTalkManagerBuilder;
+        this.objectMapper = objectMapper;
     }
 
     /**

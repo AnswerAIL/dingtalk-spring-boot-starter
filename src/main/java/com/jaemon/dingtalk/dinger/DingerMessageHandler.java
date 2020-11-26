@@ -15,7 +15,6 @@
  */
 package com.jaemon.dingtalk.dinger;
 
-import com.alibaba.fastjson.JSON;
 import com.jaemon.dingtalk.DingTalkSender;
 import com.jaemon.dingtalk.dinger.annatations.Keyword;
 import com.jaemon.dingtalk.entity.DingTalkResult;
@@ -83,7 +82,12 @@ public class DingerMessageHandler implements MessageTransfer, ParamHandle, Resul
                     || v instanceof Number) {
                 content = content.replaceAll(key, v.toString());
             } else {
-                content = content.replaceAll(key, JSON.toJSONString(v));
+//                content = content.replaceAll(key, v.toString());
+                if (log.isDebugEnabled()) {
+                    log.debug("skip convert key={} value class={}.",
+                            key, v.getClass().getName());
+                }
+                continue;
             }
 
         }

@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingtalk.config;
 
+import com.jaemon.dingtalk.multi.MultiDingerAlgorithmRegister;
 import com.jaemon.dingtalk.sign.DefaultSignAlgorithm;
 import com.jaemon.dingtalk.sign.DkSignAlgorithm;
 import com.jaemon.dingtalk.support.*;
@@ -106,5 +107,10 @@ public class BeanConfiguration {
     @ConditionalOnMissingBean(Notification.class)
     public Notification notification() {
         return new DefaultApplicationEventNotification();
+    }
+
+    @Bean
+    public static MultiDingerAlgorithmRegister multiDingerAlgorithmRegister() {
+        return new MultiDingerAlgorithmRegister();
     }
 }

@@ -48,7 +48,8 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        boolean clzClose = method.getDeclaringClass().isAnnotationPresent(DingerClose.class);
+        Class<?> dingerClass = method.getDeclaringClass();
+        boolean clzClose = dingerClass.isAnnotationPresent(DingerClose.class);
         if (clzClose) {
             return null;
         }
@@ -58,9 +59,9 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
             return null;
         }
 
-        final String classPackage = method.getDeclaringClass().getName();
+        final String dingerClassName = dingerClass.getName();
         final String methodName = method.getName();
-        String keyName = classPackage + SPOT_SEPERATOR + methodName;
+        String keyName = dingerClassName + SPOT_SEPERATOR + methodName;
 
         if (DEFAULT_STRING_METHOD.equals(keyName)) {
             return this.toString();
@@ -84,7 +85,7 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
                 if (MultiDingerProperty.multiDinger()) {
                     MultiDingerConfig multiDingerConfig =
                             MultiDingerConfigContainer
-                                    .INSTANCE.get(classPackage);
+                                    .INSTANCE.get(dingerClassName);
                     DingerConfig dingerConfig;
                     if (multiDingerConfig == null) {
                         dingerConfig = dingerDefinition.dingerConfig();

@@ -15,7 +15,8 @@
  */
 package com.jaemon.dingtalk;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.entity.*;
 import com.jaemon.dingtalk.entity.enums.ContentTypeEnum;
@@ -41,8 +42,8 @@ import java.util.List;
  */
 public class DingTalkRobot extends AbstractDingTalkSender {
 
-    public DingTalkRobot(DingTalkProperties dingTalkProperties, DingTalkManagerBuilder dingTalkManagerBuilder) {
-        super(dingTalkProperties, dingTalkManagerBuilder);
+    public DingTalkRobot(DingTalkProperties dingTalkProperties, DingTalkManagerBuilder dingTalkManagerBuilder, ObjectMapper objectMapper) {
+        super(dingTalkProperties, dingTalkManagerBuilder, objectMapper);
     }
 
     @Override
@@ -91,14 +92,22 @@ public class DingTalkRobot extends AbstractDingTalkSender {
 
     @Override
     public DingTalkResult send(String keyword, Message message) {
-        return send(keyword, JSON.toJSONString(message));
+        try {
+            return send(keyword, objectMapper.writeValueAsString(message));
+        } catch (JsonProcessingException e) {
+            return DingTalkResult.failed(ResultCode.MESSAGE_PROCESSING_FAILED, dingTalkManagerBuilder.dkIdGenerator.dkid());
+        }
     }
 
 
 
     @Override
     public <T extends MsgType> DingTalkResult send(String keyword, T message) {
-        return send(keyword, JSON.toJSONString(message));
+        try {
+            return send(keyword, objectMapper.writeValueAsString(message));
+        } catch (JsonProcessingException e) {
+            return DingTalkResult.failed(ResultCode.MESSAGE_PROCESSING_FAILED, dingTalkManagerBuilder.dkIdGenerator.dkid());
+        }
     }
 
     @Override

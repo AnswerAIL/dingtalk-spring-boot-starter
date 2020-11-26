@@ -51,13 +51,14 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
     @Override
     synchronized
     protected void analysisDingerXml(String dingerLocations, Resource[] resources) throws Exception {
+        boolean debugEnabled = log.isDebugEnabled();
         for (Resource resource : resources) {
             File file = resource.getFile();
             String xml = FileCopyUtils.copyToString(new FileReader(file));
             xml = transferXml(xml);
             BeanTag dingerBean = XmlUtils.xmlToJavaBean(xml, BeanTag.class);
             if (dingerBean == null) {
-                if (log.isDebugEnabled()) {
+                if (debugEnabled) {
                     log.debug("dinger xml file: {} content is empty.", file.getName());
                 }
                 continue;
@@ -68,7 +69,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                 String keyName = namespace + SPOT_SEPERATOR + message.getIdentityId();
                 DingerDefinition dingerDefinition = dingerXmlResolver.resolveDingerDefinition(keyName, message);
                 if (dingerDefinition == null) {
-                    if (log.isDebugEnabled()) {
+                    if (debugEnabled) {
                         log.debug("under {} keyName={} dinger xml file format is illegal.",
                                 dingerLocations, keyName);
                     }

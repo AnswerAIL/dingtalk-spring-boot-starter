@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingtalk.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaemon.dingtalk.DingTalkRobot;
 import com.jaemon.dingtalk.entity.DingTalkProperties;
 import com.jaemon.dingtalk.DingTalkManagerBuilder;
@@ -54,13 +55,13 @@ public class DingTalkConfiguration {
 
 
     @Bean
-    public DingTalkRobot dingTalkSender(DingTalkConfigurerAdapter dingTalkConfigurerAdapter, DingTalkManagerBuilder dingTalkManagerBuilder){
+    public DingTalkRobot dingTalkSender(DingTalkConfigurerAdapter dingTalkConfigurerAdapter, DingTalkManagerBuilder dingTalkManagerBuilder, ObjectMapper objectMapper){
         try {
             dingTalkConfigurerAdapter.configure(dingTalkManagerBuilder);
         } catch (Exception ex) {
             throw new ConfigurationException(ex);
         }
-        return new DingTalkRobot(dingTalkProperties, dingTalkManagerBuilder);
+        return new DingTalkRobot(dingTalkProperties, dingTalkManagerBuilder, objectMapper);
     }
 
 }

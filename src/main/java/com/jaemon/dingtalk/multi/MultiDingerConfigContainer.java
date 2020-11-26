@@ -27,16 +27,35 @@ import java.util.Map;
  * @since 3.0
  */
 public enum MultiDingerConfigContainer {
+    /**
+     * instance
+     */
     INSTANCE;
 
     /** 全局 MultiDingerConfig key */
     public static final String GLOABL_KEY = MultiDingerConfigContainer.class.getName();
+    /**
+     * <blockquote>
+     *     { <br>
+     *         key: dingclasssName | GLOABL_KEY <br>
+     *         value: {@link MultiDingerConfig} <br>
+     *     } <br>
+     * </blockquote>
+     */
     private Map<String, MultiDingerConfig> container;
 
     MultiDingerConfigContainer() {
         this.container = new HashMap<>();
     }
 
+    /**
+     * @param key
+     *              DingerClass类名 | {@link MultiDingerConfigContainer#GLOABL_KEY}
+     * @param multiDingerConfig
+     *              {@link MultiDingerConfig}
+     * @return
+     *              {@link MultiDingerConfig}
+     */
     public MultiDingerConfig put(String key, MultiDingerConfig multiDingerConfig) {
         return this.container.put(key, multiDingerConfig);
     }

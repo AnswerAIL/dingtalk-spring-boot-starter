@@ -28,28 +28,39 @@ import java.util.List;
 public interface AlgorithmHandler {
     /** 默认索引号从0开始 */
     int DEFAULT_INDEX = 0;
+    /**
+     * {@link com.jaemon.dingtalk.multi.MultiDingerAlgorithmRegister}
+     */
+    String MULTI_DINGER_PRIORITY_EXECUTE = "multiDingerAlgorithmRegister";
 
     /**
      * 具体算法处理逻辑
      *
-     * @param dingerConfigs         dingerConfigs
-     * @param defaultDingerConfig   defaultDingerConfig
-     * @return dingerConfig {@link DingerConfig}
+     * @param dingerConfigs
+     *              多钉钉机器人配置集
+     * @param defaultDingerConfig
+     *              默认钉钉机器人配置，即： 未开启MultiDinger时使用的机器人配置
+     * @return dingerConfig
+     *              返回当前应该使用的钉钉机器人配置{@link DingerConfig}
      * */
     DingerConfig handler(List<DingerConfig> dingerConfigs, DingerConfig defaultDingerConfig);
 
     /**
      * dingerConfig
      *
-     * @param dingerConfigs         dingerConfigs
-     * @param defaultDingerConfig   defaultDingerConfig
-     * @return dingerConfig {@link DingerConfig}
+     * @param dingerConfigs
+     *              多钉钉机器人配置集
+     * @param defaultDingerConfig
+     *              默认钉钉机器人配置，即： 未开启MultiDinger时使用的机器人配置
+     * @return dingerConfig
+     *              返回当前应该使用的钉钉机器人配置{@link DingerConfig}
      * */
     default DingerConfig dingerConfig(List<DingerConfig> dingerConfigs, DingerConfig defaultDingerConfig) {
         if (dingerConfigs == null || dingerConfigs.isEmpty()) {
             return defaultDingerConfig;
         }
 
+        // 如果只配置一个，则不需要执行算法处理逻辑
         if (dingerConfigs.size() == 1) {
             return dingerConfigs.get(0);
         }

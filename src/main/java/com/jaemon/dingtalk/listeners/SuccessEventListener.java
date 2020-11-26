@@ -41,6 +41,7 @@ public class SuccessEventListener implements ApplicationListener<ApplicationRead
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
+        boolean debugEnabled = log.isDebugEnabled();
         ConfigurableApplicationContext applicationContext = event.getApplicationContext();
         // fixed #3
         if (/*applicationContext.getParent() == null
@@ -61,13 +62,13 @@ public class SuccessEventListener implements ApplicationListener<ApplicationRead
                 MsgType message = notification.success(event, projectId);
                 String keyword = projectId + SUCCESS_KEYWORD;
                 DingTalkResult result = dingTalkRobot.send(keyword, message);
-                if (log.isDebugEnabled()) {
+                if (debugEnabled) {
                     log.debug("keyword={}, result={}.", keyword, result.toString());
                 }
             }
 
         } else {
-            if (log.isDebugEnabled()) {
+            if (debugEnabled) {
                 log.debug("dingtalk success listener skip, context={}.", applicationContext.getClass().getName());
             }
         }
