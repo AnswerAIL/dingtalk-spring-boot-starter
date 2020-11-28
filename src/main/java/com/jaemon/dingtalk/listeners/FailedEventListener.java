@@ -29,6 +29,7 @@ import org.springframework.context.ApplicationListener;
 
 import static com.jaemon.dingtalk.constant.DkConstant.DK_PREFIX;
 import static com.jaemon.dingtalk.constant.DkConstant.FAILED_KEYWORD;
+import static com.jaemon.dingtalk.listeners.ApplicationEventTimeTable.DISABLED_DINTALK_MONITOR;
 
 /**
  * Failed Listener
@@ -41,6 +42,13 @@ public class FailedEventListener implements ApplicationListener<ApplicationFaile
 
     @Override
     public void onApplicationEvent(ApplicationFailedEvent event) {
+        boolean debugEnabled = log.isDebugEnabled();
+
+        String monitor = System.getProperty(DISABLED_DINTALK_MONITOR);
+        if (monitor != null && "true".equals(monitor.trim())) {
+            return;
+        }
+
         ApplicationContext applicationContext = event.getApplicationContext();
         if (applicationContext == null) {
             return;
@@ -48,6 +56,9 @@ public class FailedEventListener implements ApplicationListener<ApplicationFaile
 
         if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
                 && ApplicationEventTimeTable.failedTime == 0) {
+            if (debugEnabled) {
+                log.debug("ready to execute ApplicationFailedEvent.");
+            }
             ApplicationEventTimeTable.failedTime = event.getTimestamp();
             DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
 
@@ -61,7 +72,7 @@ public class FailedEventListener implements ApplicationListener<ApplicationFaile
                 MsgType message = notification.failed(event, projectId);
                 String keyword = projectId + FAILED_KEYWORD;
                 DingTalkResult result = dingTalkRobot.send(keyword, message);
-                if (log.isDebugEnabled()) {
+                if (debugEnabled) {
                     log.debug("keyword={}, result={}.", keyword, result.toString());
                 }
             }

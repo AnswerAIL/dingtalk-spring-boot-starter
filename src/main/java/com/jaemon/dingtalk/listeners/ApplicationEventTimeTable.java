@@ -29,6 +29,8 @@ import java.util.Set;
  * @since 1.0
  */
 public class ApplicationEventTimeTable {
+    /** 禁用dingtalk监控功能 */
+    static final String DISABLED_DINTALK_MONITOR = "dingtalk.monitor.disabled";
     /**
      * startTime
      */

@@ -29,6 +29,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 import static com.jaemon.dingtalk.constant.DkConstant.DK_PREFIX;
 import static com.jaemon.dingtalk.constant.DkConstant.SUCCESS_KEYWORD;
+import static com.jaemon.dingtalk.listeners.ApplicationEventTimeTable.DISABLED_DINTALK_MONITOR;
 
 /**
  * Success Listener
@@ -42,12 +43,20 @@ public class SuccessEventListener implements ApplicationListener<ApplicationRead
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         boolean debugEnabled = log.isDebugEnabled();
+
+        String monitor = System.getProperty(DISABLED_DINTALK_MONITOR);
+        if (monitor != null && "true".equals(monitor.trim())) {
+            return;
+        }
+
         ConfigurableApplicationContext applicationContext = event.getApplicationContext();
         // fixed #3
         if (/*applicationContext.getParent() == null
                 && */AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
                 && ApplicationEventTimeTable.successTime == 0) {
-
+            if (debugEnabled) {
+                log.debug("ready to execute ApplicationReadyEvent.");
+            }
             ApplicationEventTimeTable.successTime = event.getTimestamp();
 
             DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);

@@ -29,6 +29,7 @@ import org.springframework.context.event.ContextClosedEvent;
 
 import static com.jaemon.dingtalk.constant.DkConstant.DK_PREFIX;
 import static com.jaemon.dingtalk.constant.DkConstant.EXIT_KEYWORD;
+import static com.jaemon.dingtalk.listeners.ApplicationEventTimeTable.DISABLED_DINTALK_MONITOR;
 
 /**
  * Exit Listener
@@ -41,10 +42,20 @@ public class ExitEventListener implements ApplicationListener<ContextClosedEvent
 
     @Override
     public void onApplicationEvent(ContextClosedEvent event) {
+        boolean debugEnabled = log.isDebugEnabled();
+
+        String monitor = System.getProperty(DISABLED_DINTALK_MONITOR);
+        if (monitor != null && "true".equals(monitor.trim())) {
+            return;
+        }
+
         ApplicationContext applicationContext = event.getApplicationContext();
 
         if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
                 && ApplicationEventTimeTable.exitTime == 0) {
+            if (debugEnabled) {
+                log.debug("ready to execute ContextClosedEvent.");
+            }
             ApplicationEventTimeTable.exitTime = event.getTimestamp();
             DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
 
@@ -60,7 +71,7 @@ public class ExitEventListener implements ApplicationListener<ContextClosedEvent
                 MsgType message = notification.exit(event, projectId);
                 String keyword = projectId + EXIT_KEYWORD;
                 DingTalkResult result = dingTalkRobot.send(keyword, message);
-                if (log.isDebugEnabled()) {
+                if (debugEnabled) {
                     log.debug("keyword={}, result={}.", keyword, result.toString());
                 }
             }
