@@ -15,10 +15,10 @@
  */
 package com.jaemon.dingtalk.utils;
 
+import com.jaemon.dingtalk.ApplicationHome;
 import com.jaemon.dingtalk.listeners.ApplicationEventTimeTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;

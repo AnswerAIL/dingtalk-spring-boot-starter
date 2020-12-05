@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingtalk.listeners;
 
+import com.jaemon.dingtalk.ApplicationHome;
 import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.dinger.DingerDefinitionResolver;
 import com.jaemon.dingtalk.dinger.annatations.Dinger;
@@ -31,7 +32,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.jaemon.dingtalk.utils.PackageUtils.classNames;
 
@@ -51,6 +54,34 @@ public class DingerXmlPreparedEvent
         boolean isTraceEnabled = log.isTraceEnabled();
         boolean isDebugEnabled = log.isDebugEnabled();
         log.info("ready to execute dinger analysis.");
+
+
+        if (ApplicationEventTimeTable.startTime > 0) {
+            log.info("dingtalk has already been initialized.");
+            return;
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("ready to execute ApplicationStartingEvent.");
+        }
+        ApplicationEventTimeTable.startTime = event.getTimestamp();
+
+        Set<Object> allSources = event.getSpringApplication().getSources();
+        Set<Class<?>> primarySources = new HashSet<>();
+        for (Object source : allSources) {
+            if (Class.class.isInstance(source)) {
+                Class<?> clazz = (Class<?>) source;
+                if (clazz.isAnnotationPresent(DingerScan.class)) {
+                    primarySources.add(clazz);
+                }
+            }
+        }
+
+        ApplicationHome applicationHome = new ApplicationHome();
+        ApplicationEventTimeTable.applicationHome = applicationHome;
+        log.info("applicationHome={}", applicationHome.toString());
+
+
+
 
         String DingerLocationsProp = DINGER_PROPERTIES_PREFIX + "dinger-locations";
         String dingerLocations = event.getEnvironment().getProperty(DingerLocationsProp);
@@ -81,7 +112,7 @@ public class DingerXmlPreparedEvent
             DingerScan dingerScan = null;
             List<Class<?>> dingerClasses = new ArrayList<>();
             // 获取启动类下所有Dinger标注的类信息
-            for (Class<?> primarySource : ApplicationEventTimeTable.primarySources()) {
+            for (Class<?> primarySource : primarySources) {
                 if (isDebugEnabled) {
                     log.debug("ready to analysis primarySource[{}].", primarySource.getName());
                 }

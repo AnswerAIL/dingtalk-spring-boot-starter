@@ -22,8 +22,8 @@ import com.jaemon.dingtalk.entity.message.MsgType;
 import com.jaemon.dingtalk.support.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
@@ -52,7 +52,7 @@ public class SuccessEventListener implements ApplicationListener<ApplicationRead
         ConfigurableApplicationContext applicationContext = event.getApplicationContext();
         // fixed #3
         if (/*applicationContext.getParent() == null
-                && */AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
+                && */AnnotationConfigEmbeddedWebApplicationContext.class.isInstance(applicationContext)
                 && ApplicationEventTimeTable.successTime == 0) {
             if (debugEnabled) {
                 log.debug("ready to execute ApplicationReadyEvent.");

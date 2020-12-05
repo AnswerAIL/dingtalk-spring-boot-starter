@@ -8,7 +8,6 @@ com.jaemon.dingtalk.config.DkThreadPoolConfig
 
 # Application Listeners
 org.springframework.context.ApplicationListener=\
-com.jaemon.dingtalk.listeners.StartEventListener,\
 com.jaemon.dingtalk.listeners.SuccessEventListener,\
 com.jaemon.dingtalk.listeners.FailedEventListener,\
 com.jaemon.dingtalk.listeners.ExitEventListener,\

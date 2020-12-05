@@ -7,7 +7,7 @@
     <groupId>com.github.answerail</groupId>
     <artifactId>dingtalk-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <version>3.1.0-RELEASE</version>
+    <version>3.0.0-SP1</version>
 
     <name>dingtalk-spring-boot-starter</name>
     <description>集成钉钉机器人实现消息通知</description>
@@ -15,7 +15,7 @@
 
 
     <properties>
-        <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
+        <spring-boot.version>1.3.1.RELEASE</spring-boot.version>
         <lombok.version>1.18.10</lombok.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

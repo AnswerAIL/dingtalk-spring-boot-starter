@@ -22,7 +22,7 @@ import com.jaemon.dingtalk.entity.message.MsgType;
 import com.jaemon.dingtalk.support.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
+import org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
@@ -51,7 +51,7 @@ public class ExitEventListener implements ApplicationListener<ContextClosedEvent
 
         ApplicationContext applicationContext = event.getApplicationContext();
 
-        if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
+        if (AnnotationConfigEmbeddedWebApplicationContext.class.isInstance(applicationContext)
                 && ApplicationEventTimeTable.exitTime == 0) {
             if (debugEnabled) {
                 log.debug("ready to execute ContextClosedEvent.");

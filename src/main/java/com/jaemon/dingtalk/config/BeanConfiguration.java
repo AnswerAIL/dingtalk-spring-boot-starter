@@ -47,7 +47,7 @@ public class BeanConfiguration {
      * @return CustomMessage
      */
     @ConditionalOnMissingBean(name = TEXT_MESSAGE)
-    @Bean(TEXT_MESSAGE)
+    @Bean(name = TEXT_MESSAGE)
     public CustomMessage textMessage() {
         return new TextMessage();
     }
@@ -58,7 +58,7 @@ public class BeanConfiguration {
      * @return CustomMessage
      */
     @ConditionalOnMissingBean(name = MARKDOWN_MESSAGE)
-    @Bean(MARKDOWN_MESSAGE)
+    @Bean(name = MARKDOWN_MESSAGE)
     public CustomMessage markDownMessage() {
         return new MarkDownMessage();
     }

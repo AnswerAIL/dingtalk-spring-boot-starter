@@ -36,7 +36,6 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.objenesis.instantiator.util.ClassUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -146,7 +145,7 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
                     continue;
                 }
                 String key = dingerClass.getName();
-                DingerConfigHandler handler = ClassUtils.newInstance(dingerConfigHandler);
+                DingerConfigHandler handler = BeanUtils.instantiateClass(dingerConfigHandler);
 
                 registerHandler(registry, key, handler);
             }
@@ -190,7 +189,7 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
         AnalysisEnum mode = AnalysisEnum.REFLECT;
         if (injectionCnt == 0) {
             // create algorithm instance
-            AlgorithmHandler algorithmHandler = ClassUtils.newInstance(algorithm);
+            AlgorithmHandler algorithmHandler = BeanUtils.instantiate(algorithm);
             MultiDingerConfigContainer.INSTANCE.put(
                     key, new MultiDingerConfig(algorithmHandler, dcs)
             );

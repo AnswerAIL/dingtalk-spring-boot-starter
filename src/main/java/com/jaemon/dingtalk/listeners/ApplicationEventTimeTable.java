@@ -15,12 +15,11 @@
  */
 package com.jaemon.dingtalk.listeners;
 
-import org.springframework.boot.system.ApplicationHome;
+
+import com.jaemon.dingtalk.ApplicationHome;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * ApplicationEventTimeTable
@@ -48,10 +47,6 @@ public class ApplicationEventTimeTable {
      */
     static long exitTime = 0;
     /**
-     * primarySources
-     */
-    static Set<Class<?>> primarySources = new HashSet<>();
-    /**
      * dingerClasses
      */
     static List<Class<?>> dingerClasses = new ArrayList<>();
@@ -77,10 +72,6 @@ public class ApplicationEventTimeTable {
 
     public static long exitTime() {
         return exitTime;
-    }
-
-    public static Set<Class<?>> primarySources() {
-        return primarySources;
     }
 
     public static List<Class<?>> dingerClasses() {

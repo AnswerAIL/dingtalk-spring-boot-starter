@@ -22,8 +22,8 @@ import com.jaemon.dingtalk.entity.message.MsgType;
 import com.jaemon.dingtalk.support.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
-import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 
@@ -54,7 +54,7 @@ public class FailedEventListener implements ApplicationListener<ApplicationFaile
             return;
         }
 
-        if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
+        if (AnnotationConfigEmbeddedWebApplicationContext.class.isInstance(applicationContext)
                 && ApplicationEventTimeTable.failedTime == 0) {
             if (debugEnabled) {
                 log.debug("ready to execute ApplicationFailedEvent.");
