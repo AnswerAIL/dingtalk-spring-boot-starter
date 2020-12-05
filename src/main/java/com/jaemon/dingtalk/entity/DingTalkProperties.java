@@ -18,8 +18,7 @@ package com.jaemon.dingtalk.entity;
 import com.jaemon.dingtalk.exception.InvalidPropertiesFormatException;
 import com.jaemon.dingtalk.utils.DingTalkUtils;
 import lombok.Data;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 
@@ -32,7 +31,7 @@ import org.springframework.boot.context.properties.DeprecatedConfigurationProper
  */
 @Data
 @ConfigurationProperties(prefix = "spring.dingtalk")
-public class DingTalkProperties implements BeanPostProcessor {
+public class DingTalkProperties implements InitializingBean {
 
     /** 钉钉消息推送地址 */
     private static final String ROBOT_URL = "https://oapi.dingtalk.com/robot/send?access_token";
@@ -143,7 +142,7 @@ public class DingTalkProperties implements BeanPostProcessor {
     }
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public void afterPropertiesSet() throws Exception {
         {
             if (DingTalkUtils.isEmpty(this.tokenId)) {
                 throw new InvalidPropertiesFormatException(
@@ -169,7 +168,5 @@ public class DingTalkProperties implements BeanPostProcessor {
                 );
             }
         }
-
-        return bean;
     }
 }

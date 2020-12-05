@@ -15,7 +15,8 @@
  */
 package com.jaemon.dingtalk.multi;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaemon.dingtalk.dinger.DingerConfig;
 import com.jaemon.dingtalk.multi.algorithm.AlgorithmHandler;
 import com.jaemon.dingtalk.multi.algorithm.RoundRobinHandler;
@@ -39,6 +40,7 @@ import static com.jaemon.dingtalk.utils.DingTalkUtils.uuid;
 public class RoundRobinHandlerTest {
 
     public static void main(String[] args) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
         ExecutorService executorService = Executors.newCachedThreadPool();
         final AlgorithmHandler algorithmHandler = new RoundRobinHandler();
         Random random = new Random();
@@ -49,7 +51,7 @@ public class RoundRobinHandlerTest {
             dingerConfig.setTokenId(uuid());
             dingerConfigs.add(dingerConfig);
         }
-        System.out.println(JSON.toJSONString(
+        System.out.println(objectMapper.writeValueAsString(
                 dingerConfigs.stream().map(DingerConfig::getTokenId).collect(Collectors.toList())
         ));
         System.out.println();
@@ -58,7 +60,11 @@ public class RoundRobinHandlerTest {
             TimeUnit.MILLISECONDS.sleep(random.nextInt(1000));
             executorService.execute(() -> {
                 DingerConfig dingerConfig = algorithmHandler.handler(dingerConfigs, null);
-                System.out.println(JSON.toJSONString(dingerConfig));
+                try {
+                    System.out.println(objectMapper.writeValueAsString(dingerConfig));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
             });
         }
 
