@@ -10,7 +10,7 @@
     <version>3.1.0-RELEASE</version>
 
     <name>dingtalk-spring-boot-starter</name>
-    <description>集成钉钉机器人实现消息通知</description>
+    <description>SpringBoot集成钉钉机器人实现消息通知中间件</description>
     <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter</url>
 
 
