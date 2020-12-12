@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Jaemon(answer_ljm@163.com)
+ * Copyright ©2015-2020 Jaemon. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.jaemon.dingtalk.dinger;
 /**
  * ResultHandle
  *
- * @author Jaemon#answer_ljm@163.com
+ * @author Jaemon
  * @since 2.0
  */
 public interface ResultHandle<T> {
