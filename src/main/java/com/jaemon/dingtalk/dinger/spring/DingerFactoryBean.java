@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Jaemon(answer_ljm@163.com)
+ * Copyright ©2015-2020 Jaemon. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * DingerFactoryBean
  *
- * @author Jaemon#answer_ljm@163.com
+ * @author Jaemon
  * @since 2.0
  */
 public class DingerFactoryBean<T> implements FactoryBean<T> {

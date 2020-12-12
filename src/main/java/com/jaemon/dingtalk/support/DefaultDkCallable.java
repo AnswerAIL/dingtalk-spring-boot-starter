@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Jaemon(answer_ljm@163.com)
+ * Copyright ©2015-2020 Jaemon. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 默认异步执行回调
  *
- * @author Jaemon#answer_ljm@163.com
+ * @author Jaemon
  * @since 1.0
  */
 public class DefaultDkCallable implements DkCallable {

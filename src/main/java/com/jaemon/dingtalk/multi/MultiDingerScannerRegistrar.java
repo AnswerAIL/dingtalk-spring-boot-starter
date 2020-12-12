@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Jaemon(answer_ljm@163.com)
+ * Copyright ©2015-2020 Jaemon. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ import static com.jaemon.dingtalk.multi.MultiDingerConfigContainer.GLOABL_KEY;
 /**
  * MultiDingerScannerRegistrar
  *
- * @author Jaemon#answer_ljm@163.com
+ * @author Jaemon
  * @since 3.0
  */
 public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Ordered {
