@@ -40,8 +40,9 @@ import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_PROP_PREFIX;
 @Configuration
 @ConditionalOnProperty(
         prefix = DINGTALK_PROP_PREFIX,
-        name = "async",
-        havingValue = "true"
+        name = "enabled",
+        havingValue = "true",
+        matchIfMissing = true
 )
 @ConditionalOnBean(DingTalkRobot.class)
 //@Conditional(AsyncCondition.class)
