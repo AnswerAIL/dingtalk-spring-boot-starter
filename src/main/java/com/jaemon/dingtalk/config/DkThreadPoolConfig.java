@@ -15,12 +15,13 @@
  */
 package com.jaemon.dingtalk.config;
 
+import com.jaemon.dingtalk.DingTalkRobot;
 import com.jaemon.dingtalk.entity.DkThreadPoolProperties;
-import com.jaemon.dingtalk.support.AsyncCondition;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -28,6 +29,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_EXECUTOR;
+import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_PROP_PREFIX;
 
 /**
  * DINGTALK线程池配置类
@@ -36,7 +38,13 @@ import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_EXECUTOR;
  * @since 1.0
  */
 @Configuration
-@Conditional(AsyncCondition.class)
+@ConditionalOnProperty(
+        prefix = DINGTALK_PROP_PREFIX,
+        name = "async",
+        havingValue = "true"
+)
+@ConditionalOnBean(DingTalkRobot.class)
+//@Conditional(AsyncCondition.class)
 @ConditionalOnMissingBean(name = DINGTALK_EXECUTOR)
 @EnableConfigurationProperties({DkThreadPoolProperties.class})
 public class DkThreadPoolConfig {

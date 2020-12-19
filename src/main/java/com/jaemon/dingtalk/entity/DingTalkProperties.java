@@ -22,6 +22,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 
+import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_PROP_PREFIX;
+
 
 /**
  * 属性配置类
@@ -30,7 +32,7 @@ import org.springframework.boot.context.properties.DeprecatedConfigurationProper
  * @since 1.0
  */
 @Data
-@ConfigurationProperties(prefix = "spring.dingtalk")
+@ConfigurationProperties(prefix = DINGTALK_PROP_PREFIX)
 public class DingTalkProperties implements InitializingBean {
 
     /** 钉钉消息推送地址 */

@@ -19,6 +19,7 @@ import com.jaemon.dingtalk.DingTalkSender;
 import com.jaemon.dingtalk.entity.DingTalkProperties;
 import com.jaemon.dingtalk.entity.DingTalkResult;
 import com.jaemon.dingtalk.entity.message.MsgType;
+import com.jaemon.dingtalk.multi.MultiDingerRefresh;
 import com.jaemon.dingtalk.support.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,45 +38,57 @@ import static com.jaemon.dingtalk.listeners.ApplicationEventTimeTable.DISABLED_D
  * @author Jaemon
  * @since 1.0
  */
-public class ExitEventListener implements ApplicationListener<ContextClosedEvent> {
+public class ExitEventListener
+        extends MultiDingerRefresh
+        implements ApplicationListener<ContextClosedEvent> {
     private static final Logger log = LoggerFactory.getLogger(ExitEventListener.class);
 
     @Override
     public void onApplicationEvent(ContextClosedEvent event) {
         boolean debugEnabled = log.isDebugEnabled();
 
-        String monitor = System.getProperty(DISABLED_DINTALK_MONITOR);
-        if (monitor != null && "true".equals(monitor.trim())) {
-            return;
-        }
-
-        ApplicationContext applicationContext = event.getApplicationContext();
-
-        if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
-                && ApplicationEventTimeTable.exitTime == 0) {
-            if (debugEnabled) {
-                log.debug("ready to execute ContextClosedEvent.");
+        try {
+            String monitor = System.getProperty(DISABLED_DINTALK_MONITOR);
+            if (monitor != null && "true".equals(monitor.trim())) {
+                return;
             }
-            ApplicationEventTimeTable.exitTime = event.getTimestamp();
-            DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
 
-            if (properties.isEnabled()
-                    && properties.getMonitor().isExit()
-                    // exclude start-up failed
-                    && ApplicationEventTimeTable.successTime() > 0) {
-                DingTalkSender dingTalkRobot = applicationContext.getBean(DingTalkSender.class);
-                Notification notification = applicationContext.getBean(Notification.class);
-                String projectId = properties.getProjectId();
-                projectId = projectId == null ? DK_PREFIX : projectId;
+            ApplicationContext applicationContext = event.getApplicationContext();
 
-                MsgType message = notification.exit(event, projectId);
-                String keyword = projectId + EXIT_KEYWORD;
-                DingTalkResult result = dingTalkRobot.send(keyword, message);
+            if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
+                    && ApplicationEventTimeTable.exitTime == 0) {
                 if (debugEnabled) {
-                    log.debug("keyword={}, result={}.", keyword, result.toString());
+                    log.debug("ready to execute ContextClosedEvent.");
+                }
+                ApplicationEventTimeTable.exitTime = event.getTimestamp();
+                DingTalkProperties properties = applicationContext.getBean(DingTalkProperties.class);
+
+                if (properties.isEnabled()
+                        && properties.getMonitor().isExit()
+                        // exclude start-up failed
+                        && ApplicationEventTimeTable.successTime() > 0) {
+                    DingTalkSender dingTalkRobot = applicationContext.getBean(DingTalkSender.class);
+                    Notification notification = applicationContext.getBean(Notification.class);
+                    String projectId = properties.getProjectId();
+                    projectId = projectId == null ? DK_PREFIX : projectId;
+
+                    MsgType message = notification.exit(event, projectId);
+                    String keyword = projectId + EXIT_KEYWORD;
+                    DingTalkResult result = dingTalkRobot.send(keyword, message);
+                    if (debugEnabled) {
+                        log.debug("keyword={}, result={}.", keyword, result.toString());
+                    }
                 }
             }
+        } finally {
+            // support devtools
+            refresh();
         }
 
+    }
+
+    private void refresh() {
+        multiDingerRefresh();
+        ApplicationEventTimeTable.clear();
     }
 }

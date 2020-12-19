@@ -18,6 +18,7 @@ package com.jaemon.dingtalk.dinger;
 import org.springframework.core.io.Resource;
 
 import java.util.*;
+import java.util.List;
 
 /**
  * AbstractDingerDefinitionResolver
@@ -95,6 +96,10 @@ public abstract class AbstractDingerDefinitionResolver {
         boolean contains(String key) {
             return container.containsKey(key);
         }
+    }
+
+    protected static void clear() {
+        Container.INSTANCE.container.clear();
     }
 
     /**

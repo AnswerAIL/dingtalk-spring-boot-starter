@@ -13,32 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingtalk.dinger;
+package com.jaemon.dingtalk.multi;
 
-import com.jaemon.dingtalk.DingTalkSender;
-
-import java.lang.reflect.Proxy;
+import com.jaemon.dingtalk.dinger.DingerRefresh;
 
 /**
- * DingerSession
+ * MultiDingerRefresh
  *
  * @author Jaemon
- * @since 2.0
+ * @since 3.0
  */
-public class DingerSession {
-    private DingTalkSender dingTalkSender;
+public class MultiDingerRefresh extends DingerRefresh {
 
-    public DingerSession(DingTalkSender dingTalkSender) {
-        this.dingTalkSender = dingTalkSender;
-    }
+    protected static void multiDingerRefresh() {
+        dingerFresh();
 
-    public <T> T getDinger(Class<T> type) {
-        return (T) Proxy.newProxyInstance(
-                // bugfix gitee#I29N15
-                Thread.currentThread().getContextClassLoader(),
-                new Class[]{type},
-                new DingerHandleProxy(dingTalkSender)
-        );
+        MultiDingerAlgorithmRegister.clear();
+        MultiDingerConfigContainer.clear();
     }
 
 }

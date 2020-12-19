@@ -27,6 +27,7 @@ import static com.jaemon.dingtalk.constant.DkConstant.DINGTALK_PROPERTIES_PREFIX
  * @author Jaemon
  * @since 1.0
  */
+@Deprecated
 public class AsyncCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {

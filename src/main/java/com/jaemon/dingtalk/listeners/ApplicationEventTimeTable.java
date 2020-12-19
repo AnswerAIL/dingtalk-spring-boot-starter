@@ -29,7 +29,11 @@ import java.util.Set;
  * @since 1.0
  */
 public class ApplicationEventTimeTable {
-    /** 禁用dingtalk监控功能 */
+    /**
+     * 禁用dingtalk监控功能
+     *
+     * -Ddingtalk.monitor.disabled=true
+     * */
     static final String DISABLED_DINTALK_MONITOR = "dingtalk.monitor.disabled";
     /**
      * startTime
@@ -90,12 +94,21 @@ public class ApplicationEventTimeTable {
     public static void emptyDingerClasses() {
         if (dingerClasses != null && !dingerClasses.isEmpty()) {
             dingerClasses.clear();
-            dingerClasses = null;
         }
     }
 
     public static ApplicationHome applicationHome() {
         return applicationHome == null ? new ApplicationHome() : applicationHome;
+    }
+
+    protected static void clear() {
+        ApplicationEventTimeTable.startTime = 0;
+        ApplicationEventTimeTable.successTime = 0;
+        ApplicationEventTimeTable.failedTime = 0;
+        ApplicationEventTimeTable.exitTime = 0;
+        ApplicationEventTimeTable.primarySources = new HashSet<>();
+        ApplicationEventTimeTable.dingerClasses = new ArrayList<>();
+        ApplicationEventTimeTable.applicationHome = null;
     }
 
 }

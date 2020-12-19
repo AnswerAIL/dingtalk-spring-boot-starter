@@ -63,6 +63,8 @@ public class MultiDingerAlgorithmRegister implements ApplicationContextAware, In
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (MultiDingerAlgorithmRegister.applicationContext == null) {
             MultiDingerAlgorithmRegister.applicationContext = applicationContext;
+        } else {
+            log.warn("applicationContext is not null.");
         }
     }
 
@@ -140,6 +142,10 @@ public class MultiDingerAlgorithmRegister implements ApplicationContextAware, In
         }
 
         MULTIDINGER_ALGORITHM_DEFINITION_MAP.clear();
+    }
+
+    protected static void clear() {
+        MultiDingerAlgorithmRegister.applicationContext = null;
     }
 
 }

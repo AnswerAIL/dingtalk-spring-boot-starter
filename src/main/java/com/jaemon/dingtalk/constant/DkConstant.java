@@ -50,5 +50,6 @@ public interface DkConstant {
     String NEW_LINE = "\r\n";
     String SPOT_SEPERATOR = ".";
 
-    String DINGTALK_PROPERTIES_PREFIX = "spring.dingtalk.";
+    String DINGTALK_PROP_PREFIX = "spring.dingtalk";
+    String DINGTALK_PROPERTIES_PREFIX = DINGTALK_PROP_PREFIX + SPOT_SEPERATOR;
 }

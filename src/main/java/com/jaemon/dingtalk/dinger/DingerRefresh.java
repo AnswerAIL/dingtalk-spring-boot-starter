@@ -15,30 +15,16 @@
  */
 package com.jaemon.dingtalk.dinger;
 
-import com.jaemon.dingtalk.DingTalkSender;
-
-import java.lang.reflect.Proxy;
-
 /**
- * DingerSession
+ * DingerRefresh
  *
  * @author Jaemon
- * @since 2.0
+ * @since 3.0
  */
-public class DingerSession {
-    private DingTalkSender dingTalkSender;
+public class DingerRefresh {
 
-    public DingerSession(DingTalkSender dingTalkSender) {
-        this.dingTalkSender = dingTalkSender;
-    }
-
-    public <T> T getDinger(Class<T> type) {
-        return (T) Proxy.newProxyInstance(
-                // bugfix gitee#I29N15
-                Thread.currentThread().getContextClassLoader(),
-                new Class[]{type},
-                new DingerHandleProxy(dingTalkSender)
-        );
+    protected static void dingerFresh() {
+        AbstractDingerDefinitionResolver.clear();
     }
 
 }

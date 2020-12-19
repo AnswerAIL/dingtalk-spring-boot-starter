@@ -114,7 +114,8 @@ public class PackageUtils {
 
                 if (f.isFile()) {
                     String className = packageName + SPOT + name.substring(0, name.lastIndexOf(SPOT));
-                    Class<?> clazz = Class.forName(className);
+                    // bugfix gitee#I29N15
+                    Class<?> clazz = classLoader.loadClass(className);
                     // clazz.isInterface(): XXXDinger.java must be an interface
                     boolean check = isInterface ? clazz.isInterface() : true;
                     if (check) {
@@ -164,6 +165,7 @@ public class PackageUtils {
             boolean isInterface,
             Class<? extends Annotation>... filterAnnotations)
     {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         // 处理过滤掉dingerScan和Dinger解析时重复的类
         List<String> repeatCheck = classNames.stream().map(e -> e.getName()).collect(Collectors.toList());
         packageName = packageName.replace(SPOT, SLANT);
@@ -177,7 +179,8 @@ public class PackageUtils {
                         namePath.endsWith(".class") /*&& !namePath.contains("$")*/) {
                     namePath = namePath.substring(namePath.indexOf(packageName));
                     String className = namePath.replaceAll("/", ".").replace(".class", "");
-                    Class clazz = Class.forName(className);
+                    // bugfix gitee#I29N15
+                    Class clazz = classLoader.loadClass(className);
                     boolean check = isInterface ? clazz.isInterface() : true;
                     if (check) {
                         if (filterAnnotations.length > 0) {

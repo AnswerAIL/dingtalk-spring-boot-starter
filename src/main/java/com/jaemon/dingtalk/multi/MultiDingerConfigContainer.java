@@ -70,4 +70,8 @@ public enum MultiDingerConfigContainer {
         }
         return this.container.get(GLOABL_KEY);
     }
+
+    protected static void clear() {
+        MultiDingerConfigContainer.INSTANCE.container.clear();
+    }
 }
