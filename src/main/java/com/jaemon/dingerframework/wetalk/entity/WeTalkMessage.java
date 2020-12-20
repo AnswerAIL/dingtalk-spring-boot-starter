@@ -13,33 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingerframework.exception;
+package com.jaemon.dingerframework.wetalk.entity;
 
-import com.jaemon.dingerframework.entity.enums.Pairs;
-import lombok.Getter;
+import com.jaemon.dingerframework.core.entity.MsgType;
+import com.jaemon.dingerframework.core.entity.enums.DingerType;
 
 /**
- * 异常类
+ * WeTalk请求体
  *
  * @author Jaemon
- * @since 1.0
+ * @since 4.0
  */
-public class DingerException extends RuntimeException {
-    @Getter
-    private Pairs<Integer, String> pairs;
-
-    public DingerException(Pairs pairs) {
-        super(pairs.desc().toString());
-        this.pairs = pairs;
-    }
-
-    public DingerException(String msg, Pairs pairs) {
-        super(msg);
-        this.pairs = pairs;
-    }
-
-    public DingerException(Throwable cause, Pairs pairs) {
-        super(cause);
-        this.pairs = pairs;
+public class WeTalkMessage extends MsgType {
+    public WeTalkMessage() {
+        setMsgtype(DingerType.WETALK);
     }
 }

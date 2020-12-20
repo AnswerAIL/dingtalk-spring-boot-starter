@@ -26,10 +26,10 @@ import java.lang.reflect.Proxy;
  * @since 2.0
  */
 public class DingerSession {
-    private DingerSender dingTalkSender;
+    private DingerSender dingerSender;
 
-    public DingerSession(DingerSender dingTalkSender) {
-        this.dingTalkSender = dingTalkSender;
+    public DingerSession(DingerSender dingerSender) {
+        this.dingerSender = dingerSender;
     }
 
     public <T> T getDinger(Class<T> type) {
@@ -37,7 +37,7 @@ public class DingerSession {
                 // bugfix gitee#I29N15
                 Thread.currentThread().getContextClassLoader(),
                 new Class[]{type},
-                new DingerHandleProxy(dingTalkSender)
+                new DingerHandleProxy(dingerSender)
         );
     }
 

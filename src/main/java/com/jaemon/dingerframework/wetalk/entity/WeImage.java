@@ -15,7 +15,6 @@
  */
 package com.jaemon.dingerframework.wetalk.entity;
 
-import com.jaemon.dingerframework.core.entity.MsgType;
 import lombok.Data;
 
 /**
@@ -25,7 +24,7 @@ import lombok.Data;
  * @since 4.0
  */
 @Data
-public class WeImage extends MsgType {
+public class WeImage extends WeTalkMessage {
 
     /**
      * 图片（base64编码前）最大不能超过2M，支持JPG,PNG格式

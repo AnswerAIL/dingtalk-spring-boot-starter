@@ -55,7 +55,7 @@ public class DingerConfiguration {
 
 
     @Bean
-    public DingerRobot dingTalkSender(DingerConfigurerAdapter dingTalkConfigurerAdapter, DingerManagerBuilder dingTalkManagerBuilder, ObjectMapper objectMapper){
+    public DingerRobot dingerSender(DingerConfigurerAdapter dingTalkConfigurerAdapter, DingerManagerBuilder dingTalkManagerBuilder, ObjectMapper objectMapper){
         try {
             dingTalkConfigurerAdapter.configure(dingTalkManagerBuilder);
         } catch (Exception ex) {

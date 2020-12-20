@@ -16,10 +16,13 @@
 package com.jaemon.dingerframework.listeners;
 
 import com.jaemon.dingerframework.core.DingerDefinitionResolver;
+import com.jaemon.dingerframework.exception.DingerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
+
+import static com.jaemon.dingerframework.entity.enums.ExceptionEnum.UNKNOWN;
 
 /**
  * DingerXmlPreparedEvent
@@ -39,7 +42,7 @@ public class DingerXmlPreparedEvent
         try {
             ApplicationEventTimeTable.dingerClasses = doAnalysis(event);
         } catch (Exception ex) {
-            // TODO
+            throw new DingerException(ex, UNKNOWN);
         }
     }
 

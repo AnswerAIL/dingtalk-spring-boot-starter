@@ -17,13 +17,9 @@ package com.jaemon.dingerframework.core;
 
 import com.jaemon.dingerframework.DingerSender;
 import com.jaemon.dingerframework.core.annatations.DingerClose;
+import com.jaemon.dingerframework.core.entity.MsgType;
 import com.jaemon.dingerframework.core.entity.enums.DingerType;
-import com.jaemon.dingerframework.entity.DingTalkResult;
-import com.jaemon.dingerframework.dingtalk.entity.Message;
-import com.jaemon.dingerframework.listeners.DingerXmlPreparedEvent;
-import com.jaemon.dingerframework.multi.MultiDingerConfigContainer;
-import com.jaemon.dingerframework.multi.entity.MultiDingerConfig;
-import com.jaemon.dingerframework.multi.MultiDingerProperty;
+import com.jaemon.dingerframework.entity.DingerResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,8 +39,8 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
     private static final Logger log = LoggerFactory.getLogger(DingerHandleProxy.class);
     private static final String DEFAULT_STRING_METHOD = "java.lang.Object.toString";
 
-    public DingerHandleProxy(DingerSender dingTalkSender) {
-        this.dingTalkSender = dingTalkSender;
+    public DingerHandleProxy(DingerSender dingerSender) {
+        this.dingerSender = dingerSender;
     }
 
     @Override
@@ -72,56 +68,27 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
             // method params map
             Map<String, Object> params = paramsHandle(method.getParameters(), args);
 
-            // TODO
-            keyName = DingerType.DINGTALK + SPOT_SEPERATOR + keyName;
-            DingerDefinition dingerDefinition = DingerXmlPreparedEvent
-                    .Container.INSTANCE.get(keyName);
-
+            DingerType defaultDinger = dingerType(method);
+            DingerDefinition dingerDefinition = dingerDefinition(
+                    defaultDinger, keyName, dingerClassName
+            );
             if (dingerDefinition == null) {
-                log.warn("{} there is no corresponding dinger message config", keyName);
                 return null;
             }
 
-            // 优先使用用户设定 dingerConfig
-            DingerConfig localDinger = DingerHelper.getLocalDinger();
-            if (localDinger == null) {
-                if (MultiDingerProperty.multiDinger()) {
-                    MultiDingerConfig multiDingerConfig =
-                            MultiDingerConfigContainer
-                                    .INSTANCE.get(dingerClassName);
-                    DingerConfig dingerConfig;
-                    if (multiDingerConfig == null) {
-                        dingerConfig = dingerDefinition.dingerConfig();
-                    } else {
-                        dingerConfig = multiDingerConfig.getAlgorithmHandler()
-                                .dingerConfig(
-                                        multiDingerConfig.getDingerConfigs(),
-                                        dingerDefinition.dingerConfig()
-                                );
-
-                        if (dingerConfig == null) {
-                            dingerConfig = dingerDefinition.dingerConfig();
-                        }
-                    }
-                    DingerHelper.assignDinger(dingerConfig);
-                } else {
-                    DingerHelper.assignDinger(dingerDefinition.dingerConfig());
-                }
-
-            }
-            Message message = transfer(dingerDefinition, params);
+            MsgType message = transfer(dingerDefinition, params);
 
             // when keyword is null, use methodName + timestamps
             String keyword = params.getOrDefault(
                     KEYWORD,
                     keyName + CONNECTOR + System.currentTimeMillis()
             ).toString();
-            DingTalkResult dingTalkResult = dingTalkSender.send(
+            DingerResult dingerResult = dingerSender.send(
                     keyword, message
             );
 
             // return...
-            return resultHandle(method.getReturnType(), dingTalkResult);
+            return resultHandle(method.getReturnType(), dingerResult);
         } finally {
             DingerHelper.clearDinger();
         }

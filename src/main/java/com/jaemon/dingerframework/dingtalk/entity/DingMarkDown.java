@@ -15,13 +15,13 @@
  */
 package com.jaemon.dingerframework.dingtalk.entity;
 
-import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Markdown 消息格式实体
@@ -38,12 +38,8 @@ public class DingMarkDown extends Message implements Serializable {
      */
     private MarkDown markdown;
 
-    public DingMarkDown() {
-        setMsgtype(MsgTypeEnum.MARKDOWN.type());
-    }
 
     public DingMarkDown(MarkDown markdown) {
-        setMsgtype(MsgTypeEnum.MARKDOWN.type());
         this.markdown = markdown;
     }
 
@@ -59,5 +55,10 @@ public class DingMarkDown extends Message implements Serializable {
          * markdown格式的消息
          */
         private String text;
+    }
+
+    @Override
+    public void transfer(Map<String, Object> params) {
+        this.markdown.text = replaceContent(this.markdown.text, params);
     }
 }

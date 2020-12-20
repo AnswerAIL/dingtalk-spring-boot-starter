@@ -18,9 +18,9 @@ package com.jaemon.dingerframework;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaemon.dingerframework.core.DingerHelper;
 import com.jaemon.dingerframework.core.entity.DingerProperties;
-import com.jaemon.dingerframework.entity.DingTalkResult;
+import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
+import com.jaemon.dingerframework.entity.DingerResult;
 import com.jaemon.dingerframework.entity.DkExCallable;
-import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
 import com.jaemon.dingerframework.entity.enums.ResultCode;
 import com.jaemon.dingerframework.exception.MsgTypeException;
 import com.jaemon.dingerframework.support.CustomMessage;
@@ -48,17 +48,13 @@ public abstract class AbstractDingerSender
     /**
      * 消息类型校验
      *
-     * @param msgType
+     * @param messageSubType
      *              消息类型
      * @return
      *              消息生成器
      */
-    CustomMessage checkMsgType(MsgTypeEnum msgType) {
-        if (msgType != MsgTypeEnum.TEXT && msgType != MsgTypeEnum.MARKDOWN) {
-            throw new MsgTypeException("暂不支持" + msgType.type() + "类型");
-        }
-
-        return msgType == MsgTypeEnum.TEXT ? dingTalkManagerBuilder.textMessage : dingTalkManagerBuilder.markDownMessage;
+    CustomMessage customMessage(MessageSubType messageSubType) {
+        return messageSubType == MessageSubType.TEXT ? dingTalkManagerBuilder.textMessage : dingTalkManagerBuilder.markDownMessage;
     }
 
     /**
@@ -69,13 +65,13 @@ public abstract class AbstractDingerSender
      * @param ex ex
      * @return result
      */
-    DingTalkResult exceptionResult(String keyword, String content, MsgTypeException ex) {
+    DingerResult exceptionResult(String keyword, String content, MsgTypeException ex) {
         DkExCallable dkExCallable = DkExCallable.builder()
                 .dingTalkProperties(dingTalkProperties)
                 .keyword(keyword)
                 .message(content)
                 .ex(ex).build();
         dingTalkManagerBuilder.notice.callback(dkExCallable);
-        return DingTalkResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
+        return DingerResult.failed(ResultCode.MESSAGE_TYPE_UNSUPPORTED, dingTalkManagerBuilder.dkIdGenerator.dkid());
     }
 }

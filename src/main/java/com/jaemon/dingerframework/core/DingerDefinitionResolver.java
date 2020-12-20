@@ -66,6 +66,8 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
      *          the event to respond to
      * @return
      *          Dinger类集合
+     * @throws Exception
+     *          ex
      * */
     protected List<Class<?>> doAnalysis(ApplicationEnvironmentPreparedEvent event) throws Exception {
         try {
@@ -118,7 +120,13 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                     supportMessageType = SupportMessageType.XML_MARKDOWN;
                 }
 
-                registerDingerDefinition(keyName, message, supportMessageType, dingerConfiguration, defaultDingerConfig);
+                registerDingerDefinition(
+                        keyName,
+                        message,
+                        supportMessageType,
+                        dingerConfiguration,
+                        defaultDingerConfig
+                );
             }
         }
     }
@@ -135,29 +143,25 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
             Method[] methods = dingerClass.getMethods();
             for (Method method : methods) {
                 String keyName = namespace + SPOT_SEPERATOR + method.getName();
-                boolean isDingerText = method.isAnnotationPresent(DingerText.class);
-                boolean isDingerMarkdown = method.isAnnotationPresent(DingerMarkdown.class);
 
-                if (isDingerText || isDingerMarkdown) {
-                    // either dingerText or dingerMarkdown
-                    if (isDingerText) {
-                        registerDingerDefinition(
-                                keyName,
-                                method.getAnnotation(DingerText.class),
-                                SupportMessageType.ANNOTATION_TEXT,
-                                dingerConfiguration,
-                                defaultDingerConfig
-                        );
-                    } else {
-                        registerDingerDefinition(
-                                keyName,
-                                method.getAnnotation(DingerMarkdown.class),
-                                SupportMessageType.ANNOTATION_MARKDOWN,
-                                dingerConfiguration,
-                                defaultDingerConfig
-                        );
-                    }
+                if (method.isAnnotationPresent(DingerText.class)) {
+                    registerDingerDefinition(
+                            keyName,
+                            method.getAnnotation(DingerText.class),
+                            SupportMessageType.ANNOTATION_TEXT,
+                            dingerConfiguration,
+                            defaultDingerConfig
+                    );
+                } else if (method.isAnnotationPresent(DingerMarkdown.class)) {
+                    registerDingerDefinition(
+                            keyName,
+                            method.getAnnotation(DingerMarkdown.class),
+                            SupportMessageType.ANNOTATION_MARKDOWN,
+                            dingerConfiguration,
+                            defaultDingerConfig
+                    );
                 } else {
+                    // TODO 是否需要保留，保留需注意DingerType
                     // xml dingerConfig adapt
                     if (defaultDingerConfigSet.contains(keyName)) {
                         INSTANCE.get(keyName).dingerConfig()

@@ -15,7 +15,6 @@
  */
 package com.jaemon.dingerframework.wetalk.entity;
 
-import com.jaemon.dingerframework.core.entity.MsgType;
 import lombok.Data;
 
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.List;
  * @since 4.0
  */
 @Data
-public class WeNews extends MsgType {
+public class WeNews extends WeTalkMessage {
     /** 图文类型 */
     private News news;
 

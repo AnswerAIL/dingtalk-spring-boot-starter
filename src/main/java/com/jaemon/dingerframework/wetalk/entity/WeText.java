@@ -15,10 +15,10 @@
  */
 package com.jaemon.dingerframework.wetalk.entity;
 
-import com.jaemon.dingerframework.core.entity.MsgType;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 企业微信-消息类型-文本类型
@@ -27,7 +27,7 @@ import java.util.List;
  * @since 4.0
  */
 @Data
-public class WeText extends MsgType {
+public class WeText extends WeTalkMessage {
     /**
      * 文本内容，最长不超过2048个字节，必须是utf8编码
      * */
@@ -50,12 +50,12 @@ public class WeText extends MsgType {
      * */
     private List<String> mentioned_mobile_list;
 
-    public WeText() {
-        setMsgtype(null);
+    public WeText(String content) {
+        this.content = content;
     }
 
-    public WeText(String content) {
-        setMsgtype(null);
-        this.content = content;
+    @Override
+    public void transfer(Map<String, Object> params) {
+        this.content = replaceContent(this.content, params);
     }
 }

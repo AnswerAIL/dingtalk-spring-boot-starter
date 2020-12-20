@@ -17,7 +17,7 @@ package com.jaemon.dingerframework.listeners;
 
 import com.jaemon.dingerframework.DingerSender;
 import com.jaemon.dingerframework.core.entity.DingerProperties;
-import com.jaemon.dingerframework.entity.DingTalkResult;
+import com.jaemon.dingerframework.entity.DingerResult;
 import com.jaemon.dingerframework.core.entity.MsgType;
 import com.jaemon.dingerframework.support.Notification;
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public class FailedEventListener implements ApplicationListener<ApplicationFaile
 
                 MsgType message = notification.failed(event, projectId);
                 String keyword = projectId + FAILED_KEYWORD;
-                DingTalkResult result = dingTalkRobot.send(keyword, message);
+                DingerResult result = dingTalkRobot.send(keyword, message);
                 if (debugEnabled) {
                     log.debug("keyword={}, result={}.", keyword, result.toString());
                 }

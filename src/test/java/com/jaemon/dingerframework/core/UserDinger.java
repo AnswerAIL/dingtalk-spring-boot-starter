@@ -18,7 +18,7 @@ package com.jaemon.dingerframework.core;
 import com.jaemon.dingerframework.core.annatations.DingerMarkdown;
 import com.jaemon.dingerframework.core.annatations.DingerText;
 import com.jaemon.dingerframework.core.annatations.Parameter;
-import com.jaemon.dingerframework.entity.DingTalkResult;
+import com.jaemon.dingerframework.entity.DingerResult;
 import com.jaemon.dingerframework.multi.annotations.MultiHandler;
 import com.jaemon.dingerframework.multi.handler.UserDingerConfigHandler;
 
@@ -40,7 +40,7 @@ public interface UserDinger {
      *          result
      */
     @DingerText(value = "恭喜用户${userName}注册成功!", phones = {"13520200906"})
-    DingTalkResult userRegister(String userName);
+    DingerResult userRegister(String userName);
 
     /**
      * 用户注销通知
@@ -57,5 +57,5 @@ public interface UserDinger {
             title = "用户注销反馈",
             phones = {"13520200906"}
     )
-    DingTalkResult userLogout(@Parameter("userId") Long id, String userName);
+    DingerResult userLogout(@Parameter("userId") Long id, String userName);
 }

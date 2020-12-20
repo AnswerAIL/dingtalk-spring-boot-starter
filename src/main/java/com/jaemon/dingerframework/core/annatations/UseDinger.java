@@ -13,33 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jaemon.dingerframework.exception;
+package com.jaemon.dingerframework.core.annatations;
 
-import com.jaemon.dingerframework.entity.enums.Pairs;
-import lombok.Getter;
+import com.jaemon.dingerframework.core.entity.enums.DingerType;
+
+import java.lang.annotation.*;
 
 /**
- * 异常类
+ * UseDinger
  *
  * @author Jaemon
- * @since 1.0
+ * @since 4.0
  */
-public class DingerException extends RuntimeException {
-    @Getter
-    private Pairs<Integer, String> pairs;
-
-    public DingerException(Pairs pairs) {
-        super(pairs.desc().toString());
-        this.pairs = pairs;
-    }
-
-    public DingerException(String msg, Pairs pairs) {
-        super(msg);
-        this.pairs = pairs;
-    }
-
-    public DingerException(Throwable cause, Pairs pairs) {
-        super(cause);
-        this.pairs = pairs;
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+public @interface UseDinger {
+    /**
+     * 指定使用的Dinger
+     *
+     * @return
+     *         返回Dinger {@link DingerType}
+     */
+    DingerType value() default DingerType.DINGTALK;
 }

@@ -85,7 +85,7 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * custom text message format for {@link com.jaemon.dingerframework.entity.enums.MsgTypeEnum#TEXT}
+     * custom text message format for {@link com.jaemon.dingerframework.core.entity.enums.MessageSubType#TEXT}
      *
      * @param textMessage textMessage
      * @return this
@@ -98,7 +98,7 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * custom markdown message format for {@link com.jaemon.dingerframework.entity.enums.MsgTypeEnum#MARKDOWN}
+     * custom markdown message format for {@link com.jaemon.dingerframework.core.entity.enums.MessageSubType#MARKDOWN}
      *
      * @param markDownMessage markDownMessage
      * @return this

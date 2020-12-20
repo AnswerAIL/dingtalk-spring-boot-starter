@@ -16,7 +16,7 @@
 package com.jaemon.dingerframework.core.entity.xml;
 
 import com.jaemon.dingerframework.core.annatations.PriorityColumn;
-import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
+import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="body")
 public class BodyTag {
     @PriorityColumn(clazz = MessageTag.class, column = "dingerType")
-    private String type = MsgTypeEnum.TEXT.type();
+    private String type = MessageSubType.TEXT.name();
     private ContentTag content;
     private PhonesTag phones;
 

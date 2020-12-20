@@ -15,8 +15,6 @@
  */
 package com.jaemon.dingerframework.dingtalk.entity;
 
-import com.jaemon.dingerframework.core.entity.MsgType;
-import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,11 +30,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DingFeedCard extends MsgType {
-    public DingFeedCard() {
-        // 此消息类型为固定feedCard
-        setMsgtype(MsgTypeEnum.FEEDCARD.type());
-    }
+public class DingFeedCard extends DingTalkMessage {
 
     /**
      * {@link FeedCard}

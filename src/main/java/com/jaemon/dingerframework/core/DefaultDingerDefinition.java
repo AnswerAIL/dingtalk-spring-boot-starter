@@ -30,7 +30,7 @@ import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
  */
 public class DefaultDingerDefinition implements DingerDefinition {
     private String dingerName;
-    private DingerDefinitionType dingerDefinitionType;
+    private Class<? extends DingerDefinitionGenerator> dingerDefinitionGenerator;
     private MsgType message;
     private DingerConfig dingerConfig;
     private DingerType dingerType;
@@ -48,14 +48,15 @@ public class DefaultDingerDefinition implements DingerDefinition {
     }
 
     @Override
-    public DingerDefinitionType dingerDefinitionType() {
-        return dingerDefinitionType;
+    public Class<? extends DingerDefinitionGenerator> dingerDefinitionGenerator() {
+        return dingerDefinitionGenerator;
     }
 
     @Override
-    public void setDingerDefinitionType(DingerDefinitionType dingerDefinitionType) {
-        this.dingerDefinitionType = dingerDefinitionType;
+    public void setDingerDefinitionGenerator(Class<? extends DingerDefinitionGenerator> dingerDefinitionGenerator) {
+        this.dingerDefinitionGenerator = dingerDefinitionGenerator;
     }
+
 
     @Override
     public MsgType message() {

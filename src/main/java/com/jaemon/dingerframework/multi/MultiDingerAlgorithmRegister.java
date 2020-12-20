@@ -15,6 +15,8 @@
  */
 package com.jaemon.dingerframework.multi;
 
+import com.jaemon.dingerframework.core.DingerConfig;
+import com.jaemon.dingerframework.exception.DingerException;
 import com.jaemon.dingerframework.multi.algorithm.AlgorithmHandler;
 import com.jaemon.dingerframework.multi.entity.MultiDingerAlgorithmDefinition;
 import com.jaemon.dingerframework.multi.entity.MultiDingerConfig;
@@ -29,11 +31,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
+import static com.jaemon.dingerframework.entity.enums.ExceptionEnum.MULTI_DINGERCONFIGS_EXCEPTION;
 import static com.jaemon.dingerframework.multi.MultiDingerScannerRegistrar.MULTIDINGER_ALGORITHM_DEFINITION_MAP;
 
 /**
@@ -127,13 +127,21 @@ public class MultiDingerAlgorithmRegister implements ApplicationContextAware, In
                     }
                 }
 
+                List<DingerConfig> dingerConfigs = v.getDingerConfigs();
+                // check dingerConfig is valid
+                dingerConfigs.forEach(e -> {
+                    e.check();
+                    if (e.checkEmpty()) {
+                        throw new DingerException(algorithm.getSimpleName() + " dingerConfigs配置异常", MULTI_DINGERCONFIGS_EXCEPTION);
+                    }
+                });
                 // v.getKey() is dingerClassName or MultiDingerConfigContainer#GLOABL_KEY
                 MultiDingerConfigContainer.INSTANCE.put(
-                        v.getKey(), new MultiDingerConfig(algorithmHandler, v.getDingerConfigs())
+                        v.getKey(), new MultiDingerConfig(algorithmHandler, dingerConfigs)
                 );
                 if (debugEnabled) {
                     log.debug("multiDinger key(dingerClassName)={}, algorithmHandler class={}, dingerConfigs={}.",
-                            v.getKey(), algorithm.getSimpleName(), v.getDingerConfigs().size());
+                            v.getKey(), algorithm.getSimpleName(), dingerConfigs.size());
                 }
             }
         } else {

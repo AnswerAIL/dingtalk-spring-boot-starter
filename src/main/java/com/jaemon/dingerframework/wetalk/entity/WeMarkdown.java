@@ -15,8 +15,9 @@
  */
 package com.jaemon.dingerframework.wetalk.entity;
 
-import com.jaemon.dingerframework.core.entity.MsgType;
 import lombok.Data;
+
+import java.util.Map;
 
 /**
  * 企业微信-消息类型-markdown类型
@@ -25,18 +26,18 @@ import lombok.Data;
  * @since 4.0
  */
 @Data
-public class WeMarkdown extends MsgType {
+public class WeMarkdown extends WeTalkMessage {
     /**
      * markdown内容，最长不超过4096个字节，必须是utf8编码
      * */
     private String content;
 
-    public WeMarkdown() {
-        setMsgtype(null);
+    public WeMarkdown(String content) {
+        this.content = content;
     }
 
-    public WeMarkdown(String content) {
-        setMsgtype(null);
-        this.content = content;
+    @Override
+    public void transfer(Map<String, Object> params) {
+        this.content = replaceContent(this.content, params);
     }
 }

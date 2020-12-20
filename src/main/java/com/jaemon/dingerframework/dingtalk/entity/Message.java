@@ -15,7 +15,6 @@
  */
 package com.jaemon.dingerframework.dingtalk.entity;
 
-import com.jaemon.dingerframework.core.entity.MsgType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,7 +31,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Message extends MsgType implements Serializable {
+public class Message extends DingTalkMessage implements Serializable {
     private At at;
 
     @Data

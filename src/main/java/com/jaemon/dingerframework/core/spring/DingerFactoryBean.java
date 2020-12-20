@@ -30,7 +30,7 @@ public class DingerFactoryBean<T> implements FactoryBean<T> {
     private Class<T> dingerInterface;
 
     @Autowired
-    private DingerSender dingTalkSender;
+    private DingerSender dingerSender;
 
     public DingerFactoryBean(Class dingerInterface) {
         this.dingerInterface = dingerInterface;
@@ -38,7 +38,7 @@ public class DingerFactoryBean<T> implements FactoryBean<T> {
 
     @Override
     public T getObject() throws Exception {
-        return new DingerSession(dingTalkSender).getDinger(this.dingerInterface);
+        return new DingerSession(dingerSender).getDinger(this.dingerInterface);
     }
 
     @Override

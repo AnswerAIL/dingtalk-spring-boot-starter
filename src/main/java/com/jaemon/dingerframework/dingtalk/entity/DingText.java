@@ -15,13 +15,13 @@
  */
 package com.jaemon.dingerframework.dingtalk.entity;
 
-import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Text 消息格式实体
@@ -38,12 +38,7 @@ public class DingText extends Message implements Serializable {
      * */
     private Text text;
 
-    public DingText() {
-        setMsgtype(MsgTypeEnum.TEXT.type());
-    }
-
     public DingText(Text text) {
-        setMsgtype(MsgTypeEnum.TEXT.type());
         this.text = text;
     }
 
@@ -52,5 +47,10 @@ public class DingText extends Message implements Serializable {
     @AllArgsConstructor
     public static class Text implements Serializable {
         private String content;
+    }
+
+    @Override
+    public void transfer(Map<String, Object> params) {
+        this.text.content = replaceContent(this.text.content, params);
     }
 }

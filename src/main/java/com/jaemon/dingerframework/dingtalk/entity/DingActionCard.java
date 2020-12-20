@@ -15,8 +15,6 @@
  */
 package com.jaemon.dingerframework.dingtalk.entity;
 
-import com.jaemon.dingerframework.core.entity.MsgType;
-import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,16 +30,11 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DingActionCard extends MsgType {
+public class DingActionCard extends DingTalkMessage {
     /**
      * {@link ActionCard}
      */
     private ActionCard actionCard;
-
-    public DingActionCard() {
-        // 此消息类型为固定actionCard
-        setMsgtype(MsgTypeEnum.ACTIONCARD.type());
-    }
 
     @Data
     @NoArgsConstructor

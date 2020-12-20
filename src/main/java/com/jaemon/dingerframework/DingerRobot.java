@@ -19,9 +19,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaemon.dingerframework.core.DingerConfig;
 import com.jaemon.dingerframework.core.entity.DingerProperties;
+import com.jaemon.dingerframework.core.entity.enums.DingerType;
+import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
+import com.jaemon.dingerframework.dingtalk.entity.DingMarkDown;
+import com.jaemon.dingerframework.dingtalk.entity.DingText;
 import com.jaemon.dingerframework.entity.*;
 import com.jaemon.dingerframework.entity.enums.ContentTypeEnum;
-import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
 import com.jaemon.dingerframework.entity.enums.ResultCode;
 import com.jaemon.dingerframework.dingtalk.entity.Message;
 import com.jaemon.dingerframework.core.entity.MsgType;
@@ -29,11 +32,16 @@ import com.jaemon.dingerframework.exception.AsyncCallException;
 import com.jaemon.dingerframework.exception.MsgTypeException;
 import com.jaemon.dingerframework.exception.SendMsgException;
 import com.jaemon.dingerframework.support.CustomMessage;
-import com.jaemon.dingerframework.utils.ConfigTools;
 import com.jaemon.dingerframework.utils.DingerUtils;
+import com.jaemon.dingerframework.wetalk.entity.WeMarkdown;
+import com.jaemon.dingerframework.wetalk.entity.WeText;
+import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.jaemon.dingerframework.core.DingerDefinitionHandler.WETALK_AT_ALL;
 
 /**
  * DingTalk Robot
@@ -48,115 +56,60 @@ public class DingerRobot extends AbstractDingerSender {
     }
 
     @Override
-    public DingTalkResult send(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
-        CustomMessage customMessage;
-        try {
-            customMessage = checkMsgType(msgType);
-        } catch (MsgTypeException ex) {
-            return exceptionResult(keyword, content, ex);
-        }
-        Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, null);
-
-        return send(keyword, message);
+    public DingerResult send(DingerType dingerType, MessageSubType messageSubType, String keyword, String subTitle, String content) {
+        return send(dingerType, messageSubType, keyword, subTitle, content, null, false);
     }
 
 
     @Override
-    public DingTalkResult send(MsgTypeEnum msgType, String keyword, String subTitle, String content, List<String> phones) {
-        CustomMessage customMessage;
-        try {
-            customMessage = checkMsgType(msgType);
-        } catch (MsgTypeException ex) {
-            return exceptionResult(keyword, content, ex);
-        }
-        Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, phones);;
-        message.setAt(new Message.At(phones));
-
-        return send(keyword, message);
+    public DingerResult send(DingerType dingerType, MessageSubType messageSubType, String keyword, String subTitle, String content, List<String> phones) {
+        return send(dingerType, messageSubType, keyword, subTitle, content, phones, false);
     }
 
 
     @Override
-    public DingTalkResult sendAll(MsgTypeEnum msgType, String keyword, String subTitle, String content) {
-        CustomMessage customMessage;
-        try {
-            customMessage = checkMsgType(msgType);
-        } catch (MsgTypeException ex) {
-            return exceptionResult(keyword, content, ex);
-        }
-        Message message = msgType.message(customMessage, keyword, subTitle, content, dingTalkProperties, null);
-        message.setAt(new Message.At(true));
-
-        return send(keyword, message);
+    public DingerResult sendAll(DingerType dingerType, MessageSubType messageSubType, String keyword, String subTitle, String content) {
+        return send(dingerType, messageSubType, keyword, subTitle, content, null, true);
     }
 
 
     @Override
-    public DingTalkResult send(String keyword, Message message) {
+    public <T extends MsgType> DingerResult send(String keyword, T message) {
         try {
-            return send(keyword, objectMapper.writeValueAsString(message));
+            return send(keyword, message.getMsgtype(), objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
-            return DingTalkResult.failed(ResultCode.MESSAGE_PROCESSING_FAILED, dingTalkManagerBuilder.dkIdGenerator.dkid());
-        }
-    }
-
-
-
-    @Override
-    public <T extends MsgType> DingTalkResult send(String keyword, T message) {
-        try {
-            return send(keyword, objectMapper.writeValueAsString(message));
-        } catch (JsonProcessingException e) {
-            return DingTalkResult.failed(ResultCode.MESSAGE_PROCESSING_FAILED, dingTalkManagerBuilder.dkIdGenerator.dkid());
+            return DingerResult.failed(ResultCode.MESSAGE_PROCESSING_FAILED, dingTalkManagerBuilder.dkIdGenerator.dkid());
         }
     }
 
     @Override
-    public DingTalkResult send(String keyword, String message) {
+    public DingerResult send(String keyword, DingerType dingerType, String message) {
         String dkid = dingTalkManagerBuilder.dkIdGenerator.dkid();
         if (!dingTalkProperties.isEnabled()) {
-            return DingTalkResult.failed(ResultCode.DINGTALK_DISABLED, dkid);
+            return DingerResult.failed(ResultCode.DINGTALK_DISABLED, dkid);
         }
 
         DingerConfig localDinger = getLocalDinger();
         // dinger is null? use global configuration and check whether dinger send
         boolean dingerConfig = localDinger != null;
         try {
-            String tokenId;
-            boolean isDecryptProp = dingTalkProperties.isDecrypt();
-            String decryptKeyProp = dingTalkProperties.getDecryptKey();
-            String tokenIdProp = dingTalkProperties.getTokenId();
-            String secretProp = dingTalkProperties.getSecret();
-            boolean isAsyncProp = dingerConfig ?
-                    (localDinger.getAsyncExecute() == null) ?
-                            false : localDinger.getAsyncExecute() : dingTalkProperties.isAsync();
+            DingerProperties.Dinger dinger = dingTalkProperties.getDingers().get(
+                    dingerConfig ? localDinger.getDingerType() : dingerType
+            );
 
-            // deal with tokenId
-            if (dingerConfig && !DingerUtils.isEmpty(localDinger.getTokenId())) {
-                if (!DingerUtils.isEmpty(localDinger.getDecryptKey())) {
-                    tokenId = ConfigTools.decrypt(localDinger.getDecryptKey(), localDinger.getTokenId());
-                } else {
-                    tokenId = localDinger.getTokenId();
-                }
+            if (dingerConfig) {
+                BeanUtils.copyProperties(localDinger, dinger);
             } else {
-                // inner decrypt
-                if (isDecryptProp) {
-                    tokenId = ConfigTools.decrypt(decryptKeyProp, tokenIdProp);
-                } else {
-                    tokenId = tokenIdProp;
-                }
+                dinger = dingTalkProperties.getDingers().get(dingerType);
             }
 
             StringBuilder webhook = new StringBuilder();
-            webhook.append(dingTalkProperties.getRobotUrl()).append("=").append(tokenId);
+            webhook.append(dinger.getRobotUrl()).append("=").append(dinger.getTokenId());
 
-            if (dingerConfig && !DingerUtils.isEmpty(localDinger.getSecret())) {
-                secretProp = localDinger.getSecret();
-            }
-
-            // 处理签名问题
-            if (!DingerUtils.isEmpty(secretProp)) {
-                SignBase sign = dingTalkManagerBuilder.dkSignAlgorithm.sign(secretProp.trim());
+            // 处理签名问题(只支持DingTalk)
+            if (dingerType == DingerType.DINGTALK &&
+                    DingerUtils.isNotEmpty((dinger.getSecret()))) {
+                SignBase sign = dingTalkManagerBuilder.dkSignAlgorithm.sign(dinger.getSecret().trim());
                 webhook.append(sign.transfer());
             }
 
@@ -167,7 +120,7 @@ public class DingerRobot extends AbstractDingerSender {
             headers.setData(list);
 
             // 异步处理, 直接返回标识id
-            if (isAsyncProp) {
+            if (dinger.isAsync()) {
                 dingTalkManagerBuilder.dingTalkExecutor.execute(() -> {
                     try {
                         String result = dingTalkManagerBuilder.httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
@@ -183,10 +136,10 @@ public class DingerRobot extends AbstractDingerSender {
                         dingTalkManagerBuilder.notice.callback(dkExCallable);
                     }
                 });
-                return DingTalkResult.success(dkid, dkid);
+                return DingerResult.success(dkid, dkid);
             }
             String response = dingTalkManagerBuilder.httpClient.doPost(webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType());
-            return DingTalkResult.success(dkid, response);
+            return DingerResult.success(dkid, response);
         } catch (Exception e) {
             SendMsgException ex = new SendMsgException(e);
             DkExCallable dkExCallable = DkExCallable.builder()
@@ -196,8 +149,77 @@ public class DingerRobot extends AbstractDingerSender {
                     .message(message)
                     .ex(ex).build();
             dingTalkManagerBuilder.notice.callback(dkExCallable);
-            return DingTalkResult.failed(ResultCode.SEND_MESSAGE_FAILED, dkid);
+            return DingerResult.failed(ResultCode.SEND_MESSAGE_FAILED, dkid);
         }
+    }
+
+
+    /**
+     * 发送预警消息到钉钉-艾特所有人
+     *
+     * <pre>
+     *     markdown不支持艾特全部
+     * </pre>
+     *
+     * @param dingerType
+     *              Dinger类型 {@link DingerType}
+     * @param messageSubType
+     *              消息类型{@link MessageSubType}
+     * @param keyword
+     *              关键词(方便定位日志)
+     * @param subTitle
+     *              副标题
+     * @param content
+     *              消息内容
+     * @param phones
+     *              艾特成员
+     * @param atAll
+     *              是否艾特所有人
+     * @return
+     *              响应报文
+     * */
+    private DingerResult send(DingerType dingerType, MessageSubType messageSubType, String keyword, String subTitle, String content, List<String> phones, boolean atAll) {
+        CustomMessage customMessage;
+        try {
+            customMessage = customMessage(messageSubType);
+        } catch (MsgTypeException ex) {
+            return exceptionResult(keyword, content, ex);
+        }
+        String msgContent = customMessage.message(dingTalkProperties, subTitle, keyword, content, phones);
+
+
+        // TODO
+        if (dingerType == DingerType.DINGTALK) {
+            Message message;
+            if (messageSubType == MessageSubType.TEXT) {
+                message = new DingText(new DingText.Text(msgContent));
+            } else {
+                message = new DingMarkDown(new DingMarkDown.MarkDown(subTitle, msgContent));
+            }
+
+            if (atAll) {
+                message.setAt(new Message.At(true));
+            } else if (!phones.isEmpty()) {
+                message.setAt(new Message.At(phones));
+            }
+
+            return send(keyword, message);
+        } else {
+            if (messageSubType == MessageSubType.TEXT) {
+                WeText weText = new WeText(msgContent);
+
+                if (atAll) {
+                    weText.setMentioned_mobile_list(Arrays.asList(WETALK_AT_ALL));
+                } else if (!phones.isEmpty()) {
+                    weText.setMentioned_mobile_list(phones);
+                }
+                return send(keyword, weText);
+            } else {
+                WeMarkdown weMarkdown = new WeMarkdown(msgContent);
+                return send(keyword, weMarkdown);
+            }
+        }
+
     }
 
 }

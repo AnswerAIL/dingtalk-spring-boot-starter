@@ -19,6 +19,8 @@ import com.jaemon.dingerframework.core.*;
 import com.jaemon.dingerframework.core.annatations.DingerMarkdown;
 import com.jaemon.dingerframework.core.annatations.DingerText;
 import com.jaemon.dingerframework.core.entity.enums.DingerDefinitionType;
+import com.jaemon.dingerframework.core.entity.enums.DingerType;
+import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
 import com.jaemon.dingerframework.core.entity.xml.*;
 import com.jaemon.dingerframework.dingtalk.entity.DingMarkDown;
 import com.jaemon.dingerframework.dingtalk.entity.Message;
@@ -39,17 +41,16 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
     /**
      * 生成生成注解文本消息体定义
      */
-    public class AnotationText extends DingerDefinitionGenerator<DingerText> {
+    public static class AnotationText extends DingerDefinitionGenerator<DingerText> {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerText> context) {
             DingerDefinition dingerDefinition = dingerTextHandler(context);
+            dingerDefinition.setDingerType(DingerType.DINGTALK);
 
             DingerText dinger = context.getSource();
             DingText textReq = new DingText(new DingText.Text(dinger.value()));
             textReq.setAt(new Message.At(Arrays.asList(dinger.phones()), dinger.atAll()));
-
-            dingerDefinition.setDingerDefinitionType(DingerDefinitionType.DINGTALK_ANNOTATION_TEXT);
             dingerDefinition.setMessage(textReq);
 
             return dingerDefinition;
@@ -60,17 +61,16 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
     /**
      * 生成注解Markdown消息体定义
      */
-    public class AnnotationMarkdown extends DingerDefinitionGenerator<DingerMarkdown> {
+    public static class AnnotationMarkdown extends DingerDefinitionGenerator<DingerMarkdown> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
             DingerDefinition dingerDefinition = dingerMarkdownHandler(context);
+            dingerDefinition.setDingerType(DingerType.DINGTALK);
 
             DingerMarkdown dinger = context.getSource();
             DingMarkDown markDownReq = new DingMarkDown(new DingMarkDown.MarkDown(dinger.title(), dinger.value()));
             // markdown not support at all members
             markDownReq.setAt(new Message.At(Arrays.asList(dinger.phones()), false));
-
-            dingerDefinition.setDingerDefinitionType(DingerDefinitionType.DINGTALK_ANNOTATION_MARKDOWN);
             dingerDefinition.setMessage(markDownReq);
 
             return dingerDefinition;
@@ -81,11 +81,14 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
     /**
      * 生成XML文本消息体定义
      */
-    public class XmlText extends DingerDefinitionGenerator<MessageTag> {
+    public static class XmlText extends DingerDefinitionGenerator<MessageTag> {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
-            return xmlHandler(DingerDefinitionType.DINGTALK_XML_TEXT, context);
+            DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.DINGTALK_XML_TEXT, context);
+            dingerDefinition.setMessageSubType(MessageSubType.TEXT);
+
+            return dingerDefinition;
         }
     }
 
@@ -93,10 +96,13 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
     /**
      * 生成XML Markdown消息体定义
      */
-    public class XmlMarkdown extends DingerDefinitionGenerator<MessageTag> {
+    public static class XmlMarkdown extends DingerDefinitionGenerator<MessageTag> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
-            return xmlHandler(DingerDefinitionType.DINGTALK_XML_MARKDOWN, context);
+            DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.DINGTALK_XML_MARKDOWN, context);
+            dingerDefinition.setMessageSubType(MessageSubType.MARKDOWN);
+
+            return dingerDefinition;
         }
     }
 

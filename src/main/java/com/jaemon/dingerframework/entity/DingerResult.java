@@ -25,7 +25,7 @@ import lombok.Data;
  * @since 1.0
  */
 @Data
-public class DingTalkResult {
+public class DingerResult {
     /**
      * 响应码
      */
@@ -43,33 +43,33 @@ public class DingTalkResult {
      */
     private String data;
 
-    private DingTalkResult(ResultCode resultCode, String logid) {
+    private DingerResult(ResultCode resultCode, String logid) {
         this.code = resultCode.code();
         this.message = resultCode.message();
         this.logid = logid;
     }
 
-    private DingTalkResult(ResultCode resultCode, String logid, String data) {
+    private DingerResult(ResultCode resultCode, String logid, String data) {
         this.code = resultCode.code();
         this.message = resultCode.message();
         this.logid = logid;
         this.data = data;
     }
 
-    public static <T> DingTalkResult success(String logId, String data) {
-        return new DingTalkResult(ResultCode.SUCCESS, logId, data);
+    public static <T> DingerResult success(String logId, String data) {
+        return new DingerResult(ResultCode.SUCCESS, logId, data);
     }
 
-    public static <T> DingTalkResult success(ResultCode resultCode, String logId, String data) {
-        return new DingTalkResult(resultCode, logId, data);
+    public static <T> DingerResult success(ResultCode resultCode, String logId, String data) {
+        return new DingerResult(resultCode, logId, data);
     }
 
-    public static DingTalkResult failed(String logid) {
-        return new DingTalkResult(ResultCode.FAILED, logid);
+    public static DingerResult failed(String logid) {
+        return new DingerResult(ResultCode.FAILED, logid);
     }
 
-    public static DingTalkResult failed(ResultCode resultCode, String logid) {
-        return new DingTalkResult(resultCode, logid);
+    public static DingerResult failed(ResultCode resultCode, String logid) {
+        return new DingerResult(resultCode, logid);
     }
 
     @Override

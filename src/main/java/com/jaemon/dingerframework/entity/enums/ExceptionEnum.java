@@ -40,6 +40,7 @@ public enum ExceptionEnum implements Pairs<Integer, String> {
     DINGER_CONFIG_REPEATED_EXCEPTION(6002, "重复的DingerId对象"),
     GLOBAL_MULTIDINGER_CONFIG_EXCEPTION(6003, "全局多Dinger配置错误"),
     MULTIDINGER_ALGORITHM_EXCEPTION(6004, "多Dinger配置处理器算法不可为空"),
+    MULTI_DINGERCONFIGS_EXCEPTION(6005, "多Dinger配置DingerConfig异常"),
 
     UNKNOWN(9999, "未知异常")
     ;

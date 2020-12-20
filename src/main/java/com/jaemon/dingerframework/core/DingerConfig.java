@@ -15,6 +15,10 @@
  */
 package com.jaemon.dingerframework.core;
 
+import com.jaemon.dingerframework.core.entity.enums.DingerType;
+import com.jaemon.dingerframework.utils.ConfigTools;
+import com.jaemon.dingerframework.utils.DingerUtils;
+
 import static com.jaemon.dingerframework.utils.DingerUtils.isEmpty;
 import static com.jaemon.dingerframework.utils.DingerUtils.isNotEmpty;
 
@@ -25,6 +29,10 @@ import static com.jaemon.dingerframework.utils.DingerUtils.isNotEmpty;
  * @since 2.0
  */
 public class DingerConfig {
+    /**
+     * dinger类型 {@link DingerType}
+     */
+    private DingerType dingerType = DingerType.DINGTALK;
     private String tokenId;
     /** 内部解密秘钥 */
     private String decryptKey;
@@ -109,7 +117,22 @@ public class DingerConfig {
     }
 
     public String getTokenId() {
-        return tokenId;
+        if (DingerUtils.isEmpty(decryptKey)) {
+            return tokenId;
+        }
+        try {
+            return ConfigTools.decrypt(decryptKey, tokenId);
+        } catch (Exception ex) {
+            return tokenId;
+        }
+    }
+
+    public DingerType getDingerType() {
+        return dingerType;
+    }
+
+    public void setDingerType(DingerType dingerType) {
+        this.dingerType = dingerType;
     }
 
     public void setTokenId(String tokenId) {
@@ -142,6 +165,6 @@ public class DingerConfig {
 
     @Override
     public String toString() {
-        return "DingerConfig(tokenId=" + this.getTokenId() + ", decryptKey=" + this.getDecryptKey() + ", secret=" + this.getSecret() + ", asyncExecute=" + this.getAsyncExecute() + ")";
+        return "DingerConfig(dingerType=" + this.getDingerType() + ", tokenId=" + this.getTokenId() + ", decryptKey=" + this.getDecryptKey() + ", secret=" + this.getSecret() + ", asyncExecute=" + this.getAsyncExecute() + ")";
     }
 }

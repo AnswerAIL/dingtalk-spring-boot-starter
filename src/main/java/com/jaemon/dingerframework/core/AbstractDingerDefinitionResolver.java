@@ -58,9 +58,12 @@ public abstract class AbstractDingerDefinitionResolver {
     /**
      * 解析注解Dinger
      *
-     * @param dingerClasses dingerClasses
-     * @param defaultDingerConfig defaultDingerConfig
-     * @throws Exception ex
+     * @param dingerClasses
+     *          dingerClasses
+     * @param defaultDingerConfig
+     *          defaultDingerConfig
+     * @throws Exception
+     *          ex
      */
     abstract void analysisDingerAnnotation(List<Class<?>> dingerClasses, DingerConfig defaultDingerConfig) throws Exception;
 
@@ -72,6 +75,8 @@ public abstract class AbstractDingerDefinitionResolver {
      *          Dinger Xml文件位置
      * @param defaultDingerConfig
      *          默认的Dinger机器人配置
+     * @throws Exception
+     *          ex
      * */
     protected void dingerXmlResolver(String dingerLocations, DingerConfig defaultDingerConfig) throws Exception {
         boolean debugEnabled = log.isDebugEnabled();
@@ -79,18 +84,18 @@ public abstract class AbstractDingerDefinitionResolver {
             if (debugEnabled) {
                 log.debug("dinger xml is not configured.");
             }
-        } else {
-            // 处理xml配置转为dingerDefinition
-            ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-            Resource[] resources = resolver.getResources(dingerLocations);
-            if (resources.length == 0) {
-                if (debugEnabled) {
-                    log.debug("dinger xml is empty under {}.", dingerLocations);
-                }
-            } else {
-                analysisDingerXml(resources, defaultDingerConfig);
-            }
+            return;
         }
+
+        // 处理xml配置转为dingerDefinition
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource[] resources = resolver.getResources(dingerLocations);
+        if (resources.length == 0) {
+            log.warn("dinger xml is empty under {}.", dingerLocations);
+            return;
+        }
+
+        analysisDingerXml(resources, defaultDingerConfig);
     }
 
 
@@ -99,7 +104,10 @@ public abstract class AbstractDingerDefinitionResolver {
      *
      * @param defaultDingerConfig
      *          默认的Dinger机器人配置
-     * @return Dinger类集合
+     * @return
+     *          Dinger类集合
+     * @throws Exception
+     *          ex
      * */
     protected List<Class<?>> dingerAnnotationResolver(DingerConfig defaultDingerConfig) throws Exception {
         boolean debugEnabled = log.isDebugEnabled();
@@ -140,7 +148,7 @@ public abstract class AbstractDingerDefinitionResolver {
             if (debugEnabled) {
                 log.debug("annotation dinger class is empty.");
             }
-            return null;
+            return dingerClasses;
         }
 
         // 处理类信息转为dingerDefinition
@@ -149,6 +157,20 @@ public abstract class AbstractDingerDefinitionResolver {
         return dingerClasses;
     }
 
+    /**
+     * 注册Dinger Definition
+     *
+     * @param keyName
+     *          DingerName
+     * @param source
+     *          source
+     * @param supportMessageType
+     *          supportMessageType
+     * @param dingerConfiguration
+     *          Dinger层配置DingerConfig
+     * @param defaultDingerConfig
+     *          默认的DingerConfig-配置文件
+     */
     void registerDingerDefinition(
             String keyName, Object source,
             SupportMessageType supportMessageType,

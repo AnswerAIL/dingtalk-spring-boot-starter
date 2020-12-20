@@ -16,11 +16,9 @@
 package com.jaemon.dingerframework.core;
 
 import com.jaemon.dingerframework.core.entity.MsgType;
-import com.jaemon.dingerframework.core.entity.enums.DingerDefinitionType;
 import com.jaemon.dingerframework.core.entity.enums.DingerType;
 import com.jaemon.dingerframework.core.entity.enums.MessageMainType;
 import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
-import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
 
 
 /**
@@ -46,18 +44,18 @@ public interface DingerDefinition {
     void setDingerName(String dingerName);
 
     /**
-     * 获取Dinger消息体定义类型
+     * dingerDefinition生成器
      *
-     * @return dingerDefinitionType
+     * @return dingerDefinitionGenerator
      */
-    DingerDefinitionType dingerDefinitionType();
+    Class<? extends DingerDefinitionGenerator> dingerDefinitionGenerator();
 
     /**
-     * setMsgType
+     * setDingerDefinitionGenerator
      *
-     * @param dingerDefinitionType dingerDefinitionType
+     * @param dingerDefinitionGenerator dingerDefinitionGenerator
      */
-    void setDingerDefinitionType(DingerDefinitionType dingerDefinitionType);
+    void setDingerDefinitionGenerator(Class<? extends DingerDefinitionGenerator> dingerDefinitionGenerator);
 
     /**
      * 获取Dinger消息体内容

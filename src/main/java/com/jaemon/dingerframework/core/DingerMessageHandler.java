@@ -17,12 +17,14 @@ package com.jaemon.dingerframework.core;
 
 import com.jaemon.dingerframework.DingerSender;
 import com.jaemon.dingerframework.core.annatations.Keyword;
+import com.jaemon.dingerframework.core.annatations.UseDinger;
 import com.jaemon.dingerframework.core.entity.MsgType;
-import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
-import com.jaemon.dingerframework.entity.DingTalkResult;
-import com.jaemon.dingerframework.dingtalk.entity.DingMarkDown;
-import com.jaemon.dingerframework.dingtalk.entity.Message;
-import com.jaemon.dingerframework.dingtalk.entity.DingText;
+import com.jaemon.dingerframework.core.entity.enums.DingerType;
+import com.jaemon.dingerframework.entity.DingerResult;
+import com.jaemon.dingerframework.listeners.DingerXmlPreparedEvent;
+import com.jaemon.dingerframework.multi.MultiDingerConfigContainer;
+import com.jaemon.dingerframework.multi.MultiDingerProperty;
+import com.jaemon.dingerframework.multi.entity.MultiDingerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,10 +32,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.jaemon.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
 
 /**
  * DingerMessageHandler
@@ -41,97 +46,12 @@ import java.util.Optional;
  * @author Jaemon
  * @since 2.0
  */
-public class DingerMessageHandler implements MessageTransfer, ParamHandle, ResultHandle<DingTalkResult> {
+public class DingerMessageHandler implements ParamHandle, MessageTransfer, ResultHandle<DingerResult> {
     private static final Logger log = LoggerFactory.getLogger(DingerMessageHandler.class);
-    private static final String PREFIX_TAG = "\\$\\{";
-    private static final String SUFFIX_TAG = "}";
     protected static final String KEYWORD = "DINGTALK_DINGER_METHOD_SENDER_KEYWORD";
     protected static final String CONNECTOR = "_";
 
-    protected DingerSender dingTalkSender;
-
-    @Override
-    public Message transfer(DingerDefinition dingerDefinition, Map<String, Object> params) {
-        MessageSubType msgType = dingerDefinition.messageSubType();
-        MsgType message = dingerDefinition.message();
-        // bugfix #2
-        if (msgType == MessageSubType.TEXT) {
-            DingText textReq = copyProperties(message);;
-            String text = textReq.getText().getContent();
-            String content = replaceContent(text, params);
-            textReq.getText().setContent(content);
-            return textReq;
-        } else if (msgType == MessageSubType.MARKDOWN) {
-            DingMarkDown markDownReq = copyProperties(message);
-            String text = markDownReq.getMarkdown().getText();
-            String content = replaceContent(text, params);
-            markDownReq.getMarkdown().setText(content);
-            return markDownReq;
-        } else {
-            log.warn("invalid msgType {}.", msgType);
-            return null;
-        }
-    }
-
-    private String replaceContent(String content, Map<String, Object> params) {
-        for (String k: params.keySet()) {
-            Object v = params.get(k);
-            String key = PREFIX_TAG + k +SUFFIX_TAG;
-            if (v instanceof CharSequence
-                    || v instanceof Character
-                    || v instanceof Boolean
-                    || v instanceof Number) {
-                content = content.replaceAll(key, v.toString());
-            } else {
-//                content = content.replaceAll(key, v.toString());
-                if (log.isDebugEnabled()) {
-                    log.debug("skip convert key={} value class={}.",
-                            key, v.getClass().getName());
-                }
-                continue;
-            }
-
-        }
-
-        return content;
-    }
-
-    /**
-     * copyProperties
-     *
-     * @param src src
-     * @param <T> T extends Message
-     * @return msg
-     */
-    private <T extends MsgType> T copyProperties(MsgType src) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(src);
-
-            ByteArrayInputStream byteIn = new ByteArrayInputStream(baos.toByteArray());
-            ObjectInputStream in = new ObjectInputStream(byteIn);
-            T dest = (T) in.readObject();
-            return dest;
-        } catch (Exception e) {
-            //
-            if (log.isDebugEnabled()) {
-                log.debug("copy properties error:", e);
-            }
-            return null;
-        }
-    }
-
-    @Override
-    public Object resultHandle(Class<?> resultType, DingTalkResult dingTalkResult) {
-        String name = resultType.getName();
-        if (String.class.getName().equals(name)) {
-            return Optional.ofNullable(dingTalkResult).map(e -> e.getData()).orElse(null);
-        } else if (DingTalkResult.class.getName().equals(name)) {
-            return dingTalkResult;
-        }
-        return null;
-    }
+    protected DingerSender dingerSender;
 
     @Override
     public Map<String, Object> paramsHandle(Parameter[] parameters, Object[] values) {
@@ -163,5 +83,141 @@ public class DingerMessageHandler implements MessageTransfer, ParamHandle, Resul
         }
 
         return params;
+    }
+
+
+    @Override
+    public MsgType transfer(DingerDefinition dingerDefinition, Map<String, Object> params) {
+        MsgType message = copyProperties(dingerDefinition.message());
+        message.transfer(params);
+        return message;
+    }
+
+
+    @Override
+    public Object resultHandle(Class<?> resultType, DingerResult dingerResult) {
+        String name = resultType.getName();
+        if (String.class.getName().equals(name)) {
+            return Optional.ofNullable(dingerResult).map(e -> e.getData()).orElse(null);
+        } else if (DingerResult.class.getName().equals(name)) {
+            return dingerResult;
+        }
+        return null;
+    }
+
+
+    /**
+     * copyProperties
+     *
+     * @param src src
+     * @param <T> T extends Message
+     * @return msg
+     */
+    private <T extends MsgType> T copyProperties(MsgType src) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(src);
+
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(byteIn);
+            T dest = (T) in.readObject();
+            return dest;
+        } catch (Exception e) {
+            //
+            if (log.isDebugEnabled()) {
+                log.debug("copy properties error:", e);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * 获取方法执行的Dinger
+     *
+     * @param method
+     *          代理方法
+     * @return
+     *          返回Dinger
+     */
+    DingerType dingerType(Method method) {
+        DingerType dingerType = DingerType.DINGTALK;
+
+        if (method.isAnnotationPresent(UseDinger.class)) {
+            return method.getAnnotation(UseDinger.class).value();
+        }
+
+        Class<?> dingerClass = method.getDeclaringClass();
+        if (dingerClass.isAnnotationPresent(UseDinger.class)) {
+            return dingerClass.getAnnotation(UseDinger.class).value();
+        }
+
+        return dingerType;
+    }
+
+    /**
+     * 获取Dinger定义
+     *
+     * @param defaultDinger
+     *          代理方法默认Dinger
+     * @param keyName
+     *          keyName
+     * @param dingerClassName
+     *          代理类
+     * @return
+     *          dingerDefinition {@link DingerDefinition}
+     */
+    DingerDefinition dingerDefinition(DingerType defaultDinger, String keyName, String dingerClassName) {
+        DingerDefinition dingerDefinition;
+        DingerConfig localDinger = DingerHelper.getLocalDinger();
+
+        // 优先使用用户设定 dingerConfig
+        if (localDinger == null) {
+            keyName = defaultDinger + SPOT_SEPERATOR + keyName;
+            dingerDefinition = DingerXmlPreparedEvent
+                    .Container.INSTANCE.get(keyName);
+
+            if (dingerDefinition == null) {
+                log.warn("{} there is no corresponding dinger message config", keyName);
+                return null;
+            }
+
+            // 判断是否是multiDinger
+            if (MultiDingerProperty.multiDinger()) {
+                MultiDingerConfig multiDingerConfig =
+                        MultiDingerConfigContainer
+                                .INSTANCE.get(dingerClassName);
+                DingerConfig dingerConfig = null;
+                if (multiDingerConfig != null) {
+                    // 拿到MultiDingerConfig中当前应该使用的DingerConfig
+                    dingerConfig = multiDingerConfig.getAlgorithmHandler()
+                            .dingerConfig(
+                                    multiDingerConfig.getDingerConfigs(),
+                                    dingerDefinition.dingerConfig()
+                            );
+                }
+
+                // use default dingerConfig
+                if (dingerConfig == null) {
+                    dingerConfig = dingerDefinition.dingerConfig();
+                }
+
+                DingerHelper.assignDinger(dingerConfig);
+            } else {
+                DingerHelper.assignDinger(dingerDefinition.dingerConfig());
+            }
+
+        } else {
+            keyName = localDinger.getDingerType() + SPOT_SEPERATOR + keyName;
+            dingerDefinition = DingerXmlPreparedEvent
+                    .Container.INSTANCE.get(keyName);
+
+            if (dingerDefinition == null) {
+                log.warn("{} there is no corresponding dinger message config", keyName);
+                return null;
+            }
+        }
+
+        return dingerDefinition;
     }
 }

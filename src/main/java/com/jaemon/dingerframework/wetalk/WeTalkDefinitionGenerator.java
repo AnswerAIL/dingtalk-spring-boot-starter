@@ -19,6 +19,8 @@ import com.jaemon.dingerframework.core.*;
 import com.jaemon.dingerframework.core.annatations.DingerMarkdown;
 import com.jaemon.dingerframework.core.annatations.DingerText;
 import com.jaemon.dingerframework.core.entity.enums.DingerDefinitionType;
+import com.jaemon.dingerframework.core.entity.enums.DingerType;
+import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
 import com.jaemon.dingerframework.core.entity.xml.MessageTag;
 import com.jaemon.dingerframework.wetalk.entity.WeMarkdown;
 import com.jaemon.dingerframework.wetalk.entity.WeText;
@@ -35,20 +37,18 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
     /**
      * 生成生成注解文本消息体定义
      */
-    public class AnnotationText extends DingerDefinitionGenerator<DingerText> {
+    public static class AnnotationText extends DingerDefinitionGenerator<DingerText> {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerText> context) {
             DingerDefinition dingerDefinition = dingerTextHandler(context);
+            dingerDefinition.setDingerType(DingerType.WETALK);
 
             DingerText dinger = context.getSource();
-            WeText weText = new WeText();
-            weText.setContent(dinger.value());
+            WeText weText = new WeText(dinger.value());
             weText.setMentioned_mobile_list(
                     dinger.atAll() ? Arrays.asList(WETALK_AT_ALL) : Arrays.asList(dinger.phones())
             );
-
-            dingerDefinition.setDingerDefinitionType(DingerDefinitionType.WETALK_ANNOTATION_TEXT);
             dingerDefinition.setMessage(weText);
 
             return dingerDefinition;
@@ -59,13 +59,13 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
     /**
      * 生成注解Markdown消息体定义
      */
-    public class AnnotationMarkDown extends DingerDefinitionGenerator<DingerMarkdown> {
+    public static class AnnotationMarkDown extends DingerDefinitionGenerator<DingerMarkdown> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
             DingerDefinition dingerDefinition = dingerMarkdownHandler(context);
+            dingerDefinition.setDingerType(DingerType.WETALK);
 
             WeMarkdown weMarkdown = new WeMarkdown(context.getSource().value());
-            dingerDefinition.setDingerDefinitionType(DingerDefinitionType.WETALK_ANNOTATION_MARKDOWN);
             dingerDefinition.setMessage(weMarkdown);
 
             return dingerDefinition;
@@ -76,11 +76,13 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
     /**
      * 生成XML文本消息体定义
      */
-    public class XmlText extends DingerDefinitionGenerator<MessageTag> {
+    public static class XmlText extends DingerDefinitionGenerator<MessageTag> {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
-            return xmlHandler(DingerDefinitionType.WETALK_XML_TEXT, context);
+            DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.WETALK_XML_TEXT, context);
+            dingerDefinition.setMessageSubType(MessageSubType.TEXT);
+            return dingerDefinition;
         }
     }
 
@@ -88,10 +90,12 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
     /**
      * 生成XML Markdown消息体定义
      */
-    public class XmlMarkdown extends DingerDefinitionGenerator<MessageTag> {
+    public static class XmlMarkdown extends DingerDefinitionGenerator<MessageTag> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
-            return xmlHandler(DingerDefinitionType.WETALK_XML_MARKDOWN, context);
+            DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.WETALK_XML_MARKDOWN, context);
+            dingerDefinition.setMessageSubType(MessageSubType.MARKDOWN);
+            return dingerDefinition;
         }
     }
 }

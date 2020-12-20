@@ -88,6 +88,16 @@ public enum DingerDefinitionType {
         return dingerDefinitionGenerator;
     }
 
+    static {
+        for (DingerDefinitionType dingTalkMessageType : values()) {
+            try {
+                dingTalkMessageType.dingerDefinitionGenerator().newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static Class<? extends DingerDefinitionGenerator> dingerDefinitionGenerator(
             DingerType dingerType,
             SupportMessageType supportMessageType
@@ -102,4 +112,5 @@ public enum DingerDefinitionType {
         // TODO
         throw new DingerException(null);
     }
+
 }

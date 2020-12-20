@@ -21,6 +21,7 @@ import com.jaemon.dingerframework.core.annatations.DingerTokenId;
 import com.jaemon.dingerframework.core.entity.enums.AsyncExecuteType;
 import com.jaemon.dingerframework.core.entity.enums.DingerDefinitionType;
 import com.jaemon.dingerframework.core.entity.enums.MessageMainType;
+import com.jaemon.dingerframework.core.entity.enums.MessageSubType;
 import com.jaemon.dingerframework.core.entity.xml.*;
 import com.jaemon.dingerframework.dingtalk.entity.DingMarkDown;
 import com.jaemon.dingerframework.dingtalk.entity.DingText;
@@ -44,7 +45,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DingerDefinitionHandler {
     /** 企业微信@所有人标识 */
-    protected static final String WETALK_AT_ALL = "@all";
+    public static final String WETALK_AT_ALL = "@all";
 
 
     /**
@@ -55,11 +56,13 @@ public class DingerDefinitionHandler {
      * @return
      *          dingerDefinition {@link DingerDefinition}
      */
-    protected DingerDefinition dingerTextHandler(DingerDefinitionGeneratorContext<DingerText> context) {
+    protected static DingerDefinition dingerTextHandler(DingerDefinitionGeneratorContext<DingerText> context) {
         String keyName = context.getKeyName();
         DingerText dinger = context.getSource();
 
-        return annotationDingerDefition(keyName, dinger.tokenId(), dinger.asyncExecute());
+        DingerDefinition dingerDefinition = annotationDingerDefition(keyName, dinger.tokenId(), dinger.asyncExecute());
+        dingerDefinition.setMessageSubType(MessageSubType.TEXT);
+        return dingerDefinition;
     }
 
     /**
@@ -70,11 +73,13 @@ public class DingerDefinitionHandler {
      * @return
      *          dingerDefinition {@link DingerDefinition}
      */
-    protected DingerDefinition dingerMarkdownHandler(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
+    protected static DingerDefinition dingerMarkdownHandler(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
         String keyName = context.getKeyName();
         DingerMarkdown dinger = context.getSource();
 
-        return annotationDingerDefition(keyName, dinger.tokenId(), dinger.asyncExecute());
+        DingerDefinition dingerDefinition = annotationDingerDefition(keyName, dinger.tokenId(), dinger.asyncExecute());
+        dingerDefinition.setMessageSubType(MessageSubType.MARKDOWN);
+        return dingerDefinition;
     }
 
 
@@ -88,13 +93,14 @@ public class DingerDefinitionHandler {
      * @return
      *          dingerDefinition {@link DingerDefinition}
      */
-    protected DingerDefinition xmlHandler(
+    protected static DingerDefinition xmlHandler(
             DingerDefinitionType dingerDefinitionType,
             DingerDefinitionGeneratorContext<MessageTag> context
     ) {
         String keyName = context.getKeyName();
         MessageTag messageTag = context.getSource();
         DingerDefinition dingerDefinition = new DefaultDingerDefinition();
+        dingerDefinition.setDingerType(dingerDefinitionType.dingerType());
         dingerDefinition.setMessageMainType(MessageMainType.XML);
         dingerDefinition.setDingerName(keyName);
 
@@ -105,9 +111,6 @@ public class DingerDefinitionHandler {
         dingerConfig(dingerConfig, configuration);
 
         Optional<BodyTag> body = Optional.ofNullable(messageTag.getBody());
-
-        // msgtype
-        dingerDefinition.setDingerDefinitionType(dingerDefinitionType);
 
         // 处理@成员逻辑
         Optional<PhonesTag> phonesTag = body.map(e -> e.getPhones());
@@ -126,6 +129,7 @@ public class DingerDefinitionHandler {
         String content = contentTag.map(e -> e.getContent()).orElse("");
         String title = contentTag.map(e -> e.getTitle()).orElse("Dinger Title");
 
+        // TODO
         if (DingerDefinitionType.DINGTALK_XML_TEXT == dingerDefinitionType) {
             DingText message = new DingText(new DingText.Text(content));
             message.setAt(new Message.At(phones, atAll));
@@ -136,7 +140,7 @@ public class DingerDefinitionHandler {
             message.setAt(new Message.At(phones, false));
             dingerDefinition.setMessage(message);
         } else if (DingerDefinitionType.WETALK_XML_TEXT == dingerDefinitionType) {
-            WeText message = new WeText();
+            WeText message = new WeText(content);
             message.setMentioned_mobile_list(
                     atAll ? Arrays.asList(WETALK_AT_ALL) : phones
             );
@@ -166,7 +170,7 @@ public class DingerDefinitionHandler {
      * @return
      *      dingerDefinition {@link DingerDefinition}
      */
-    private DingerDefinition annotationDingerDefition(
+    private static DingerDefinition annotationDingerDefition(
             String dingerName, DingerTokenId dingerTokenId,
             AsyncExecuteType asyncExecuteType
     ) {
@@ -192,7 +196,7 @@ public class DingerDefinitionHandler {
      * @param configuration
      *          xml中配置的configuration
      */
-    private void dingerConfig(DingerConfig dingerConfig, Optional<ConfigurationTag> configuration) {
+    private static void dingerConfig(DingerConfig dingerConfig, Optional<ConfigurationTag> configuration) {
         if (configuration.isPresent()) {
             Optional<TokenId> tokenId = configuration.map(e -> e.getTokenId());
             if (tokenId.isPresent()) {
@@ -224,7 +228,7 @@ public class DingerDefinitionHandler {
      * @return
      *          dingerConfig
      */
-    private DingerConfig dingerConfig(DingerTokenId dingerTokenId) {
+    private static DingerConfig dingerConfig(DingerTokenId dingerTokenId) {
         DingerConfig dingerConfig = new DingerConfig();
         dingerConfig.setTokenId(dingerTokenId.value());
         dingerConfig.setSecret(dingerTokenId.secret());
