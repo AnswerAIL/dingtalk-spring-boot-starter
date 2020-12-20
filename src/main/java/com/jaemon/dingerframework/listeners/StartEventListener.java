@@ -15,7 +15,7 @@
  */
 package com.jaemon.dingerframework.listeners;
 
-import com.jaemon.dingerframework.dingtalk.annatations.DingerScan;
+import com.jaemon.dingerframework.core.annatations.DingerScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationStartingEvent;

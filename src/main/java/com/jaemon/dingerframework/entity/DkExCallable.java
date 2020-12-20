@@ -15,6 +15,7 @@
  */
 package com.jaemon.dingerframework.entity;
 
+import com.jaemon.dingerframework.core.entity.DingerProperties;
 import com.jaemon.dingerframework.exception.DingerException;
 import lombok.Builder;
 import lombok.Data;

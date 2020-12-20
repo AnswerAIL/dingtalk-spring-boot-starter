@@ -15,8 +15,8 @@
  */
 package com.jaemon.dingerframework.support;
 
-import com.jaemon.dingerframework.entity.message.MsgType;
-import com.jaemon.dingerframework.entity.message.TextReq;
+import com.jaemon.dingerframework.core.entity.MsgType;
+import com.jaemon.dingerframework.dingtalk.entity.DingText;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.ContextClosedEvent;
@@ -102,6 +102,6 @@ public abstract class Notification {
      *          具体消息对象
      */
     public MsgType message(String text) {
-        return new TextReq(new TextReq.Text(text));
+        return new DingText(new DingText.Text(text));
     }
 }

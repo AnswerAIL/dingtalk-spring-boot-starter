@@ -16,8 +16,8 @@
 package com.jaemon.dingerframework;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jaemon.dingerframework.dingtalk.DingerHelper;
-import com.jaemon.dingerframework.entity.DingerProperties;
+import com.jaemon.dingerframework.core.DingerHelper;
+import com.jaemon.dingerframework.core.entity.DingerProperties;
 import com.jaemon.dingerframework.entity.DingTalkResult;
 import com.jaemon.dingerframework.entity.DkExCallable;
 import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;

@@ -17,7 +17,7 @@ package com.jaemon.dingerframework.multi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jaemon.dingerframework.dingtalk.DingerConfig;
+import com.jaemon.dingerframework.core.DingerConfig;
 import com.jaemon.dingerframework.multi.algorithm.AlgorithmHandler;
 import com.jaemon.dingerframework.multi.algorithm.DingerHandler;
 

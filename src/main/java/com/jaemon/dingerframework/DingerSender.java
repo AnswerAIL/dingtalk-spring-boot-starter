@@ -17,8 +17,8 @@ package com.jaemon.dingerframework;
 
 import com.jaemon.dingerframework.entity.DingTalkResult;
 import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
-import com.jaemon.dingerframework.entity.message.Message;
-import com.jaemon.dingerframework.entity.message.MsgType;
+import com.jaemon.dingerframework.dingtalk.entity.Message;
+import com.jaemon.dingerframework.core.entity.MsgType;
 
 import java.util.List;
 

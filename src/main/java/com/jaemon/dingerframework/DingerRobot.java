@@ -17,13 +17,14 @@ package com.jaemon.dingerframework;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jaemon.dingerframework.dingtalk.DingerConfig;
+import com.jaemon.dingerframework.core.DingerConfig;
+import com.jaemon.dingerframework.core.entity.DingerProperties;
 import com.jaemon.dingerframework.entity.*;
 import com.jaemon.dingerframework.entity.enums.ContentTypeEnum;
 import com.jaemon.dingerframework.entity.enums.MsgTypeEnum;
 import com.jaemon.dingerframework.entity.enums.ResultCode;
-import com.jaemon.dingerframework.entity.message.Message;
-import com.jaemon.dingerframework.entity.message.MsgType;
+import com.jaemon.dingerframework.dingtalk.entity.Message;
+import com.jaemon.dingerframework.core.entity.MsgType;
 import com.jaemon.dingerframework.exception.AsyncCallException;
 import com.jaemon.dingerframework.exception.MsgTypeException;
 import com.jaemon.dingerframework.exception.SendMsgException;

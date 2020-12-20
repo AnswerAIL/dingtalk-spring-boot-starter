@@ -15,7 +15,7 @@
  */
 package com.jaemon.dingerframework.multi.entity;
 
-import com.jaemon.dingerframework.dingtalk.DingerConfig;
+import com.jaemon.dingerframework.core.DingerConfig;
 import com.jaemon.dingerframework.multi.algorithm.AlgorithmHandler;
 
 import java.util.List;

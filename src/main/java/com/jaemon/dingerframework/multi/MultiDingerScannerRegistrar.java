@@ -15,7 +15,7 @@
  */
 package com.jaemon.dingerframework.multi;
 
-import com.jaemon.dingerframework.dingtalk.DingerConfig;
+import com.jaemon.dingerframework.core.DingerConfig;
 import com.jaemon.dingerframework.exception.DingerException;
 import com.jaemon.dingerframework.listeners.ApplicationEventTimeTable;
 import com.jaemon.dingerframework.multi.algorithm.AlgorithmHandler;

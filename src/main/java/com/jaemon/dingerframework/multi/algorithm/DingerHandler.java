@@ -15,7 +15,7 @@
  */
 package com.jaemon.dingerframework.multi.algorithm;
 
-import com.jaemon.dingerframework.dingtalk.DingerConfig;
+import com.jaemon.dingerframework.core.DingerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

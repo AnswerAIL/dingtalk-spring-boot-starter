@@ -15,10 +15,10 @@
  */
 package com.jaemon.dingerframework.entity.enums;
 
-import com.jaemon.dingerframework.entity.DingerProperties;
-import com.jaemon.dingerframework.entity.message.MarkDownReq;
-import com.jaemon.dingerframework.entity.message.Message;
-import com.jaemon.dingerframework.entity.message.TextReq;
+import com.jaemon.dingerframework.core.entity.DingerProperties;
+import com.jaemon.dingerframework.dingtalk.entity.DingMarkDown;
+import com.jaemon.dingerframework.dingtalk.entity.Message;
+import com.jaemon.dingerframework.dingtalk.entity.DingText;
 import com.jaemon.dingerframework.exception.MsgTypeException;
 import com.jaemon.dingerframework.support.CustomMessage;
 
@@ -42,7 +42,7 @@ public enum MsgTypeEnum {
                 List<String> phones) {
             String text = customMessage.message(dingTalkProperties, subTitle, keyword, content, phones);
 
-            TextReq textReq = new TextReq(new TextReq.Text(text));
+            DingText textReq = new DingText(new DingText.Text(text));
             return textReq;
         }
     },
@@ -58,7 +58,7 @@ public enum MsgTypeEnum {
                 List<String> phones) {
             String text = customMessage.message(dingTalkProperties, subTitle, keyword, content, phones);
 
-            MarkDownReq markDownReq = new MarkDownReq(new MarkDownReq.MarkDown(subTitle, text));
+            DingMarkDown markDownReq = new DingMarkDown(new DingMarkDown.MarkDown(subTitle, text));
             return markDownReq;
         }
     },

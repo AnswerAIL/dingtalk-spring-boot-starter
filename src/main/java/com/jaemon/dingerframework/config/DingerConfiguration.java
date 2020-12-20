@@ -17,7 +17,7 @@ package com.jaemon.dingerframework.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaemon.dingerframework.DingerRobot;
-import com.jaemon.dingerframework.entity.DingerProperties;
+import com.jaemon.dingerframework.core.entity.DingerProperties;
 import com.jaemon.dingerframework.DingerManagerBuilder;
 import com.jaemon.dingerframework.exception.ConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;

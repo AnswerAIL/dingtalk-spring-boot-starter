@@ -15,7 +15,7 @@
  */
 package com.jaemon.dingerframework.multi.handler;
 
-import com.jaemon.dingerframework.dingtalk.DingerConfig;
+import com.jaemon.dingerframework.core.DingerConfig;
 import com.jaemon.dingerframework.multi.DingerConfigHandler;
 import com.jaemon.dingerframework.multi.algorithm.AlgorithmHandler;
 import com.jaemon.dingerframework.multi.algorithm.DingerHandler;

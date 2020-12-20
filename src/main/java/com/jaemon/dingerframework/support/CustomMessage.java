@@ -15,7 +15,7 @@
  */
 package com.jaemon.dingerframework.support;
 
-import com.jaemon.dingerframework.entity.DingerProperties;
+import com.jaemon.dingerframework.core.entity.DingerProperties;
 
 import java.util.List;
 

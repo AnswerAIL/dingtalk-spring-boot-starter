@@ -16,9 +16,9 @@
 package com.jaemon.dingerframework.listeners;
 
 import com.jaemon.dingerframework.DingerSender;
-import com.jaemon.dingerframework.entity.DingerProperties;
+import com.jaemon.dingerframework.core.entity.DingerProperties;
 import com.jaemon.dingerframework.entity.DingTalkResult;
-import com.jaemon.dingerframework.entity.message.MsgType;
+import com.jaemon.dingerframework.core.entity.MsgType;
 import com.jaemon.dingerframework.support.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

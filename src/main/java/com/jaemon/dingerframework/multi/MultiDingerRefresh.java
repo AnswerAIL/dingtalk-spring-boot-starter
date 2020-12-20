@@ -15,7 +15,7 @@
  */
 package com.jaemon.dingerframework.multi;
 
-import com.jaemon.dingerframework.dingtalk.DingerRefresh;
+import com.jaemon.dingerframework.core.DingerRefresh;
 
 /**
  * MultiDingerRefresh
