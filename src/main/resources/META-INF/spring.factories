@@ -1,15 +1,15 @@
 # Auto Configuration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.jaemon.dingtalk.config.DingTalkConfiguration,\
-com.jaemon.dingtalk.config.OkHttpConfiguration,\
-com.jaemon.dingtalk.config.NoticeConfig,\
-com.jaemon.dingtalk.config.BeanConfiguration,\
-com.jaemon.dingtalk.config.DkThreadPoolConfig
+com.jaemon.dingerframework.config.DingerConfiguration,\
+com.jaemon.dingerframework.config.OkHttpConfiguration,\
+com.jaemon.dingerframework.config.NoticeConfig,\
+com.jaemon.dingerframework.config.BeanConfiguration,\
+com.jaemon.dingerframework.config.DkThreadPoolConfig
 
 # Application Listeners
 org.springframework.context.ApplicationListener=\
-com.jaemon.dingtalk.listeners.StartEventListener,\
-com.jaemon.dingtalk.listeners.SuccessEventListener,\
-com.jaemon.dingtalk.listeners.FailedEventListener,\
-com.jaemon.dingtalk.listeners.ExitEventListener,\
-com.jaemon.dingtalk.listeners.DingerXmlPreparedEvent
+com.jaemon.dingerframework.listeners.StartEventListener,\
+com.jaemon.dingerframework.listeners.SuccessEventListener,\
+com.jaemon.dingerframework.listeners.FailedEventListener,\
+com.jaemon.dingerframework.listeners.ExitEventListener,\
+com.jaemon.dingerframework.listeners.DingerXmlPreparedEvent

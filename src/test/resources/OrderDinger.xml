@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE dinger SYSTEM "dingtalk-dinger.dtd">
-<!DOCTYPE dinger PUBLIC "-//AnswerAIL//DTD Dinger 2.0//EN" "dingtalk-dinger.dtd">
+<!DOCTYPE dinger SYSTEM "dinger.dtd">
+<!DOCTYPE dinger PUBLIC "-//AnswerAIL//DTD Dinger 2.0//EN" "dinger.dtd">
 
 <!--
-	spring.dingtalk.dinger-locations: classpath*:dinger/*.xml
+	spring.dinger.dinger-locations: classpath*:dinger/*.xml
 -->
 
-<dinger namespace="com.jaemon.dingtalk.dinger.OrderDinger">
+<dinger namespace="com.jaemon.dingerframework.dingtalk.OrderDinger">
 
 	<message id="orderSuccess" type="TEXT">
 		<body>
