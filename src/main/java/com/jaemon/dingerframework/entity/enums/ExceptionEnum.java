@@ -42,6 +42,9 @@ public enum ExceptionEnum implements Pairs<Integer, String> {
     MULTIDINGER_ALGORITHM_EXCEPTION(6004, "多Dinger配置处理器算法不可为空"),
     MULTI_DINGERCONFIGS_EXCEPTION(6005, "多Dinger配置DingerConfig异常"),
 
+    REGISTER_DINGERDEFINITION_ERROR(6006, "注册dingerDefinition异常"),
+    DINGERDEFINITION_ERROR(6007, "dingerDefinition异常"),
+
     UNKNOWN(9999, "未知异常")
     ;
 

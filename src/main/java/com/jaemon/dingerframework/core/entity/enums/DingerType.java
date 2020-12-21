@@ -27,6 +27,8 @@ public enum DingerType {
     DINGTALK("钉钉", "https://oapi.dingtalk.com/robot/send?access_token"),
     WETALK("企业微信", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key");
 
+    public static final DingerType[] dingerTypes = DingerType.values();
+
     @Getter
     private String type;
     @Getter

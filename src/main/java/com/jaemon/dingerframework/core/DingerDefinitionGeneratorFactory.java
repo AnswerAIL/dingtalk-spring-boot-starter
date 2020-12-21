@@ -15,8 +15,12 @@
  */
 package com.jaemon.dingerframework.core;
 
+import com.jaemon.dingerframework.exception.DingerException;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.jaemon.dingerframework.entity.enums.ExceptionEnum.DINGERDEFINITION_ERROR;
 
 /**
  * Dinger Definition工厂类
@@ -39,7 +43,7 @@ public class DingerDefinitionGeneratorFactory {
     public static DingerDefinitionGenerator get(String key) {
         DingerDefinitionGenerator dingTalkDefinitionGenerator = dingTalkDefinitionGeneratorMap.get(key);
         if (dingTalkDefinitionGenerator == null) {
-            // TODO throw
+            throw new DingerException(key + "无对应的Dinger定义生成器", DINGERDEFINITION_ERROR);
         }
         return dingTalkDefinitionGenerator;
     }

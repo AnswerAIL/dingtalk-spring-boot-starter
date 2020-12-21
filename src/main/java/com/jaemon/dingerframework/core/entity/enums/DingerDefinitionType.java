@@ -18,8 +18,8 @@ package com.jaemon.dingerframework.core.entity.enums;
 
 import com.jaemon.dingerframework.dingtalk.DingTalkDefinitionGenerator;
 import com.jaemon.dingerframework.core.DingerDefinitionGenerator;
-import com.jaemon.dingerframework.exception.DingerException;
 import com.jaemon.dingerframework.wetalk.WeTalkDefinitionGenerator;
+
 
 /**
  * Dinger消息体定义类型
@@ -58,6 +58,7 @@ public enum DingerDefinitionType {
     )
 
     ;
+    public static final DingerDefinitionType[] dingerDefinitionTypes = values();
 
     /** dinger类型 */
     private DingerType dingerType;
@@ -89,28 +90,13 @@ public enum DingerDefinitionType {
     }
 
     static {
-        for (DingerDefinitionType dingTalkMessageType : values()) {
+        for (DingerDefinitionType dingTalkMessageType : dingerDefinitionTypes) {
             try {
                 dingTalkMessageType.dingerDefinitionGenerator().newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static Class<? extends DingerDefinitionGenerator> dingerDefinitionGenerator(
-            DingerType dingerType,
-            SupportMessageType supportMessageType
-    ) {
-        for (DingerDefinitionType dingerMessageType : values()) {
-            if (dingerMessageType.dingerType == dingerType &&
-                    dingerMessageType.supportMessageType == supportMessageType) {
-                return dingerMessageType.dingerDefinitionGenerator;
-            }
-        }
-
-        // TODO
-        throw new DingerException(null);
     }
 
 }

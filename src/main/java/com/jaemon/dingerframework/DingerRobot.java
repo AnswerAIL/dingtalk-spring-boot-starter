@@ -185,40 +185,15 @@ public class DingerRobot extends AbstractDingerSender {
         } catch (MsgTypeException ex) {
             return exceptionResult(keyword, content, ex);
         }
-        String msgContent = customMessage.message(dingTalkProperties, subTitle, keyword, content, phones);
+        String msgContent = customMessage.message(
+                dingTalkProperties, subTitle, keyword, content, phones
+        );
 
+        MsgType msgType = messageSubType.msgType(
+                dingerType, msgContent, subTitle, phones, atAll
+        );
 
-        // TODO
-        if (dingerType == DingerType.DINGTALK) {
-            Message message;
-            if (messageSubType == MessageSubType.TEXT) {
-                message = new DingText(new DingText.Text(msgContent));
-            } else {
-                message = new DingMarkDown(new DingMarkDown.MarkDown(subTitle, msgContent));
-            }
-
-            if (atAll) {
-                message.setAt(new Message.At(true));
-            } else if (!phones.isEmpty()) {
-                message.setAt(new Message.At(phones));
-            }
-
-            return send(keyword, message);
-        } else {
-            if (messageSubType == MessageSubType.TEXT) {
-                WeText weText = new WeText(msgContent);
-
-                if (atAll) {
-                    weText.setMentioned_mobile_list(Arrays.asList(WETALK_AT_ALL));
-                } else if (!phones.isEmpty()) {
-                    weText.setMentioned_mobile_list(phones);
-                }
-                return send(keyword, weText);
-            } else {
-                WeMarkdown weMarkdown = new WeMarkdown(msgContent);
-                return send(keyword, weMarkdown);
-            }
-        }
+        return send(keyword, msgType);
 
     }
 

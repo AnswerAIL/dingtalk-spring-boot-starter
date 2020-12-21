@@ -21,6 +21,7 @@ import com.jaemon.dingerframework.core.entity.enums.DingerDefinitionType;
 import com.jaemon.dingerframework.core.entity.enums.DingerType;
 import com.jaemon.dingerframework.core.entity.enums.SupportMessageType;
 import com.jaemon.dingerframework.exception.DingerConfigRepeatedException;
+import com.jaemon.dingerframework.exception.DingerException;
 import com.jaemon.dingerframework.exception.DingerScanRepeatedException;
 import com.jaemon.dingerframework.listeners.ApplicationEventTimeTable;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import static com.jaemon.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
 import static com.jaemon.dingerframework.core.AbstractDingerDefinitionResolver.Container.INSTANCE;
+import static com.jaemon.dingerframework.entity.enums.ExceptionEnum.REGISTER_DINGERDEFINITION_ERROR;
 import static com.jaemon.dingerframework.utils.PackageUtils.classNames;
 
 /**
@@ -43,6 +45,18 @@ import static com.jaemon.dingerframework.utils.PackageUtils.classNames;
  */
 @Slf4j
 public abstract class AbstractDingerDefinitionResolver {
+    protected Map<String, Class<? extends DingerDefinitionGenerator>> dingerDefinitionGeneratorMap;
+
+    public AbstractDingerDefinitionResolver() {
+        this.dingerDefinitionGeneratorMap = new HashMap<>();
+
+        for (DingerDefinitionType dingTalkMessageType : DingerDefinitionType.dingerDefinitionTypes) {
+            dingerDefinitionGeneratorMap.put(
+                    dingTalkMessageType.dingerType() + SPOT_SEPERATOR + dingTalkMessageType.supportMessageType(),
+                    dingTalkMessageType.dingerDefinitionGenerator()
+            );
+        }
+    }
 
     /**
      * 解析XML文件Dinger
@@ -177,11 +191,15 @@ public abstract class AbstractDingerDefinitionResolver {
             DingerConfig dingerConfiguration,
             DingerConfig defaultDingerConfig
     ) {
-        for (DingerType dingerType : DingerType.values()) {
+        for (DingerType dingerType : DingerType.dingerTypes) {
             keyName = dingerType + SPOT_SEPERATOR + keyName;
-            Class<? extends DingerDefinitionGenerator> dingerDefinitionGeneratorClass = DingerDefinitionType.dingerDefinitionGenerator(
-                    dingerType, supportMessageType
+            Class<? extends DingerDefinitionGenerator> dingerDefinitionGeneratorClass = dingerDefinitionGeneratorMap.get(
+                    dingerType + SPOT_SEPERATOR + supportMessageType
             );
+            if (dingerDefinitionGeneratorClass == null) {
+                throw new DingerException(dingerType + "-" + supportMessageType + "无效.", REGISTER_DINGERDEFINITION_ERROR);
+            }
+
             DingerDefinitionGenerator dingerDefinitionGenerator = DingerDefinitionGeneratorFactory.get(
                     dingerDefinitionGeneratorClass.getSimpleName()
             );

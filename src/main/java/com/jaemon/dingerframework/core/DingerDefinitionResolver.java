@@ -41,7 +41,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.jaemon.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
-import static com.jaemon.dingerframework.core.AbstractDingerDefinitionResolver.Container.INSTANCE;
 import static com.jaemon.dingerframework.entity.enums.ExceptionEnum.DINER_XML_ANALYSIS_EXCEPTION;
 
 /**
@@ -85,6 +84,8 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
         } finally {
             defaultDingerConfigSet.clear();
             defaultDingerConfigSet = null;
+            dingerDefinitionGeneratorMap.clear();
+            dingerDefinitionGeneratorMap = null;
         }
     }
 
@@ -161,13 +162,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                             defaultDingerConfig
                     );
                 } else {
-                    // TODO 是否需要保留，保留需注意DingerType
-                    // xml dingerConfig adapt
-                    if (defaultDingerConfigSet.contains(keyName)) {
-                        INSTANCE.get(keyName).dingerConfig()
-                                .merge(dingerConfiguration)
-                                .merge(defaultDingerConfig);
-                    }
+                    log.info("register dingerDefinition and skip method={}.", keyName);
                 }
             }
 
