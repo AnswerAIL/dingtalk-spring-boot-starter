@@ -16,10 +16,6 @@
 package com.dingerframework.dingtalk.entity;
 
 import com.dingerframework.dingtalk.entity.enums.DingTalkMsgType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -30,9 +26,7 @@ import java.util.Map;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class DingText extends Message implements Serializable {
+public class DingText extends Message {
 
     /**
      * 消息内容
@@ -40,15 +34,35 @@ public class DingText extends Message implements Serializable {
     private Text text;
 
     public DingText(Text text) {
-        this.text = text;
         setMsgtype(DingTalkMsgType.TEXT.type());
+        this.text = text;
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    public Text getText() {
+        return text;
+    }
+
+    public void setText(Text text) {
+        this.text = text;
+    }
+
     public static class Text implements Serializable {
         private String content;
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public Text() {
+        }
+
+        public Text(String content) {
+            this.content = content;
+        }
     }
 
     @Override

@@ -15,8 +15,6 @@
  */
 package com.dingerframework.support;
 
-import com.dingerframework.core.entity.DingerProperties;
-
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -29,12 +27,9 @@ import java.util.List;
 public class TextMessage implements CustomMessage {
 
     @Override
-    public String message(DingerProperties dingerProperties, String title, String keyword, String content, List<String> phones) {
+    public String message(String projectId, String title, String keyword, String content, List<String> phones) {
         return MessageFormat.format(
                 "【Dinger通知】 {0}\n- 项目名称: {1}\n- 检索关键字: {2}\n- 内容: {3}.",
-                title,
-                dingerProperties.getProjectId(),
-                keyword,
-                content);
+                title, projectId, keyword, content);
     }
 }

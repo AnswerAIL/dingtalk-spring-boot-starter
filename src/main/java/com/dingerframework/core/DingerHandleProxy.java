@@ -28,7 +28,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static com.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
+import static com.dingerframework.constant.DingerConstant.SPOT_SEPERATOR;
 
 /**
  * Dinger Handle Proxy
@@ -72,7 +72,7 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
 
             DingerType useDinger = dingerType(method);
             DingerDefinition dingerDefinition = dingerDefinition(
-                    useDinger, keyName, dingerClassName
+                    useDinger, keyName
             );
             if (dingerDefinition == null) {
                 return null;

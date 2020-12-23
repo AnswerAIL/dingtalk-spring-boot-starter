@@ -15,7 +15,7 @@
  */
 package com.dingerframework.multi.algorithm;
 
-import com.dingerframework.multi.MultiDingerAlgorithmRegister;
+import com.dingerframework.multi.MultiDingerAlgorithmInjectRegister;
 import com.dingerframework.core.DingerConfig;
 
 import java.util.List;
@@ -30,9 +30,9 @@ public interface AlgorithmHandler {
     /** 默认索引号从0开始 */
     int DEFAULT_INDEX = 0;
     /**
-     * {@link MultiDingerAlgorithmRegister}
+     * {@link MultiDingerAlgorithmInjectRegister}
      */
-    String MULTI_DINGER_PRIORITY_EXECUTE = "multiDingerAlgorithmRegister";
+    String MULTI_DINGER_PRIORITY_EXECUTE = "multiDingerAlgorithmInjectRegister";
 
     /**
      * 具体算法处理逻辑

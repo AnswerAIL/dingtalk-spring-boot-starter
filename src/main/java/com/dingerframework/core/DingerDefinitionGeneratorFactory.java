@@ -29,8 +29,7 @@ import static com.dingerframework.entity.enums.ExceptionEnum.DINGERDEFINITION_ER
  * @since 4.0
  */
 public class DingerDefinitionGeneratorFactory {
-    /** 解析 */
-    // TODO
+    /** dingerDefinition生成器 */
     static final Map<String, DingerDefinitionGenerator> dingTalkDefinitionGeneratorMap = new HashMap<>();
 
     /**

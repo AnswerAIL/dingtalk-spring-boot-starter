@@ -1,10 +1,9 @@
 # Auto Configuration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.dingerframework.config.DingerConfiguration,\
-com.dingerframework.config.OkHttpConfiguration,\
-com.dingerframework.config.NoticeConfig,\
 com.dingerframework.config.BeanConfiguration,\
-com.dingerframework.config.DkThreadPoolConfig
+com.dingerframework.config.DingerConfiguration,\
+com.dingerframework.config.DingerHttpClientConfig,\
+com.dingerframework.config.DingerThreadPoolConfig
 
 # Application Listeners
 org.springframework.context.ApplicationListener=\

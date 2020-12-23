@@ -20,14 +20,12 @@ import com.dingerframework.core.DingerDefinitionGenerator;
 import com.dingerframework.core.DingerDefinitionGeneratorContext;
 import com.dingerframework.core.DingerDefinitionHandler;
 import com.dingerframework.core.entity.enums.DingerType;
-import com.dingerframework.core.entity.enums.MessageSubType;
 import com.dingerframework.core.entity.xml.MessageTag;
-import com.jaemon.dingerframework.core.*;
 import com.dingerframework.core.annatations.DingerMarkdown;
 import com.dingerframework.core.annatations.DingerText;
 import com.dingerframework.core.entity.enums.DingerDefinitionType;
-import com.jaemon.dingerframework.core.entity.xml.*;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 钉钉消息体定义生成类
@@ -35,8 +33,8 @@ import lombok.extern.slf4j.Slf4j;
  * @author Jaemon
  * @since 4.0
  */
-@Slf4j
 public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
+    private static final Logger log = LoggerFactory.getLogger(DingerDefinitionGenerator.class);
 
     /**
      * 生成生成注解文本消息体定义
@@ -45,8 +43,7 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerText> context) {
-            DingerDefinition dingerDefinition = dingerTextHandler(context);
-            dingerDefinition.setDingerType(DingerType.DINGTALK);
+            DingerDefinition dingerDefinition = dingerTextHandler(DingerType.DINGTALK, context);
 
             return dingerDefinition;
         }
@@ -59,8 +56,7 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
     public static class AnnotationMarkdown extends DingerDefinitionGenerator<DingerMarkdown> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
-            DingerDefinition dingerDefinition = dingerMarkdownHandler(context);
-            dingerDefinition.setDingerType(DingerType.DINGTALK);
+            DingerDefinition dingerDefinition = dingerMarkdownHandler(DingerType.DINGTALK, context);
 
             return dingerDefinition;
         }
@@ -75,7 +71,6 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
             DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.DINGTALK_XML_TEXT, context);
-            dingerDefinition.setMessageSubType(MessageSubType.TEXT);
 
             return dingerDefinition;
         }
@@ -89,7 +84,6 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
             DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.DINGTALK_XML_MARKDOWN, context);
-            dingerDefinition.setMessageSubType(MessageSubType.MARKDOWN);
 
             return dingerDefinition;
         }

@@ -16,11 +16,11 @@
 package com.dingerframework.listeners;
 
 import com.dingerframework.DingerSender;
-import com.dingerframework.constant.DkConstant;
+import com.dingerframework.constant.DingerConstant;
 import com.dingerframework.core.entity.DingerProperties;
 import com.dingerframework.core.entity.MsgType;
 import com.dingerframework.entity.DingerResult;
-import com.dingerframework.support.Notification;
+import com.dingerframework.support.MonitorEventNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
@@ -62,12 +62,12 @@ public class FailedEventListener implements ApplicationListener<ApplicationFaile
             if (properties.isEnabled()
                     && properties.getMonitor().isFalied()) {
                 DingerSender dingTalkRobot = applicationContext.getBean(DingerSender.class);
-                Notification notification = applicationContext.getBean(Notification.class);
+                MonitorEventNotification monitorEventNotification = applicationContext.getBean(MonitorEventNotification.class);
                 String projectId = properties.getProjectId();
-                projectId = projectId == null ? DkConstant.DK_PREFIX : projectId;
+                projectId = projectId == null ? DingerConstant.DINGER_PREFIX : projectId;
 
-                MsgType message = notification.failed(event, projectId);
-                String keyword = projectId + DkConstant.FAILED_KEYWORD;
+                MsgType message = monitorEventNotification.failed(event, projectId);
+                String keyword = projectId + DingerConstant.FAILED_KEYWORD;
                 DingerResult result = dingTalkRobot.send(keyword, message);
                 if (debugEnabled) {
                     log.debug("keyword={}, result={}.", keyword, result.toString());

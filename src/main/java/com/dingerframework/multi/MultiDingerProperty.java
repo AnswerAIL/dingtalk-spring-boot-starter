@@ -25,7 +25,7 @@ public class MultiDingerProperty {
     /** app start at multiDinger */
     static boolean multiDinger = false;
 
-    public static boolean multiDinger() {
+    protected static boolean multiDinger() {
         return multiDinger;
     }
 }

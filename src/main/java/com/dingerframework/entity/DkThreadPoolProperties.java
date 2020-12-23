@@ -15,8 +15,7 @@
  */
 package com.dingerframework.entity;
 
-import com.dingerframework.constant.DkConstant;
-import lombok.Data;
+import com.dingerframework.constant.DingerConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -25,8 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@ConfigurationProperties(prefix = DkConstant.DINGER_PROPERTIES_PREFIX + "executor-pool")
+@ConfigurationProperties(prefix = DingerConstant.DINGER_PROPERTIES_PREFIX + "executor-pool")
 public class DkThreadPoolProperties {
     private static final int DEFAULT_CORE_SIZE = Runtime.getRuntime().availableProcessors() + 1;
     /**
@@ -48,5 +46,45 @@ public class DkThreadPoolProperties {
     /**
      * 线程名称前缀
      */
-    private String threadNamePrefix = DkConstant.DEFAULT_THREAD_NAME_PREFIX;
+    private String threadNamePrefix = DingerConstant.DEFAULT_THREAD_NAME_PREFIX;
+
+    public int getCoreSize() {
+        return coreSize;
+    }
+
+    public void setCoreSize(int coreSize) {
+        this.coreSize = coreSize;
+    }
+
+    public int getMaxSize() {
+        return maxSize;
+    }
+
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
+    }
+
+    public int getKeepAliveSeconds() {
+        return keepAliveSeconds;
+    }
+
+    public void setKeepAliveSeconds(int keepAliveSeconds) {
+        this.keepAliveSeconds = keepAliveSeconds;
+    }
+
+    public int getQueueCapacity() {
+        return queueCapacity;
+    }
+
+    public void setQueueCapacity(int queueCapacity) {
+        this.queueCapacity = queueCapacity;
+    }
+
+    public String getThreadNamePrefix() {
+        return threadNamePrefix;
+    }
+
+    public void setThreadNamePrefix(String threadNamePrefix) {
+        this.threadNamePrefix = threadNamePrefix;
+    }
 }

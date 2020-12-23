@@ -22,14 +22,14 @@ package com.dingerframework.entity.enums;
  * @since 1.0
  */
 public enum ResultCode {
-    SUCCESS("DK000", "success"),
+    SUCCESS("D000", "success"),
 
-    DINGER_DISABLED("DK101", "Dinger未启用"),
+    DINGER_DISABLED("D101", "Dinger未启用"),
 
-    MESSAGE_TYPE_UNSUPPORTED("DK201", "无法支持的消息类型"),
-    SEND_MESSAGE_FAILED("DK202", "消息发送失败"),
-    MESSAGE_PROCESSING_FAILED("DK203", "消息处理异常"),
-    FAILED("DK999", "failed")
+    MESSAGE_TYPE_UNSUPPORTED("D201", "无法支持的消息类型"),
+    SEND_MESSAGE_FAILED("D202", "消息发送失败"),
+    MESSAGE_PROCESSING_FAILED("D203", "消息处理异常"),
+    FAILED("D999", "failed")
 
     ;
 

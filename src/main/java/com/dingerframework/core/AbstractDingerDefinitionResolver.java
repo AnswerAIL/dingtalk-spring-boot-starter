@@ -15,19 +15,19 @@
  */
 package com.dingerframework.core;
 
-import com.dingerframework.constant.DkConstant;
-import com.dingerframework.core.annatations.Dinger;
+import com.dingerframework.constant.DingerConstant;
 import com.dingerframework.core.annatations.DingerScan;
 import com.dingerframework.core.entity.enums.DingerDefinitionType;
 import com.dingerframework.core.entity.enums.DingerType;
 import com.dingerframework.entity.enums.ExceptionEnum;
 import com.dingerframework.exception.DingerException;
 import com.dingerframework.listeners.ApplicationEventTimeTable;
+import com.dingerframework.listeners.DingerListenersProperty;
 import com.dingerframework.utils.PackageUtils;
-import com.jaemon.dingerframework.core.entity.enums.*;
 import com.dingerframework.exception.DingerConfigRepeatedException;
 import com.dingerframework.exception.DingerScanRepeatedException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -43,8 +43,10 @@ import static com.dingerframework.core.AbstractDingerDefinitionResolver.Containe
  * @author Jaemon
  * @since 2.0
  */
-@Slf4j
-public abstract class AbstractDingerDefinitionResolver {
+public abstract class AbstractDingerDefinitionResolver
+        extends DingerListenersProperty {
+    private static final Logger log = LoggerFactory.getLogger(AbstractDingerDefinitionResolver.class);
+    /** dinger消息类型和对应生成器映射关系 */
     protected Map<String, Class<? extends DingerDefinitionGenerator>> dingerDefinitionGeneratorMap;
     /** Dinger默认的DingerConfig */
     protected Map<DingerType, DingerConfig> defaultDingerConfigs;
@@ -55,10 +57,13 @@ public abstract class AbstractDingerDefinitionResolver {
 
         for (DingerDefinitionType dingerDefinitionType : DingerDefinitionType.dingerDefinitionTypes) {
             dingerDefinitionGeneratorMap.put(
-                    dingerDefinitionType.dingerType() + DkConstant.SPOT_SEPERATOR + dingerDefinitionType.messageMainType() + DkConstant.SPOT_SEPERATOR + dingerDefinitionType.messageSubType(),
+                    dingerDefinitionType.dingerType() + DingerConstant.SPOT_SEPERATOR +
+                            dingerDefinitionType.messageMainType() + DingerConstant.SPOT_SEPERATOR +
+                            dingerDefinitionType.messageSubType(),
                     dingerDefinitionType.dingerDefinitionGenerator()
             );
         }
+
     }
 
     /**
@@ -137,7 +142,6 @@ public abstract class AbstractDingerDefinitionResolver {
                     throw new DingerScanRepeatedException();
                 }
             }
-            PackageUtils.classNames(primarySource.getPackage().getName(), dingerClasses, true, Dinger.class);
         }
 
         // 获取dingerScan下所有类信息
@@ -184,7 +188,7 @@ public abstract class AbstractDingerDefinitionResolver {
             DingerConfig dingerConfiguration
     ) {
         boolean debugEnabled = log.isDebugEnabled();
-        for (DingerType dingerType : DingerType.dingerTypes) {
+        for (DingerType dingerType : enabledDingerTypes) {
             DingerConfig defaultDingerConfig = defaultDingerConfigs.get(dingerType);
             if (dingerConfiguration == null) {
                 if (debugEnabled) {
@@ -192,8 +196,8 @@ public abstract class AbstractDingerDefinitionResolver {
                 }
                 continue;
             }
-            String keyName = dingerType + DkConstant.SPOT_SEPERATOR + dingerName;
-            String key = dingerType + DkConstant.SPOT_SEPERATOR + dingerDefinitionKey;
+            String keyName = dingerType + DingerConstant.SPOT_SEPERATOR + dingerName;
+            String key = dingerType + DingerConstant.SPOT_SEPERATOR + dingerDefinitionKey;
             Class<? extends DingerDefinitionGenerator> dingerDefinitionGeneratorClass =
                     dingerDefinitionGeneratorMap.get(key);
             if (dingerDefinitionGeneratorClass == null) {
@@ -223,6 +227,9 @@ public abstract class AbstractDingerDefinitionResolver {
                     .merge(defaultDingerConfig);
 
             INSTANCE.put(keyName, dingerDefinition);
+            if (debugEnabled) {
+                log.debug("dinger definition={} has been registed.", keyName);
+            }
         }
     }
 

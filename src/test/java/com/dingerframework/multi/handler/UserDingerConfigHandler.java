@@ -15,6 +15,7 @@
  */
 package com.dingerframework.multi.handler;
 
+import com.dingerframework.core.entity.enums.DingerType;
 import com.dingerframework.multi.DingerConfigHandler;
 import com.dingerframework.multi.algorithm.AlgorithmHandler;
 import com.dingerframework.multi.algorithm.DingerHandler;
@@ -30,6 +31,11 @@ import java.util.List;
  * @since 3.0
  */
 public class UserDingerConfigHandler implements DingerConfigHandler {
+    @Override
+    public DingerType dinger() {
+        return DingerType.DINGTALK;
+    }
+
     @Override
     public List<DingerConfig> dingerConfigs() {
         ArrayList<DingerConfig> dingerConfigs = new ArrayList<>();

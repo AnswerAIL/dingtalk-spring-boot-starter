@@ -15,8 +15,6 @@
  */
 package com.dingerframework.core.entity.enums;
 
-import lombok.Getter;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,22 +29,26 @@ public enum DingerType {
     DINGTALK("钉钉", "https://oapi.dingtalk.com/robot/send?access_token", true),
     WETALK("企业微信", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key", true);
 
-    public static final List<DingerType> dingerTypes;
-    static {
-        dingerTypes = Arrays.stream(DingerType.values()).filter(e -> e.enabled).collect(Collectors.toList());
-    }
-
-    @Getter
     private String type;
-    @Getter
     private String robotUrl;
     /** 是否开启 */
-    @Getter
     private boolean enabled;
 
     DingerType(String type, String robotUrl, boolean enabled) {
         this.type = type;
         this.robotUrl = robotUrl;
         this.enabled = enabled;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getRobotUrl() {
+        return robotUrl;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }

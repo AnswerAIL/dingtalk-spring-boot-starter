@@ -16,16 +16,14 @@
 package com.dingerframework;
 
 import com.dingerframework.entity.DingerResult;
-import com.dingerframework.entity.RequestHeader;
 import com.dingerframework.entity.SignBase;
+import com.dingerframework.support.client.MediaTypeEnum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dingerframework.core.DingerConfig;
 import com.dingerframework.core.entity.DingerProperties;
 import com.dingerframework.core.entity.enums.DingerType;
 import com.dingerframework.core.entity.enums.MessageSubType;
-import com.jaemon.dingerframework.entity.*;
-import com.dingerframework.entity.enums.ContentTypeEnum;
 import com.dingerframework.entity.enums.ResultCode;
 import com.dingerframework.core.entity.MsgType;
 import com.dingerframework.exception.AsyncCallException;
@@ -34,8 +32,9 @@ import com.dingerframework.support.CustomMessage;
 import com.dingerframework.utils.DingerUtils;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -93,12 +92,13 @@ public class DingerRobot extends AbstractDingerSender {
     }
 
     @Override
-    public DingerResult send(String keyword, DingerType dingerType, String message) {
+    public <T> DingerResult send(String keyword, DingerType dingerType, T message) {
         String dkid = dingTalkManagerBuilder.dingerIdGenerator.dingerId();
+        Map<DingerType, DingerProperties.Dinger> dingers = dingerProperties.getDingers();
         if (!
                 (
                         dingerProperties.isEnabled() &&
-                                dingerProperties.getDingers().containsKey(dingerType)
+                                dingers.containsKey(dingerType)
                 )
         ) {
             return DingerResult.failed(ResultCode.DINGER_DISABLED, dkid);
@@ -112,9 +112,9 @@ public class DingerRobot extends AbstractDingerSender {
             if (dingerConfig) {
                 dinger = new DingerProperties.Dinger();
                 BeanUtils.copyProperties(localDinger, dinger);
-                dinger.setRobotUrl(dingerProperties.getDingers().get(dingerType).getRobotUrl());
+                dinger.setRobotUrl(dingers.get(dingerType).getRobotUrl());
             } else {
-                dinger = dingerProperties.getDingers().get(dingerType);
+                dinger = dingers.get(dingerType);
             }
 
             StringBuilder webhook = new StringBuilder();
@@ -127,18 +127,15 @@ public class DingerRobot extends AbstractDingerSender {
                 webhook.append(sign.transfer());
             }
 
-            RequestHeader headers = new RequestHeader();
-            RequestHeader.Pairs pairs = new RequestHeader.Pairs("Content-Type", "application/json; charset=utf-8");
-            ArrayList<RequestHeader.Pairs> list = new ArrayList<>();
-            list.add(pairs);
-            headers.setData(list);
+            Map<String, String> headers = new HashMap<>();
+            headers.put("Content-Type", "application/json; charset=utf-8");
 
             // 异步处理, 直接返回标识id
             if (dinger.isAsync()) {
                 dingTalkManagerBuilder.dingTalkExecutor.execute(() -> {
                     try {
-                        String result = dingTalkManagerBuilder.httpClient.doPost(
-                                webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType()
+                        String result = dingTalkManagerBuilder.dingerHttpClient.post(
+                                webhook.toString(), headers, message, MediaTypeEnum.JSON
                         );
                         dingTalkManagerBuilder.dingerAsyncCallback.execute(dkid, result);
                     } catch (Exception e) {
@@ -148,8 +145,8 @@ public class DingerRobot extends AbstractDingerSender {
                 return DingerResult.success(dkid, dkid);
             }
 
-            String response = dingTalkManagerBuilder.httpClient.doPost(
-                    webhook.toString(), headers, message, ContentTypeEnum.JSON.mediaType()
+            String response = dingTalkManagerBuilder.dingerHttpClient.post(
+                    webhook.toString(), headers, message, MediaTypeEnum.JSON
             );
             return DingerResult.success(dkid, response);
         } catch (Exception e) {
@@ -186,7 +183,7 @@ public class DingerRobot extends AbstractDingerSender {
     private DingerResult send(DingerType dingerType, MessageSubType messageSubType, String keyword, String title, String content, List<String> phones, boolean atAll) {
         CustomMessage customMessage = customMessage(messageSubType);
         String msgContent = customMessage.message(
-                dingerProperties, title, keyword, content, phones
+                dingerProperties.getProjectId(), title, keyword, content, phones
         );
 
         MsgType msgType = messageSubType.msgType(

@@ -15,12 +15,11 @@
  */
 package com.dingerframework.core.spring;
 
-import com.dingerframework.core.annatations.Dinger;
 import com.dingerframework.core.annatations.DingerScan;
 import com.dingerframework.entity.enums.ExceptionEnum;
 import com.dingerframework.exception.DingerException;
 import com.dingerframework.listeners.ApplicationEventTimeTable;
-import com.dingerframework.utils.DingerUtils;
+import com.dingerframework.listeners.DingerListenersProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -42,7 +41,10 @@ import static com.dingerframework.utils.PackageUtils.classNames;
  * @author Jaemon
  * @since 2.0
  */
-public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Ordered {
+public class DingerScannerRegistrar
+        extends DingerListenersProperty
+        implements ImportBeanDefinitionRegistrar, Ordered
+{
     private static final Logger log = LoggerFactory.getLogger(DingerScannerRegistrar.class);
 
     @Override
@@ -74,8 +76,8 @@ public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Or
                     classNames(basePackage, dingerClasses, true);
                 }
 
-                // just to obtain interface that defined by Dinger annotation
-                classNames(DingerUtils.classPackageName(importingClassMetadata.getClassName()), dingerClasses, true, Dinger.class);
+                // just to obtain interface that defined by Dinger annotation, Deprecated
+//                classNames(DingerUtils.classPackageName(importingClassMetadata.getClassName()), dingerClasses, true, Dinger.class);
 
                 if (!dingerClasses.isEmpty()) {
                     registerBeanDefinition(registry, dingerClasses);
@@ -100,7 +102,6 @@ public class DingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Or
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(DingerFactoryBean.class);
             AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
             beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(dingerClass);
-            // 设置可通过 @Autowired 注解访问
             beanDefinition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
             // 注册到 BeanDefinitionRegistry
             registry.registerBeanDefinition(dingerClass.getSimpleName(), beanDefinition);

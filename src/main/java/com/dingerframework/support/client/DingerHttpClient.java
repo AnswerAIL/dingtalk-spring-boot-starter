@@ -15,6 +15,8 @@
  */
 package com.dingerframework.support.client;
 
+import com.dingerframework.exception.SendMsgException;
+
 import java.util.Map;
 
 /**
@@ -30,8 +32,12 @@ public interface DingerHttpClient {
      *
      * @param url
      *          请求URL地址
+     * @return
+     *          response message
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void get(String url);
+    String get(String url) throws SendMsgException;
 
     /**
      * get request
@@ -40,8 +46,12 @@ public interface DingerHttpClient {
      *          请求URL地址
      * @param headers
      *          请求头
+     * @return
+     *          响应内容
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void get(String url, String[] headers);
+    String get(String url, Map<String, String> headers) throws SendMsgException;
 
     /**
      * get request
@@ -52,8 +62,12 @@ public interface DingerHttpClient {
      *          请求头
      * @param params
      *          请求参数
+     * @return
+     *          响应内容
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void get(String url, String[] headers, Map<String, ?> params);
+    String get(String url, Map<String, String> headers, Map<String, ?> params) throws SendMsgException;
 
     /**
      * get request
@@ -65,9 +79,13 @@ public interface DingerHttpClient {
      * @param params
      *          请求参数
      * @param mediaType
-     *          参数类型
+     *          内容类型
+     * @return
+     *          响应内容
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void get(String url, String[] headers, Map<String, ?> params, String mediaType);
+    String get(String url, Map<String, String> headers, Map<String, ?> params, MediaTypeEnum mediaType) throws SendMsgException;
 
     /**
      * post request
@@ -76,8 +94,12 @@ public interface DingerHttpClient {
      *          请求URL地址
      * @param message
      *          请求体信息
+     * @return
+     *          响应内容
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void post(String url, String message);
+    String post(String url, String message) throws SendMsgException;
 
     /**
      * post request
@@ -88,8 +110,12 @@ public interface DingerHttpClient {
      *          请求头
      * @param message
      *          请求体信息
+     * @return
+     *          响应内容
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void post(String url, String[] headers, String message);
+    String post(String url, Map<String, String> headers, String message) throws SendMsgException;
 
     /**
      * post request
@@ -100,8 +126,13 @@ public interface DingerHttpClient {
      *          请求头
      * @param params
      *          请求参数
+     * @return
+     *          响应内容
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void post(String url, String[] headers, Map<String, ?> params);
+    String post(String url, Map<String, String> headers, Map<String, ?> params) throws SendMsgException;
+
 
     /**
      * post request
@@ -112,10 +143,16 @@ public interface DingerHttpClient {
      *          请求头
      * @param message
      *          请求体信息
-     * @param contentType
-     *          参数类型
+     * @param <T>
+     *          请求内容类型
+     * @param mediaType
+     *          内容类型
+     * @return
+     *          响应内容
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void post(String url, String[] headers, String message, String contentType);
+    <T> String post(String url, Map<String, String> headers, T message, MediaTypeEnum mediaType) throws SendMsgException;
 
     /**
      * post request
@@ -126,8 +163,12 @@ public interface DingerHttpClient {
      *          请求头
      * @param params
      *          请求参数
-     * @param contentType
-     *          参数类型
+     * @param mediaType
+     *          内容类型
+     * @return
+     *          响应内容
+     * @throws SendMsgException
+     *          ex {@link SendMsgException}
      */
-    void post(String url, String[] headers, Map<String, ?> params, String contentType);
+    String post(String url, Map<String, String> headers, Map<String, ?> params, MediaTypeEnum mediaType) throws SendMsgException;
 }

@@ -16,10 +16,6 @@
 package com.dingerframework.dingtalk.entity;
 
 import com.dingerframework.dingtalk.entity.enums.DingTalkMsgType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -30,24 +26,26 @@ import java.util.Map;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class DingMarkDown extends Message implements Serializable {
+public class DingMarkDown extends Message {
 
     /**
      * {@link MarkDown}
      */
     private MarkDown markdown;
 
-
     public DingMarkDown(MarkDown markdown) {
         setMsgtype(DingTalkMsgType.MARKDOWN.type());
         this.markdown = markdown;
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    public MarkDown getMarkdown() {
+        return markdown;
+    }
+
+    public void setMarkdown(MarkDown markdown) {
+        this.markdown = markdown;
+    }
+
     public static class MarkDown implements Serializable {
         /**
          * 首屏会话透出的展示内容, 不会展示在具体的显示内容上
@@ -57,6 +55,30 @@ public class DingMarkDown extends Message implements Serializable {
          * markdown格式的消息
          */
         private String text;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public MarkDown() {
+        }
+
+        public MarkDown(String title, String text) {
+            this.title = title;
+            this.text = text;
+        }
     }
 
     @Override

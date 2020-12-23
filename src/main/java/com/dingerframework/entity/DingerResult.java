@@ -16,7 +16,6 @@
 package com.dingerframework.entity;
 
 import com.dingerframework.entity.enums.ResultCode;
-import lombok.Data;
 
 /**
  * DingTalk Result
@@ -24,7 +23,6 @@ import lombok.Data;
  * @author Jaemon
  * @since 1.0
  */
-@Data
 public class DingerResult {
     /**
      * 响应码
@@ -70,6 +68,38 @@ public class DingerResult {
 
     public static DingerResult failed(ResultCode resultCode, String logid) {
         return new DingerResult(resultCode, logid);
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getLogid() {
+        return logid;
+    }
+
+    public void setLogid(String logid) {
+        this.logid = logid;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     @Override

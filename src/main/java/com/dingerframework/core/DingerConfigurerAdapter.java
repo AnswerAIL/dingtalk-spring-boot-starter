@@ -13,27 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dingerframework.config;
+package com.dingerframework.core;
 
-import com.dingerframework.support.DefaultDingerExceptionCallback;
-import com.dingerframework.support.DingerExceptionCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.dingerframework.DingerManagerBuilder;
 
 /**
- * 默认通知配置
+ *  DingTalk Configurer Adapter
  *
  * @author Jaemon
  * @since 1.0
  */
-@Configuration
-@ConditionalOnMissingBean(DingerExceptionCallback.class)
-public class NoticeConfig {
+public class DingerConfigurerAdapter {
 
-    @Bean
-    public DingerExceptionCallback dingerExceptionCallback() {
-        return new DefaultDingerExceptionCallback();
+    /**
+     * configure for dinger Client
+     *
+     * @param config {@link DingerManagerBuilder}
+     * @throws Exception ex
+     */
+    public void configure(DingerManagerBuilder config) throws Exception {
+
     }
 
 }

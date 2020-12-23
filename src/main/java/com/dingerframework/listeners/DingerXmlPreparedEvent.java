@@ -27,7 +27,7 @@ import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEven
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
 
-import static com.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
+import static com.dingerframework.constant.DingerConstant.SPOT_SEPERATOR;
 
 /**
  * DingerXmlPreparedEvent
@@ -44,12 +44,8 @@ public class DingerXmlPreparedEvent
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         log.info("ready to execute dinger analysis.");
 
-        for (DingerType dingerType : DingerType.dingerTypes) {
-            DingerConfig dingerConfig = defaultDingerConfig(event.getEnvironment(), dingerType);
-            if (dingerConfig != null) {
-                defaultDingerConfigs.put(dingerType, dingerConfig);
-            }
-        }
+        registerDefaultDingerConfig(event.getEnvironment());
+
         try {
             ApplicationEventTimeTable.dingerClasses = doAnalysis(event);
         } catch (Exception ex) {
@@ -58,44 +54,43 @@ public class DingerXmlPreparedEvent
     }
 
     /**
-     * 获取默认的Dinger机器人信息, 即配置文件内容
+     * 注册默认的Dinger机器人信息, 即配置文件内容
      *
      * @param environment
      *          environment
-     * @return
-     *          defaultDingerConfig
      */
-    private DingerConfig defaultDingerConfig(Environment environment, DingerType dingerType) {
-        String dingers = DINGER_PROPERTIES_PREFIX + "dingers" + SPOT_SEPERATOR + dingerType.name().toLowerCase() + SPOT_SEPERATOR;
-        String tokenIdProp = dingers + "token-id";
-        String secretProp = dingers + "secret";
-        String decryptProp = dingers + "decrypt";
-        String decryptKeyProp = dingers + "decryptKey";
-        String asyncExecuteProp = dingers + "async";
+    private void registerDefaultDingerConfig(Environment environment) {
+        for (DingerType dingerType : enabledDingerTypes) {
+            String dingers = DINGER_PROPERTIES_PREFIX + "dingers" + SPOT_SEPERATOR + dingerType.name().toLowerCase() + SPOT_SEPERATOR;
+            String tokenIdProp = dingers + "token-id";
+            String secretProp = dingers + "secret";
+            String decryptProp = dingers + "decrypt";
+            String decryptKeyProp = dingers + "decryptKey";
+            String asyncExecuteProp = dingers + "async";
 
-        if (DingerUtils.isEmpty(tokenIdProp)) {
-            if (log.isDebugEnabled()) {
-                log.debug("dinger={} is not open.", dingerType);
+            if (DingerUtils.isEmpty(tokenIdProp)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("dinger={} is not open.", dingerType);
+                }
+                continue;
             }
-            return null;
-        }
-        String tokenId = environment.getProperty(tokenIdProp);
-        String secret = environment.getProperty(secretProp);
-        boolean decrypt = getProperty(environment, decryptProp);
-        boolean async = getProperty(environment, asyncExecuteProp);
-        DingerConfig defaultDingerConfig = new DingerConfig();
-        defaultDingerConfig.setDingerType(dingerType);
-        defaultDingerConfig.setTokenId(tokenId);
-        defaultDingerConfig.setSecret(secret);
-        if (decrypt) {
-            defaultDingerConfig.setDecryptKey(
-                    environment.getProperty(decryptKeyProp)
-            );
-        }
-        defaultDingerConfig.setAsyncExecute(async);
+            String tokenId = environment.getProperty(tokenIdProp);
+            String secret = environment.getProperty(secretProp);
+            boolean decrypt = getProperty(environment, decryptProp);
+            boolean async = getProperty(environment, asyncExecuteProp);
+            DingerConfig defaultDingerConfig = new DingerConfig(tokenId);
+            defaultDingerConfig.setDingerType(dingerType);
+            defaultDingerConfig.setSecret(secret);
+            if (decrypt) {
+                defaultDingerConfig.setDecryptKey(
+                        environment.getProperty(decryptKeyProp)
+                );
+            }
+            defaultDingerConfig.setAsyncExecute(async);
 
-        defaultDingerConfig.check();
-        return defaultDingerConfig;
+            defaultDingerConfig.check();
+            defaultDingerConfigs.put(dingerType, defaultDingerConfig);
+        }
     }
 
     /**

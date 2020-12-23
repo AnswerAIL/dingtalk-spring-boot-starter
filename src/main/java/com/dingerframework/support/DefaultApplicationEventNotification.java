@@ -29,7 +29,7 @@ import java.util.Optional;
  * @author Jaemon
  * @since 1.0
  */
-public class DefaultApplicationEventNotification extends Notification {
+public class DefaultApplicationEventNotification extends MonitorEventNotification {
     @Override
     public String successMessage(ApplicationReadyEvent event, String projectId) {
         long startUpTime = (event.getTimestamp() - ApplicationEventTimeTable.startTime()) / 1000;

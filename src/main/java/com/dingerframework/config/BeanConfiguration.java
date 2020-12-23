@@ -18,14 +18,15 @@ package com.dingerframework.config;
 import com.dingerframework.sign.DingTalkSignAlgorithm;
 import com.dingerframework.sign.DingerSignAlgorithm;
 import com.dingerframework.support.*;
-import com.dingerframework.multi.MultiDingerAlgorithmRegister;
-import com.jaemon.dingerframework.support.*;
+import com.dingerframework.multi.MultiDingerAlgorithmInjectRegister;
+import com.dingerframework.support.client.DingerHttpClient;
+import com.dingerframework.support.client.DingerHttpTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.dingerframework.constant.DkConstant.MARKDOWN_MESSAGE;
-import static com.dingerframework.constant.DkConstant.TEXT_MESSAGE;
+import static com.dingerframework.constant.DingerConstant.MARKDOWN_MESSAGE;
+import static com.dingerframework.constant.DingerConstant.TEXT_MESSAGE;
 
 /**
  *  实例化bean配置
@@ -37,10 +38,9 @@ import static com.dingerframework.constant.DkConstant.TEXT_MESSAGE;
 public class BeanConfiguration {
 
     @Bean
-    public HttpClient httpClient() {
-        return new HttpClient();
+    public DingerHttpClient dingerHttpClient() {
+        return new DingerHttpTemplate();
     }
-
 
     /**
      * 默认Text消息格式配置
@@ -99,19 +99,25 @@ public class BeanConfiguration {
         return new DefaultDkCallable();
     }
 
+    @Bean
+    @ConditionalOnMissingBean(DingerExceptionCallback.class)
+    public DingerExceptionCallback dingerExceptionCallback() {
+        return new DefaultDingerExceptionCallback();
+    }
+
     /**
-     * notification(default)
+     * 自定义监控事件
      *
      * @return notification instance
      */
     @Bean
-    @ConditionalOnMissingBean(Notification.class)
-    public Notification notification() {
+    @ConditionalOnMissingBean(MonitorEventNotification.class)
+    public MonitorEventNotification monitorEventNotification() {
         return new DefaultApplicationEventNotification();
     }
 
     @Bean
-    public static MultiDingerAlgorithmRegister multiDingerAlgorithmRegister() {
-        return new MultiDingerAlgorithmRegister();
+    public static MultiDingerAlgorithmInjectRegister multiDingerAlgorithmInjectRegister() {
+        return new MultiDingerAlgorithmInjectRegister();
     }
 }

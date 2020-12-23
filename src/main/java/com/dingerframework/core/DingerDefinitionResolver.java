@@ -15,7 +15,7 @@
  */
 package com.dingerframework.core;
 
-import com.dingerframework.constant.DkConstant;
+import com.dingerframework.constant.DingerConstant;
 import com.dingerframework.core.annatations.AsyncExecute;
 import com.dingerframework.core.annatations.DingerConfiguration;
 import com.dingerframework.core.annatations.DingerMarkdown;
@@ -39,7 +39,7 @@ import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static com.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
+import static com.dingerframework.constant.DingerConstant.SPOT_SEPERATOR;
 import static com.dingerframework.entity.enums.ExceptionEnum.DINER_XML_ANALYSIS_EXCEPTION;
 
 /**
@@ -50,7 +50,7 @@ import static com.dingerframework.entity.enums.ExceptionEnum.DINER_XML_ANALYSIS_
  */
 public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
     private static final Logger log = LoggerFactory.getLogger(DingerDefinitionResolver.class);
-    protected static final String DINGER_PROPERTIES_PREFIX = DkConstant.DINGER_PROPERTIES_PREFIX;
+    protected static final String DINGER_PROPERTIES_PREFIX = DingerConstant.DINGER_PROPERTIES_PREFIX;
 
     /**
      * 解析处理
@@ -169,7 +169,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
             DingerConfiguration dingerConfiguration = dingerClass.getAnnotation(DingerConfiguration.class);
             String tokenId = dingerConfiguration.tokenId();
             if (DingerUtils.isNotEmpty(tokenId)) {
-                dingerConfig.setTokenId(dingerConfiguration.tokenId());
+                dingerConfig.setTokenId(tokenId);
                 dingerConfig.setDecryptKey(dingerConfiguration.decryptKey());
                 dingerConfig.setSecret(dingerConfiguration.secret());
             }

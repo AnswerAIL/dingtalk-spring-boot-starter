@@ -16,7 +16,7 @@
 package com.dingerframework.config;
 
 import com.dingerframework.DingerRobot;
-import com.dingerframework.constant.DkConstant;
+import com.dingerframework.constant.DingerConstant;
 import com.dingerframework.entity.DkThreadPoolProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -37,19 +37,19 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration
 @ConditionalOnProperty(
-        prefix = DkConstant.DINGER_PROP_PREFIX,
+        prefix = DingerConstant.DINGER_PROP_PREFIX,
         name = "enabled",
         havingValue = "true",
         matchIfMissing = true
 )
 @ConditionalOnBean(DingerRobot.class)
 //@Conditional(AsyncCondition.class)
-@ConditionalOnMissingBean(name = DkConstant.DINGTALK_EXECUTOR)
+@ConditionalOnMissingBean(name = DingerConstant.DINGER_EXECUTOR)
 @EnableConfigurationProperties({DkThreadPoolProperties.class})
-public class DkThreadPoolConfig {
+public class DingerThreadPoolConfig {
 
 
-    @Bean(name = DkConstant.DINGTALK_EXECUTOR)
+    @Bean(name = DingerConstant.DINGER_EXECUTOR)
     public Executor dingTalkExecutor(DkThreadPoolProperties threadPoolProperties) {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 核心线程数

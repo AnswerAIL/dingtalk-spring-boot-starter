@@ -15,7 +15,6 @@
  */
 package com.dingerframework.support;
 
-import com.dingerframework.core.entity.DingerProperties;
 import com.dingerframework.core.entity.enums.DingerType;
 
 import java.util.List;
@@ -31,8 +30,8 @@ public interface CustomMessage {
     /**
      * 自定义消息
      *
-     * @param dingerProperties
-     *              dingtalk参数
+     * @param projectId
+     *              projectId
      * @param title
      *              标题-{@link DingerType#DINGTALK}Markdown使用
      * @param keyword
@@ -44,6 +43,6 @@ public interface CustomMessage {
      * @return
      *              消息内容字符串
      */
-    String message(DingerProperties dingerProperties, String title, String keyword, String content, List<String> phones);
+    String message(String projectId, String title, String keyword, String content, List<String> phones);
 
 }

@@ -15,10 +15,7 @@
  */
 package com.dingerframework.entity;
 
-import com.dingerframework.core.entity.DingerProperties;
 import com.dingerframework.exception.DingerException;
-import lombok.Builder;
-import lombok.Data;
 
 /**
  *  异常回调信息实体
@@ -26,18 +23,12 @@ import lombok.Data;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@Builder
-public class DingerCallback {
+public class DingerCallback<T> {
 
     /**
      * 处理唯一id
      */
     private String dkid;
-    /**
-     * dingTalk配置信息
-     */
-    private DingerProperties dingerProperties;
     /**
      * 检索关键字(方便日志查询)
      */
@@ -45,10 +36,51 @@ public class DingerCallback {
     /**
      * 通知信息
      */
-    private String message;
+    private T message;
     /**
      * 异常对象
      */
     private DingerException ex;
 
+    public DingerCallback() {
+    }
+
+    public DingerCallback(String dkid, String keyword, T message, DingerException ex) {
+        this.dkid = dkid;
+        this.keyword = keyword;
+        this.message = message;
+        this.ex = ex;
+    }
+
+    public String getDkid() {
+        return dkid;
+    }
+
+    public void setDkid(String dkid) {
+        this.dkid = dkid;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public T getMessage() {
+        return message;
+    }
+
+    public void setMessage(T message) {
+        this.message = message;
+    }
+
+    public DingerException getEx() {
+        return ex;
+    }
+
+    public void setEx(DingerException ex) {
+        this.ex = ex;
+    }
 }

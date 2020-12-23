@@ -15,6 +15,8 @@
  */
 package com.dingerframework.core.annatations;
 
+import com.dingerframework.core.entity.enums.DingerType;
+
 import java.lang.annotation.*;
 
 /**
@@ -24,7 +26,14 @@ import java.lang.annotation.*;
  * @since 2.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Documented
 public @interface Dinger {
+    /**
+     * 指定使用的Dinger
+     *
+     * @return
+     *         返回Dinger {@link DingerType}
+     */
+    DingerType value();
 }

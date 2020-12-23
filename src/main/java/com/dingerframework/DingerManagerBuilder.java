@@ -15,19 +15,19 @@
  */
 package com.dingerframework;
 
-import com.dingerframework.config.HttpClient;
 import com.dingerframework.core.entity.enums.MessageSubType;
 import com.dingerframework.sign.DingerSignAlgorithm;
 import com.dingerframework.support.DingerExceptionCallback;
 import com.dingerframework.support.CustomMessage;
 import com.dingerframework.support.DingerAsyncCallback;
 import com.dingerframework.support.DingerIdGenerator;
+import com.dingerframework.support.client.DingerHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.concurrent.Executor;
 
-import static com.dingerframework.constant.DkConstant.*;
+import static com.dingerframework.constant.DingerConstant.*;
 
 /**
  *  DingTalk Manager Builder
@@ -37,7 +37,7 @@ import static com.dingerframework.constant.DkConstant.*;
  */
 public class DingerManagerBuilder {
     @Autowired
-    HttpClient httpClient;
+    DingerHttpClient dingerHttpClient;
     @Autowired
     DingerExceptionCallback dingerExceptionCallback;
     @Autowired
@@ -51,7 +51,7 @@ public class DingerManagerBuilder {
     @Autowired
     DingerIdGenerator dingerIdGenerator;
     @Autowired(required = false)
-    @Qualifier(DINGTALK_EXECUTOR)
+    @Qualifier(DINGER_EXECUTOR)
     Executor dingTalkExecutor;
     @Autowired
     DingerAsyncCallback dingerAsyncCallback;
@@ -62,12 +62,12 @@ public class DingerManagerBuilder {
     /**
      * custom http client
      *
-     * @param httpClient httpClient
+     * @param dingerHttpClient dingerHttpClient
      * @return this
      */
-    public DingerManagerBuilder httpClient(HttpClient httpClient) {
-        if (httpClient != null) {
-            this.httpClient = httpClient;
+    public DingerManagerBuilder dingerHttpClient(DingerHttpClient dingerHttpClient) {
+        if (dingerHttpClient != null) {
+            this.dingerHttpClient = dingerHttpClient;
         }
         return this;
     }

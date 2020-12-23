@@ -62,13 +62,8 @@ public abstract class AbstractDingerSender
      * @param message message
      * @param ex ex
      */
-    void exceptionCallback(String dingerId, String keyword, String message, DingerException ex) {
-        DingerCallback dkExCallable = DingerCallback.builder()
-                .dkid(dingerId)
-                .dingerProperties(dingerProperties)
-                .keyword(keyword)
-                .message(message)
-                .ex(ex).build();
+    <T> void exceptionCallback(String dingerId, String keyword, T message, DingerException ex) {
+        DingerCallback dkExCallable = new DingerCallback(dingerId, keyword, message, ex);
         dingTalkManagerBuilder.dingerExceptionCallback.execute(dkExCallable);
     }
 }

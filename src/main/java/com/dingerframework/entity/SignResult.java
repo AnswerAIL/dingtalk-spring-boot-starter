@@ -15,8 +15,6 @@
  */
 package com.dingerframework.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 /**
  * 签名返回体
@@ -24,8 +22,6 @@ import lombok.Data;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@AllArgsConstructor
 public class SignResult extends SignBase {
     /**
      * 秘钥
@@ -35,6 +31,30 @@ public class SignResult extends SignBase {
      * 时间戳
      */
     private Long timestamp;
+
+    public SignResult() {
+    }
+
+    public SignResult(String sign, Long timestamp) {
+        this.sign = sign;
+        this.timestamp = timestamp;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     @Override
     public String transfer() {

@@ -20,7 +20,7 @@ import com.dingerframework.DingerSender;
 import com.dingerframework.core.entity.DingerProperties;
 import com.dingerframework.entity.DingerResult;
 import com.dingerframework.core.entity.MsgType;
-import com.dingerframework.support.Notification;
+import com.dingerframework.support.MonitorEventNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
@@ -28,8 +28,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 
-import static com.dingerframework.constant.DkConstant.DK_PREFIX;
-import static com.dingerframework.constant.DkConstant.EXIT_KEYWORD;
+import static com.dingerframework.constant.DingerConstant.DINGER_PREFIX;
+import static com.dingerframework.constant.DingerConstant.EXIT_KEYWORD;
 import static com.dingerframework.listeners.ApplicationEventTimeTable.DISABLED_DINTALK_MONITOR;
 
 /**
@@ -68,11 +68,11 @@ public class ExitEventListener
                         // exclude start-up failed
                         && ApplicationEventTimeTable.successTime() > 0) {
                     DingerSender dingTalkRobot = applicationContext.getBean(DingerSender.class);
-                    Notification notification = applicationContext.getBean(Notification.class);
+                    MonitorEventNotification monitorEventNotification = applicationContext.getBean(MonitorEventNotification.class);
                     String projectId = properties.getProjectId();
-                    projectId = projectId == null ? DK_PREFIX : projectId;
+                    projectId = projectId == null ? DINGER_PREFIX : projectId;
 
-                    MsgType message = notification.exit(event, projectId);
+                    MsgType message = monitorEventNotification.exit(event, projectId);
                     String keyword = projectId + EXIT_KEYWORD;
                     DingerResult result = dingTalkRobot.send(keyword, message);
                     if (debugEnabled) {

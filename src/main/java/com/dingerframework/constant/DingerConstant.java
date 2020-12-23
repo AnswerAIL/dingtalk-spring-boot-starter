@@ -21,13 +21,13 @@ package com.dingerframework.constant;
  * @author Jaemon
  * @since 1.0
  */
-public interface DkConstant {
+public interface DingerConstant {
 
-    String DK_PREFIX = "DK";
+    String DINGER_PREFIX = "D";
     /**
      * 默认线程池中线程名称前缀
      */
-    String DEFAULT_THREAD_NAME_PREFIX = "dkt-";
+    String DEFAULT_THREAD_NAME_PREFIX = "dinger-";
 
 
     /**
@@ -41,7 +41,9 @@ public interface DkConstant {
     /**
      * bean name
      */
-    String DINGTALK_EXECUTOR = "dingerExecutor";
+    String DINGER_EXECUTOR = "dingerExecutor";
+    /** 自定义restTemplate名称 */
+    String DINGER_REST_TEMPLATE = "dingerRestTemplate";
 
     String SUCCESS_KEYWORD = "_SUCCESS";
     String FAILED_KEYWORD = "_FAILED";

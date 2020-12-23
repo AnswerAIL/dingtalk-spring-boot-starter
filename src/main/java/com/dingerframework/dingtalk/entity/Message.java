@@ -15,11 +15,6 @@
  */
 package com.dingerframework.dingtalk.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,14 +24,24 @@ import java.util.List;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
 public class Message extends DingTalkMessage implements Serializable {
     private At at;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+    public Message() {
+    }
+
+    public Message(At at) {
+        this.at = at;
+    }
+
+    public At getAt() {
+        return at;
+    }
+
+    public void setAt(At at) {
+        this.at = at;
+    }
+
     public static class At implements Serializable {
         /**
          * 被@人的手机号(在content里添加@人的手机号)
@@ -47,12 +52,36 @@ public class Message extends DingTalkMessage implements Serializable {
          * */
         private Boolean isAtAll = false;
 
+        public At() {
+        }
+
         public At(List<String> atMobiles) {
             this.atMobiles = atMobiles;
         }
 
         public At(Boolean isAtAll) {
             this.isAtAll = isAtAll;
+        }
+
+        public At(List<String> atMobiles, Boolean isAtAll) {
+            this.atMobiles = atMobiles;
+            this.isAtAll = isAtAll;
+        }
+
+        public List<String> getAtMobiles() {
+            return atMobiles;
+        }
+
+        public void setAtMobiles(List<String> atMobiles) {
+            this.atMobiles = atMobiles;
+        }
+
+        public Boolean getAtAll() {
+            return isAtAll;
+        }
+
+        public void setAtAll(Boolean atAll) {
+            isAtAll = atAll;
         }
     }
 }

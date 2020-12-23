@@ -20,8 +20,6 @@ import com.dingerframework.core.DingerDefinitionGenerator;
 import com.dingerframework.core.DingerDefinitionGeneratorContext;
 import com.dingerframework.core.DingerDefinitionHandler;
 import com.dingerframework.core.entity.enums.DingerType;
-import com.dingerframework.core.entity.enums.MessageSubType;
-import com.jaemon.dingerframework.core.*;
 import com.dingerframework.core.annatations.DingerMarkdown;
 import com.dingerframework.core.annatations.DingerText;
 import com.dingerframework.core.entity.enums.DingerDefinitionType;
@@ -41,8 +39,7 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerText> context) {
-            DingerDefinition dingerDefinition = dingerTextHandler(context);
-            dingerDefinition.setDingerType(DingerType.WETALK);
+            DingerDefinition dingerDefinition = dingerTextHandler(DingerType.WETALK, context);
 
             return dingerDefinition;
         }
@@ -55,8 +52,7 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
     public static class AnnotationMarkDown extends DingerDefinitionGenerator<DingerMarkdown> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
-            DingerDefinition dingerDefinition = dingerMarkdownHandler(context);
-            dingerDefinition.setDingerType(DingerType.WETALK);
+            DingerDefinition dingerDefinition = dingerMarkdownHandler(DingerType.WETALK, context);
 
             return dingerDefinition;
         }
@@ -71,7 +67,6 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
             DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.WETALK_XML_TEXT, context);
-            dingerDefinition.setMessageSubType(MessageSubType.TEXT);
             return dingerDefinition;
         }
     }
@@ -84,7 +79,6 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
             DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.WETALK_XML_MARKDOWN, context);
-            dingerDefinition.setMessageSubType(MessageSubType.MARKDOWN);
             return dingerDefinition;
         }
     }

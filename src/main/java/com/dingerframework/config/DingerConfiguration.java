@@ -17,6 +17,7 @@ package com.dingerframework.config;
 
 import com.dingerframework.DingerManagerBuilder;
 import com.dingerframework.DingerRobot;
+import com.dingerframework.core.DingerConfigurerAdapter;
 import com.dingerframework.core.entity.DingerProperties;
 import com.dingerframework.exception.ConfigurationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +35,6 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0
  */
 @Configuration
-//@ConditionalOnWebApplication
 @ConditionalOnClass(DingerRobot.class)
 @EnableConfigurationProperties(DingerProperties.class)
 public class DingerConfiguration {

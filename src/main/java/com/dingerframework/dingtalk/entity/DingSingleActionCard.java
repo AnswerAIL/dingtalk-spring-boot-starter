@@ -16,10 +16,8 @@
 package com.dingerframework.dingtalk.entity;
 
 import com.dingerframework.dingtalk.entity.enums.DingTalkMsgType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * 整体跳转ActionCard类型
@@ -27,8 +25,6 @@ import lombok.NoArgsConstructor;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
 public class DingSingleActionCard extends DingTalkMessage {
 
     /**
@@ -40,10 +36,15 @@ public class DingSingleActionCard extends DingTalkMessage {
         setMsgtype(DingTalkMsgType.ACTION_CARD.type());
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SingleActionCard {
+    public SingleActionCard getActionCard() {
+        return actionCard;
+    }
+
+    public void setActionCard(SingleActionCard actionCard) {
+        this.actionCard = actionCard;
+    }
+
+    public static class SingleActionCard implements Serializable {
         /**
          * 首屏会话透出的展示内容
          */
@@ -64,5 +65,45 @@ public class DingSingleActionCard extends DingTalkMessage {
          * 点击singleTitle按钮触发的URL
          */
         private String singleURL;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getBtnOrientation() {
+            return btnOrientation;
+        }
+
+        public void setBtnOrientation(String btnOrientation) {
+            this.btnOrientation = btnOrientation;
+        }
+
+        public String getSingleTitle() {
+            return singleTitle;
+        }
+
+        public void setSingleTitle(String singleTitle) {
+            this.singleTitle = singleTitle;
+        }
+
+        public String getSingleURL() {
+            return singleURL;
+        }
+
+        public void setSingleURL(String singleURL) {
+            this.singleURL = singleURL;
+        }
     }
 }

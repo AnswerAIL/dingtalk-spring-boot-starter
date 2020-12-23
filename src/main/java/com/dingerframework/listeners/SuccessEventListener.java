@@ -16,10 +16,10 @@
 package com.dingerframework.listeners;
 
 import com.dingerframework.DingerSender;
-import com.dingerframework.constant.DkConstant;
+import com.dingerframework.constant.DingerConstant;
 import com.dingerframework.core.entity.DingerProperties;
 import com.dingerframework.core.entity.MsgType;
-import com.dingerframework.support.Notification;
+import com.dingerframework.support.MonitorEventNotification;
 import com.dingerframework.entity.DingerResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,12 +62,12 @@ public class SuccessEventListener implements ApplicationListener<ApplicationRead
             if (properties.isEnabled()
                     && properties.getMonitor().isSuccess()) {
                 DingerSender dingTalkRobot = applicationContext.getBean(DingerSender.class);
-                Notification notification = applicationContext.getBean(Notification.class);
+                MonitorEventNotification monitorEventNotification = applicationContext.getBean(MonitorEventNotification.class);
                 String projectId = properties.getProjectId();
-                projectId = projectId == null ? DkConstant.DK_PREFIX : projectId;
+                projectId = projectId == null ? DingerConstant.DINGER_PREFIX : projectId;
 
-                MsgType message = notification.success(event, projectId);
-                String keyword = projectId + DkConstant.SUCCESS_KEYWORD;
+                MsgType message = monitorEventNotification.success(event, projectId);
+                String keyword = projectId + DingerConstant.SUCCESS_KEYWORD;
                 DingerResult result = dingTalkRobot.send(keyword, message);
                 if (debugEnabled) {
                     log.debug("keyword={}, result={}.", keyword, result.toString());

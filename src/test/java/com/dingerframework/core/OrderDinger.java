@@ -16,7 +16,6 @@
 package com.dingerframework.core;
 
 import com.dingerframework.core.annatations.*;
-import com.jaemon.dingerframework.core.annatations.*;
 import com.dingerframework.entity.DingerResult;
 
 import java.math.BigDecimal;

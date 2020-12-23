@@ -27,7 +27,7 @@ import org.springframework.context.event.ContextClosedEvent;
  * @author Jaemon
  * @since 1.0
  */
-public abstract class Notification {
+public abstract class MonitorEventNotification {
 
     /**
      * success Message

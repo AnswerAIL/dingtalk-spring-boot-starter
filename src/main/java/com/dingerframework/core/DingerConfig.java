@@ -38,16 +38,26 @@ public class DingerConfig {
     /** 异步执行 */
     private Boolean asyncExecute;
 
-    public DingerConfig() {
+    protected DingerConfig() {
     }
 
     public DingerConfig(String tokenId) {
         this.tokenId = tokenId;
     }
 
+    public DingerConfig(DingerType dingerType, String tokenId) {
+        this(tokenId);
+        this.dingerType = dingerType;
+    }
+
     public DingerConfig(String tokenId, String secret) {
         this.tokenId = tokenId;
         this.secret = secret;
+    }
+
+    public DingerConfig(DingerType dingerType, String tokenId, String secret) {
+        this(tokenId, secret);
+        this.dingerType = dingerType;
     }
 
     public DingerConfig(String tokenId, String secret, String decryptKey) {
@@ -56,11 +66,21 @@ public class DingerConfig {
         this.secret = secret;
     }
 
-    public DingerConfig(String tokenId, String secret, String decryptKey, Boolean asyncExecute) {
+    public DingerConfig(DingerType dingerType, String tokenId, String secret, String decryptKey) {
+        this(tokenId, secret, decryptKey);
+        this.dingerType = dingerType;
+    }
+
+    public DingerConfig(String tokenId, String secret, String decryptKey, boolean asyncExecute) {
         this.tokenId = tokenId;
         this.decryptKey = decryptKey;
         this.secret = secret;
         this.asyncExecute = asyncExecute;
+    }
+
+    public DingerConfig(DingerType dingerType, String tokenId, String secret, String decryptKey, boolean asyncExecute) {
+        this(tokenId, secret, decryptKey, asyncExecute);
+        this.dingerType = dingerType;
     }
 
     /**
@@ -98,9 +118,8 @@ public class DingerConfig {
         // first this
         if (DingerUtils.isEmpty(this.tokenId) &&
                 DingerUtils.isNotEmpty(dingerConfig.tokenId)) {
-            this.tokenId = dingerConfig.tokenId;
-
             // tokenId & decryptKey & secret 需配套出现
+            this.tokenId = dingerConfig.tokenId;
             this.decryptKey = dingerConfig.decryptKey;
             this.secret = dingerConfig.secret;
         }
@@ -162,6 +181,6 @@ public class DingerConfig {
 
     @Override
     public String toString() {
-        return "DingerConfig(dingerType=" + this.getDingerType() + ", tokenId=" + this.getTokenId() + ", decryptKey=" + this.getDecryptKey() + ", secret=" + this.getSecret() + ", asyncExecute=" + this.getAsyncExecute() + ")";
+        return "DingerConfig(dingerType=" + this.dingerType + ", tokenId=" + this.tokenId + ", decryptKey=" + this.decryptKey + ", secret=" + this.secret + ", asyncExecute=" + this.asyncExecute + ")";
     }
 }

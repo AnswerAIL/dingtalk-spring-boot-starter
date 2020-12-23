@@ -16,8 +16,8 @@
 package com.dingerframework.wetalk.entity;
 
 import com.dingerframework.wetalk.entity.enums.WeTalkMsgType;
-import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,7 +26,6 @@ import java.util.List;
  * @author Jaemon
  * @since 4.0
  */
-@Data
 public class WeNews extends WeTalkMessage {
     /** 图文类型 */
     private News news;
@@ -35,13 +34,28 @@ public class WeNews extends WeTalkMessage {
         setMsgtype(WeTalkMsgType.NEWS.type());
     }
 
-    @Data
-    public static class News {
+    public News getNews() {
+        return news;
+    }
+
+    public void setNews(News news) {
+        this.news = news;
+    }
+
+
+    public static class News implements Serializable {
         /** 图文消息，一个图文消息支持1到8条图文 */
         private List<Article> articles;
 
-        @Data
-        public static class Article {
+        public List<Article> getArticles() {
+            return articles;
+        }
+
+        public void setArticles(List<Article> articles) {
+            this.articles = articles;
+        }
+
+        public static class Article implements Serializable {
             /** 标题，不超过128个字节，超过会自动截断 */
             private String title;
             /** 描述，不超过512个字节，超过会自动截断 */
@@ -50,6 +64,38 @@ public class WeNews extends WeTalkMessage {
             private String url;
             /** 图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图 1068*455，小图150*150。 */
             private String picurl;
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getDescription() {
+                return description;
+            }
+
+            public void setDescription(String description) {
+                this.description = description;
+            }
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
+
+            public String getPicurl() {
+                return picurl;
+            }
+
+            public void setPicurl(String picurl) {
+                this.picurl = picurl;
+            }
         }
     }
 }

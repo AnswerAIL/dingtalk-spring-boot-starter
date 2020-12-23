@@ -16,7 +16,7 @@
 package com.dingerframework.wetalk.entity.enums;
 
 /**
- * WeTalk消息类型
+ * WeTalk支持的消息类型
  *
  * @author Jaemon
  * @since 4.0

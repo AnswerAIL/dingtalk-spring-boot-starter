@@ -28,7 +28,7 @@ public class MultiDingerRefresh extends DingerRefresh {
     protected static void multiDingerRefresh() {
         dingerFresh();
 
-        MultiDingerAlgorithmRegister.clear();
+        MultiDingerAlgorithmInjectRegister.clear();
         MultiDingerConfigContainer.clear();
     }
 

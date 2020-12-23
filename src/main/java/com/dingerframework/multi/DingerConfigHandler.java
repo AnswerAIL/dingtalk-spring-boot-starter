@@ -16,8 +16,10 @@
 package com.dingerframework.multi;
 
 import com.dingerframework.core.DingerConfig;
+import com.dingerframework.core.entity.enums.DingerType;
 import com.dingerframework.multi.algorithm.AlgorithmHandler;
 import com.dingerframework.multi.algorithm.DefaultHandler;
+import com.dingerframework.multi.algorithm.DingerHandler;
 
 import java.util.List;
 
@@ -28,6 +30,14 @@ import java.util.List;
  * @since 3.0
  */
 public interface DingerConfigHandler {
+
+    /**
+     * 指定当前handler处理的dinger
+     *
+     * @return
+     *          dinger {@link DingerType}
+     */
+    DingerType dinger();
 
     /**
      * 多钉钉机器人配置
@@ -46,7 +56,7 @@ public interface DingerConfigHandler {
      * @return algorithmHandler {@link AlgorithmHandler}
      * */
     default Class<? extends AlgorithmHandler> algorithmHandler() {
-        return DefaultHandler.class;
+        return DingerHandler.class;
     }
 
 }

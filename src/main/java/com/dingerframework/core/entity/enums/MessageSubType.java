@@ -49,12 +49,12 @@ public enum MessageSubType {
 
                 return message;
             } else {
-                WeText weText = new WeText(content);
-
+                WeText.Text text = new WeText.Text(content);
+                WeText weText = new WeText(text);
                 if (atAll) {
-                    weText.setMentioned_mobile_list(Arrays.asList(WETALK_AT_ALL));
+                    text.setMentioned_mobile_list(Arrays.asList(WETALK_AT_ALL));
                 } else if (!phones.isEmpty()) {
-                    weText.setMentioned_mobile_list(phones);
+                    text.setMentioned_mobile_list(phones);
                 }
                 return weText;
             }
@@ -73,7 +73,8 @@ public enum MessageSubType {
 
                 return message;
             } else {
-                WeMarkdown weMarkdown = new WeMarkdown(content);
+                WeMarkdown.Markdown markdown = new WeMarkdown.Markdown(content);
+                WeMarkdown weMarkdown = new WeMarkdown(markdown);
                 return weMarkdown;
             }
         }

@@ -15,7 +15,7 @@
  */
 package com.dingerframework.support;
 
-import com.dingerframework.constant.DkConstant;
+import com.dingerframework.constant.DingerConstant;
 
 import java.util.UUID;
 
@@ -28,7 +28,7 @@ import java.util.UUID;
 public class DefaultDingerIdGenerator implements DingerIdGenerator {
     @Override
     public String dingerId() {
-        StringBuilder dkid = new StringBuilder(DkConstant.DK_PREFIX);
+        StringBuilder dkid = new StringBuilder(DingerConstant.DINGER_PREFIX);
         String uuid = UUID.randomUUID()
                 .toString()
                 .replaceAll("-", "")

@@ -19,7 +19,6 @@ import com.dingerframework.core.annatations.DingerScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.context.ApplicationListener;
 
 import java.util.HashSet;
@@ -56,9 +55,5 @@ public class StartEventListener implements ApplicationListener<ApplicationStarti
             }
         }
         ApplicationEventTimeTable.primarySources = primarySources;
-
-        ApplicationHome applicationHome = new ApplicationHome();
-        ApplicationEventTimeTable.applicationHome = applicationHome;
-        log.info("applicationHome={}", applicationHome.toString());
     }
 }

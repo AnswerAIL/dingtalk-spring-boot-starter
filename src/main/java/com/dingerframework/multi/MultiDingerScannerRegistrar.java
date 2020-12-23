@@ -15,8 +15,10 @@
  */
 package com.dingerframework.multi;
 
-import com.dingerframework.constant.DkConstant;
-import com.dingerframework.listeners.ApplicationEventTimeTable;
+import com.dingerframework.constant.DingerConstant;
+import com.dingerframework.core.entity.enums.DingerType;
+import com.dingerframework.entity.enums.ExceptionEnum;
+import com.dingerframework.listeners.DingerListenersProperty;
 import com.dingerframework.multi.entity.MultiDingerAlgorithmDefinition;
 import com.dingerframework.core.DingerConfig;
 import com.dingerframework.exception.DingerException;
@@ -43,9 +45,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static com.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
+import static com.dingerframework.constant.DingerConstant.SPOT_SEPERATOR;
 import static com.dingerframework.entity.enums.ExceptionEnum.GLOBAL_MULTIDINGER_CONFIG_EXCEPTION;
 import static com.dingerframework.entity.enums.ExceptionEnum.MULTIDINGER_ALGORITHM_EXCEPTION;
 import static com.dingerframework.multi.MultiDingerConfigContainer.GLOABL_KEY;
@@ -56,14 +57,17 @@ import static com.dingerframework.multi.MultiDingerConfigContainer.GLOABL_KEY;
  * @author Jaemon
  * @since 3.0
  */
-public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistrar, Ordered {
+public class MultiDingerScannerRegistrar
+        extends DingerListenersProperty
+        implements ImportBeanDefinitionRegistrar, Ordered
+{
     private static final Logger log = LoggerFactory.getLogger(MultiDingerScannerRegistrar.class);
     /**
      * 算法{@link AlgorithmHandler}容器
      *
      * <blockquote>
      *     {<br>
-     *         key: dingerClassName | {@link MultiDingerConfigContainer#GLOABL_KEY}(key) + {@link DkConstant#SPOT_SEPERATOR} + {@link AlgorithmHandler}.simpleName<br>
+     *         key: dingerClassName | {@link MultiDingerConfigContainer#GLOABL_KEY}(key) + {@link DingerConstant#SPOT_SEPERATOR} + {@link AlgorithmHandler}.simpleName<br>
      *         value: {@link MultiDingerAlgorithmDefinition}<br>
      *     }<br>
      * </blockquote>
@@ -86,11 +90,12 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
             );
 
             Class<? extends DingerConfigHandler> value = annotationAttributes.getClass("value");
+            log.info("multi dinger register and is it global register? {}-{}.", !value.isInterface(), value.getName());
             // 指定多机器人配置处理逻辑
             if (value.isInterface()) {
                 if (DingerConfigHandler.class.equals(value)) {
                     // 处理需要执行MultiDinger逻辑的dingerClass
-                    List<Class<?>> dingerClasses = ApplicationEventTimeTable.dingerClasses();
+                    List<Class<?>> dingerClasses = dingerClasses();
                     if (dingerClasses.isEmpty()) {
                         log.warn("dinger class is empty, so no need to deal with multiDinger.");
                         return;
@@ -115,7 +120,7 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
             }
 
         } finally {
-            ApplicationEventTimeTable.emptyDingerClasses();
+            emptyDingerClasses();
         }
 
     }
@@ -134,22 +139,25 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
 
         for (Class<?> dingerClass : dingerClasses) {
             if (dingerClass.isAnnotationPresent(MultiHandler.class)) {
-                if (debugEnabled) {
-                    log.debug("dingerClass={} configured with MultiDinger annotation.", dingerClass.getSimpleName());
-                }
                 MultiHandler multiDinger = dingerClass.getAnnotation(MultiHandler.class);
                 Class<? extends DingerConfigHandler> dingerConfigHandler = multiDinger.value();
                 String beanName = dingerConfigHandler.getSimpleName();
                 // 如果DingerClass指定的MultiHandler对应的处理器为接口，则直接跳过
                 if (dingerConfigHandler.isInterface()) {
-                    log.warn("dingerClass={}  handler className={} is interface and skip.",
+                    log.warn("dingerClass={} handler className={} is interface and skip.",
                             dingerClass.getSimpleName(), beanName);
                     continue;
                 }
                 String key = dingerClass.getName();
                 DingerConfigHandler handler = ClassUtils.newInstance(dingerConfigHandler);
+                DingerType dinger = handler.dinger();
 
-                registerHandler(registry, key, handler);
+                registerHandler(registry, dinger + DingerConstant.SPOT_SEPERATOR + key, handler);
+
+                if (debugEnabled) {
+                    log.debug("regiseter multi dinger for dingerClass={} and dingerConfigHandler={}.",
+                            dingerClass.getSimpleName(), beanName);
+                }
             }
         }
     }
@@ -166,6 +174,7 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
      *          dingerClass指定的multiHandler处理器
      */
     private void registerHandler(BeanDefinitionRegistry registry, String key, DingerConfigHandler dingerConfigHandler) {
+        DingerType dinger = dingerConfigHandler.dinger();
         // 获取当前指定算法类名, 默认四种，或使用自定义
         Class<? extends AlgorithmHandler> algorithm = dingerConfigHandler.algorithmHandler();
         // if empty? use default dinger config
@@ -175,25 +184,27 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
             throw new DingerException(MULTIDINGER_ALGORITHM_EXCEPTION);
         }
 
-        // check dingerConfig
-        List<DingerConfig> dcs =
-                dingerConfigs
-                        .stream()
-                        .filter(
-                                e -> DingerUtils.isNotEmpty(
-                                        e.getTokenId()
-                                )
-                        )
-                        .collect(Collectors.toList());
+        dingerConfigs.stream().forEach(e -> {
 
+        });
+        for (int i = 0; i < dingerConfigs.size(); i++) {
+            DingerConfig dingerConfig = dingerConfigs.get(i);
+            if (DingerUtils.isEmpty(dingerConfig.getTokenId()) || dinger != dingerConfig.getDingerType()) {
+                throw new DingerException(algorithm.getSimpleName() + "第" + i + "个dingerConfig配置异常",
+                        ExceptionEnum.MULTI_DINGERCONFIGS_EXCEPTION);
+            }
+        }
+
+        // 目前只支持属性方式注入, 可优化支持构造器注入和set注入
         long injectionCnt = Arrays.stream(algorithm.getDeclaredFields()).filter(e -> e.isAnnotationPresent(Autowired.class)).count();
         // 如果无注入对象，直接反射算法处理器对象
         AnalysisEnum mode = AnalysisEnum.REFLECT;
+        // 如果无需注入属性，直接采用反射进行实例化并注册到容器
         if (injectionCnt == 0) {
             // create algorithm instance
             AlgorithmHandler algorithmHandler = ClassUtils.newInstance(algorithm);
             MultiDingerConfigContainer.INSTANCE.put(
-                    key, new MultiDingerConfig(algorithmHandler, dcs)
+                    key, new MultiDingerConfig(algorithmHandler, dingerConfigs)
             );
         } else {
             BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(algorithm);
@@ -205,7 +216,7 @@ public class MultiDingerScannerRegistrar implements ImportBeanDefinitionRegistra
             String beanName = key + SPOT_SEPERATOR + algorithm.getSimpleName();
             registry.registerBeanDefinition(beanName, beanDefinition);
             MULTIDINGER_ALGORITHM_DEFINITION_MAP.put(
-                    beanName, new MultiDingerAlgorithmDefinition(key, algorithm, dcs)
+                    beanName, new MultiDingerAlgorithmDefinition(key, algorithm, dingerConfigs)
             );
             mode = AnalysisEnum.SPRING_CONTAINER;
         }

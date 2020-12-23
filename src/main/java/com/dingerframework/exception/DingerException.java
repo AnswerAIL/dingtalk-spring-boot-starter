@@ -16,7 +16,6 @@
 package com.dingerframework.exception;
 
 import com.dingerframework.entity.enums.Pairs;
-import lombok.Getter;
 
 /**
  * 异常类
@@ -25,7 +24,6 @@ import lombok.Getter;
  * @since 1.0
  */
 public class DingerException extends RuntimeException {
-    @Getter
     private Pairs<Integer, String> pairs;
 
     public DingerException(Pairs pairs) {
@@ -41,5 +39,9 @@ public class DingerException extends RuntimeException {
     public DingerException(Throwable cause, Pairs pairs) {
         super(cause);
         this.pairs = pairs;
+    }
+
+    public Pairs<Integer, String> getPairs() {
+        return pairs;
     }
 }

@@ -19,15 +19,15 @@ import com.dingerframework.core.entity.enums.DingerType;
 import com.dingerframework.exception.InvalidPropertiesFormatException;
 import com.dingerframework.utils.ConfigTools;
 import com.dingerframework.utils.DingerUtils;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.dingerframework.constant.DkConstant.DINGER_PROP_PREFIX;
+import static com.dingerframework.constant.DingerConstant.DINGER_PROP_PREFIX;
 
 
 /**
@@ -36,10 +36,9 @@ import static com.dingerframework.constant.DkConstant.DINGER_PROP_PREFIX;
  * @author Jaemon
  * @since 1.0
  */
-@Data
 @ConfigurationProperties(prefix = DINGER_PROP_PREFIX)
-@Slf4j
 public class DingerProperties implements InitializingBean {
+    private static final Logger log = LoggerFactory.getLogger(DingerProperties.class);
 
     /**
      * 是否启用DingTalk, 默认true
@@ -74,7 +73,54 @@ public class DingerProperties implements InitializingBean {
     /** 默认的Dinger, default {@link DingerType#DINGTALK} */
     private DingerType defaultDinger = DingerType.DINGTALK;
 
-    @Data
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Map<DingerType, Dinger> getDingers() {
+        return dingers;
+    }
+
+    public void setDingers(Map<DingerType, Dinger> dingers) {
+        this.dingers = dingers;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public MonitorStatus getMonitor() {
+        return monitor;
+    }
+
+    public void setMonitor(MonitorStatus monitor) {
+        this.monitor = monitor;
+    }
+
+    public String getDingerLocations() {
+        return dingerLocations;
+    }
+
+    public void setDingerLocations(String dingerLocations) {
+        this.dingerLocations = dingerLocations;
+    }
+
+    public DingerType getDefaultDinger() {
+        return defaultDinger;
+    }
+
+    public void setDefaultDinger(DingerType defaultDinger) {
+        this.defaultDinger = defaultDinger;
+    }
+
     public static class Dinger {
         /**
          * 请求地址前缀-选填
@@ -123,9 +169,56 @@ public class DingerProperties implements InitializingBean {
          * 可选, 是否开启异步处理, 默认： false
          */
         private boolean async = false;
+
+        public String getRobotUrl() {
+            return robotUrl;
+        }
+
+        public void setRobotUrl(String robotUrl) {
+            this.robotUrl = robotUrl;
+        }
+
+        public String getTokenId() {
+            return tokenId;
+        }
+
+        public void setTokenId(String tokenId) {
+            this.tokenId = tokenId;
+        }
+
+        public String getSecret() {
+            return secret;
+        }
+
+        public void setSecret(String secret) {
+            this.secret = secret;
+        }
+
+        public boolean isDecrypt() {
+            return decrypt;
+        }
+
+        public void setDecrypt(boolean decrypt) {
+            this.decrypt = decrypt;
+        }
+
+        public String getDecryptKey() {
+            return decryptKey;
+        }
+
+        public void setDecryptKey(String decryptKey) {
+            this.decryptKey = decryptKey;
+        }
+
+        public boolean isAsync() {
+            return async;
+        }
+
+        public void setAsync(boolean async) {
+            this.async = async;
+        }
     }
 
-    @Data
     public static class MonitorStatus {
         /**
          * 应用启动成功是否通知
@@ -139,6 +232,30 @@ public class DingerProperties implements InitializingBean {
          * 应用退出是否通知
          */
         private boolean exit = false;
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
+
+        public boolean isFalied() {
+            return falied;
+        }
+
+        public void setFalied(boolean falied) {
+            this.falied = falied;
+        }
+
+        public boolean isExit() {
+            return exit;
+        }
+
+        public void setExit(boolean exit) {
+            this.exit = exit;
+        }
     }
 
     @Override

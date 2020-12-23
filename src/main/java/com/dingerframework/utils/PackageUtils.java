@@ -15,7 +15,6 @@
  */
 package com.dingerframework.utils;
 
-import com.dingerframework.listeners.ApplicationEventTimeTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.system.ApplicationHome;
@@ -42,6 +41,7 @@ import java.util.stream.Collectors;
  */
 public class PackageUtils {
     private static final Logger log = LoggerFactory.getLogger(PackageUtils.class);
+    private static final ApplicationHome applicationHome = new ApplicationHome();
 
     public static final String SPOT = ".";
     public static final String SLANT = "/";
@@ -66,7 +66,6 @@ public class PackageUtils {
         if (DingerUtils.isEmpty(packageName)) {
             return;
         }
-        ApplicationHome applicationHome = ApplicationEventTimeTable.applicationHome();
         File applicationHomeSource = applicationHome.getSource();
         if (applicationHomeSource != null) {
             String absolutePath = applicationHomeSource.getAbsolutePath();
@@ -134,8 +133,8 @@ public class PackageUtils {
                             }
                         }
                     } else {
-                        if (log.isDebugEnabled()) {
-                            log.debug("skip class {}.", clazz.getName());
+                        if (log.isTraceEnabled()) {
+                            log.trace("skip class {}.", clazz.getName());
                         }
                     }
 
@@ -198,8 +197,8 @@ public class PackageUtils {
                             }
                         }
                     } else {
-                        if (log.isDebugEnabled()) {
-                            log.debug("skip class {}.", clazz.getName());
+                        if (log.isTraceEnabled()) {
+                            log.trace("skip class {}.", clazz.getName());
                         }
                     }
                 }

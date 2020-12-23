@@ -15,7 +15,7 @@
  */
 package com.dingerframework.multi.entity;
 
-import com.dingerframework.constant.DkConstant;
+import com.dingerframework.constant.DingerConstant;
 import com.dingerframework.core.DingerConfig;
 import com.dingerframework.multi.algorithm.AlgorithmHandler;
 
@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class MultiDingerAlgorithmDefinition {
     /**
-     * dingerClass + {@link DkConstant#SPOT_SEPERATOR} + {@link AlgorithmHandler}.simpleName
+     * dingerClass + {@link DingerConstant#SPOT_SEPERATOR} + {@link AlgorithmHandler}.simpleName
      */
     private String key;
     /**

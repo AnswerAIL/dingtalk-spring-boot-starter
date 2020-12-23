@@ -16,11 +16,8 @@
 package com.dingerframework.dingtalk.entity;
 
 import com.dingerframework.dingtalk.entity.enums.DingTalkMsgType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,8 +26,6 @@ import java.util.List;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
 public class DingActionCard extends DingTalkMessage {
     /**
      * {@link ActionCard}
@@ -41,10 +36,15 @@ public class DingActionCard extends DingTalkMessage {
         setMsgtype(DingTalkMsgType.ACTION_CARD.type());
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ActionCard {
+    public ActionCard getActionCard() {
+        return actionCard;
+    }
+
+    public void setActionCard(ActionCard actionCard) {
+        this.actionCard = actionCard;
+    }
+
+    public static class ActionCard implements Serializable {
         /**
          * 首屏会话透出的展示内容
          */
@@ -62,10 +62,39 @@ public class DingActionCard extends DingTalkMessage {
          */
         private List<Button> btns;
 
-        @Data
-        @NoArgsConstructor
-        @AllArgsConstructor
-        public static class Button {
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getBtnOrientation() {
+            return btnOrientation;
+        }
+
+        public void setBtnOrientation(String btnOrientation) {
+            this.btnOrientation = btnOrientation;
+        }
+
+        public List<Button> getBtns() {
+            return btns;
+        }
+
+        public void setBtns(List<Button> btns) {
+            this.btns = btns;
+        }
+
+        public static class Button implements Serializable {
             /**
              * 按钮标题
              */
@@ -74,6 +103,22 @@ public class DingActionCard extends DingTalkMessage {
              * 点击按钮触发的URL
              */
             private String actionURL;
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getActionURL() {
+                return actionURL;
+            }
+
+            public void setActionURL(String actionURL) {
+                this.actionURL = actionURL;
+            }
         }
     }
 

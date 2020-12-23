@@ -16,8 +16,8 @@
 package com.dingerframework.core;
 
 import com.dingerframework.DingerSender;
+import com.dingerframework.core.annatations.Dinger;
 import com.dingerframework.core.annatations.Keyword;
-import com.dingerframework.core.annatations.UseDinger;
 import com.dingerframework.core.entity.DingerProperties;
 import com.dingerframework.core.entity.MsgType;
 import com.dingerframework.core.entity.enums.DingerType;
@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
+import static com.dingerframework.constant.DingerConstant.SPOT_SEPERATOR;
 
 /**
  * DingerMessageHandler
@@ -47,7 +47,9 @@ import static com.dingerframework.constant.DkConstant.SPOT_SEPERATOR;
  * @author Jaemon
  * @since 2.0
  */
-public class DingerMessageHandler implements ParamHandle, MessageTransfer, ResultHandle<DingerResult> {
+public class DingerMessageHandler
+        extends MultiDingerProperty
+        implements ParamHandle, MessageTransfer, ResultHandle<DingerResult> {
     private static final Logger log = LoggerFactory.getLogger(DingerMessageHandler.class);
     protected static final String KEYWORD = "DINGTALK_DINGER_METHOD_SENDER_KEYWORD";
     protected static final String CONNECTOR = "_";
@@ -143,13 +145,13 @@ public class DingerMessageHandler implements ParamHandle, MessageTransfer, Resul
      *          返回Dinger
      */
     DingerType dingerType(Method method) {
-        if (method.isAnnotationPresent(UseDinger.class)) {
-            return method.getAnnotation(UseDinger.class).value();
+        if (method.isAnnotationPresent(Dinger.class)) {
+            return method.getAnnotation(Dinger.class).value();
         }
 
         Class<?> dingerClass = method.getDeclaringClass();
-        if (dingerClass.isAnnotationPresent(UseDinger.class)) {
-            return dingerClass.getAnnotation(UseDinger.class).value();
+        if (dingerClass.isAnnotationPresent(Dinger.class)) {
+            return dingerClass.getAnnotation(Dinger.class).value();
         }
 
         return dingerProperties.getDefaultDinger();
@@ -162,12 +164,10 @@ public class DingerMessageHandler implements ParamHandle, MessageTransfer, Resul
      *          代理方法默认Dinger
      * @param keyName
      *          keyName
-     * @param dingerClassName
-     *          代理类
      * @return
      *          dingerDefinition {@link DingerDefinition}
      */
-    DingerDefinition dingerDefinition(DingerType defaultDinger, String keyName, String dingerClassName) {
+    DingerDefinition dingerDefinition(DingerType defaultDinger, String keyName) {
         DingerDefinition dingerDefinition;
         DingerConfig localDinger = DingerHelper.getLocalDinger();
 
@@ -183,10 +183,10 @@ public class DingerMessageHandler implements ParamHandle, MessageTransfer, Resul
             }
 
             // 判断是否是multiDinger
-            if (MultiDingerProperty.multiDinger()) {
+            if (multiDinger()) {
                 MultiDingerConfig multiDingerConfig =
                         MultiDingerConfigContainer
-                                .INSTANCE.get(dingerClassName);
+                                .INSTANCE.get(keyName);
                 DingerConfig dingerConfig = null;
                 if (multiDingerConfig != null) {
                     // 拿到MultiDingerConfig中当前应该使用的DingerConfig

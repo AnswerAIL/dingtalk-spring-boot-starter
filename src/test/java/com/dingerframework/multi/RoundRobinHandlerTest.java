@@ -47,8 +47,7 @@ public class RoundRobinHandlerTest {
 
         List<DingerConfig> dingerConfigs = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            DingerConfig dingerConfig = new DingerConfig();
-            dingerConfig.setTokenId(uuid());
+            DingerConfig dingerConfig = new DingerConfig(uuid());
             dingerConfigs.add(dingerConfig);
         }
         System.out.println(objectMapper.writeValueAsString(

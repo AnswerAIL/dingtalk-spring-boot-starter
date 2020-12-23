@@ -16,8 +16,8 @@
 package com.dingerframework.wetalk.entity;
 
 import com.dingerframework.wetalk.entity.enums.WeTalkMsgType;
-import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -26,20 +26,47 @@ import java.util.Map;
  * @author Jaemon
  * @since 4.0
  */
-@Data
 public class WeMarkdown extends WeTalkMessage {
-    /**
-     * markdown内容，最长不超过4096个字节，必须是utf8编码
-     * */
-    private String content;
+    private Markdown markdown;
 
-    public WeMarkdown(String content) {
+    public WeMarkdown(Markdown markdown) {
         setMsgtype(WeTalkMsgType.MARKDOWN.type());
-        this.content = content;
+        this.markdown = markdown;
     }
+
+    public Markdown getMarkdown() {
+        return markdown;
+    }
+
+    public void setMarkdown(Markdown markdown) {
+        this.markdown = markdown;
+    }
+
+    public static class Markdown implements Serializable {
+        /**
+         * markdown内容，最长不超过4096个字节，必须是utf8编码
+         * */
+        private String content;
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public Markdown() {
+        }
+
+        public Markdown(String content) {
+            this.content = content;
+        }
+    }
+
 
     @Override
     public void transfer(Map<String, Object> params) {
-        this.content = replaceContent(this.content, params);
+        this.markdown.content = replaceContent(this.markdown.content, params);
     }
 }

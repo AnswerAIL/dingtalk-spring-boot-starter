@@ -16,11 +16,8 @@
 package com.dingerframework.dingtalk.entity;
 
 import com.dingerframework.dingtalk.entity.enums.DingTalkMsgType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,10 +26,7 @@ import java.util.List;
  * @author Jaemon
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
 public class DingFeedCard extends DingTalkMessage {
-
 
     /**
      * {@link FeedCard}
@@ -43,19 +37,29 @@ public class DingFeedCard extends DingTalkMessage {
         setMsgtype(DingTalkMsgType.FEED_CARD.type());
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class FeedCard {
+    public FeedCard getFeedCard() {
+        return feedCard;
+    }
+
+    public void setFeedCard(FeedCard feedCard) {
+        this.feedCard = feedCard;
+    }
+
+    public static class FeedCard implements Serializable {
         /**
          * {@link Link}
          */
         private List<Link> links;
 
-        @Data
-        @NoArgsConstructor
-        @AllArgsConstructor
-        public static class Link {
+        public List<Link> getLinks() {
+            return links;
+        }
+
+        public void setLinks(List<Link> links) {
+            this.links = links;
+        }
+
+        public static class Link implements Serializable {
             /**
              * 单条信息文本
              */
@@ -68,6 +72,30 @@ public class DingFeedCard extends DingTalkMessage {
              * 单条信息后面图片的URL
              */
             private String picURL;
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getMessageURL() {
+                return messageURL;
+            }
+
+            public void setMessageURL(String messageURL) {
+                this.messageURL = messageURL;
+            }
+
+            public String getPicURL() {
+                return picURL;
+            }
+
+            public void setPicURL(String picURL) {
+                this.picURL = picURL;
+            }
         }
     }
 }

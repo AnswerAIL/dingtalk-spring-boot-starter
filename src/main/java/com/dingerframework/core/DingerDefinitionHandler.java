@@ -16,17 +16,14 @@
 package com.dingerframework.core;
 
 import com.dingerframework.core.annatations.DingerTokenId;
-import com.dingerframework.core.entity.enums.AsyncExecuteType;
-import com.dingerframework.core.entity.enums.MessageSubType;
+import com.dingerframework.core.entity.enums.*;
 import com.dingerframework.core.annatations.DingerMarkdown;
 import com.dingerframework.core.annatations.DingerText;
 import com.dingerframework.core.entity.MsgType;
-import com.dingerframework.core.entity.enums.DingerDefinitionType;
-import com.dingerframework.core.entity.enums.MessageMainType;
 import com.dingerframework.core.entity.xml.*;
-import com.jaemon.dingerframework.core.entity.xml.*;
 import com.dingerframework.exception.DingerException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,8 +39,8 @@ import static com.dingerframework.entity.enums.ExceptionEnum.DINGERDEFINITIONTYP
  * @author Jaemon
  * @since 4.0
  */
-@Slf4j
 public class DingerDefinitionHandler {
+    private static final Logger log = LoggerFactory.getLogger(DingerDefinitionHandler.class);
     /** 企业微信@所有人标识 */
     public static final String WETALK_AT_ALL = "@all";
 
@@ -51,20 +48,23 @@ public class DingerDefinitionHandler {
     /**
      * 处理注解-Text定义的Dinger消息
      *
+     * @param dingerType
+     *          Dinger类型 {@link DingerType}
      * @param context
      *          Dinger定义源
      * @return
      *          dingerDefinition {@link DingerDefinition}
      */
-    protected static DingerDefinition dingerTextHandler(DingerDefinitionGeneratorContext<DingerText> context) {
+    protected static DingerDefinition dingerTextHandler(DingerType dingerType, DingerDefinitionGeneratorContext<DingerText> context) {
         String keyName = context.getKeyName();
         DingerText dinger = context.getSource();
 
         DingerDefinition dingerDefinition = annotationDingerDefition(keyName, dinger.tokenId(), dinger.asyncExecute());
+        dingerDefinition.setDingerType(dingerType);
         dingerDefinition.setMessageSubType(MessageSubType.TEXT);
 
         MsgType msgType = dingerDefinition.messageSubType().msgType(
-                dingerDefinition.dingerType(), dinger.value(), null, Arrays.asList(dinger.phones()), dinger.atAll()
+                dingerType, dinger.value(), null, Arrays.asList(dinger.phones()), dinger.atAll()
         );
         dingerDefinition.setMessage(msgType);
 
@@ -74,21 +74,24 @@ public class DingerDefinitionHandler {
     /**
      * 处理注解-Markdown定义的Dinger消息
      *
+     * @param dingerType
+     *          Dinger类型 {@link DingerType}
      * @param context
      *          Dinger定义源
      * @return
      *          dingerDefinition {@link DingerDefinition}
      */
-    protected static DingerDefinition dingerMarkdownHandler(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
+    protected static DingerDefinition dingerMarkdownHandler(DingerType dingerType, DingerDefinitionGeneratorContext<DingerMarkdown> context) {
         String keyName = context.getKeyName();
         DingerMarkdown dinger = context.getSource();
 
         DingerDefinition dingerDefinition = annotationDingerDefition(keyName, dinger.tokenId(), dinger.asyncExecute());
+        dingerDefinition.setDingerType(dingerType);
         dingerDefinition.setMessageSubType(MessageSubType.MARKDOWN);
 
         // markdown not support at all members
         MsgType msgType = dingerDefinition.messageSubType().msgType(
-                dingerDefinition.dingerType(), dinger.value(), dinger.title(), Arrays.asList(dinger.phones()), false
+                dingerType, dinger.value(), dinger.title(), Arrays.asList(dinger.phones()), false
         );
         dingerDefinition.setMessage(msgType);
 

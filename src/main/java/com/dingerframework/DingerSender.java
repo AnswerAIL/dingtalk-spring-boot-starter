@@ -178,8 +178,10 @@ public interface DingerSender {
      *              机器人类型 {@link DingerType}
      * @param message
      *              消息内容
+     * @param <T>
+     *              消息类型
      * @return
      *              响应报文
      */
-    DingerResult send(String keyword, DingerType dingerType, String message);
+    <T> DingerResult send(String keyword, DingerType dingerType, T message);
 }

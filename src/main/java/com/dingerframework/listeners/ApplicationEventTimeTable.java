@@ -15,12 +15,9 @@
  */
 package com.dingerframework.listeners;
 
-import org.springframework.boot.system.ApplicationHome;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * ApplicationEventTimeTable
@@ -28,7 +25,7 @@ import java.util.Set;
  * @author Jaemon
  * @since 1.0
  */
-public class ApplicationEventTimeTable {
+public final class ApplicationEventTimeTable extends DingerListenersProperty {
     /**
      * 禁用dinger监控功能
      *
@@ -51,18 +48,6 @@ public class ApplicationEventTimeTable {
      * exitTime
      */
     static long exitTime = 0;
-    /**
-     * primarySources
-     */
-    static Set<Class<?>> primarySources = new HashSet<>();
-    /**
-     * dingerClasses
-     */
-    static List<Class<?>> dingerClasses = new ArrayList<>();
-    /**
-     * applicationHome
-     */
-    static ApplicationHome applicationHome;
 
     private ApplicationEventTimeTable() {
     }
@@ -83,32 +68,14 @@ public class ApplicationEventTimeTable {
         return exitTime;
     }
 
-    public static Set<Class<?>> primarySources() {
-        return primarySources;
-    }
-
-    public static List<Class<?>> dingerClasses() {
-        return dingerClasses;
-    }
-
-    public static void emptyDingerClasses() {
-        if (dingerClasses != null && !dingerClasses.isEmpty()) {
-            dingerClasses.clear();
-        }
-    }
-
-    public static ApplicationHome applicationHome() {
-        return applicationHome == null ? new ApplicationHome() : applicationHome;
-    }
 
     protected static void clear() {
         ApplicationEventTimeTable.startTime = 0;
         ApplicationEventTimeTable.successTime = 0;
         ApplicationEventTimeTable.failedTime = 0;
         ApplicationEventTimeTable.exitTime = 0;
-        ApplicationEventTimeTable.primarySources = new HashSet<>();
-        ApplicationEventTimeTable.dingerClasses = new ArrayList<>();
-        ApplicationEventTimeTable.applicationHome = null;
+        DingerListenersProperty.primarySources = new HashSet<>();
+        DingerListenersProperty.dingerClasses = new ArrayList<>();
     }
 
 }

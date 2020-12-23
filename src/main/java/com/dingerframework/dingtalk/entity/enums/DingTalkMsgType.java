@@ -16,7 +16,7 @@
 package com.dingerframework.dingtalk.entity.enums;
 
 /**
- * DingTalk消息类型
+ * DingTalk支持的消息类型
  *
  * @author Jaemon
  * @since 4.0

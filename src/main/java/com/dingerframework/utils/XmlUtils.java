@@ -21,7 +21,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
-import static com.dingerframework.constant.DkConstant.NEW_LINE;
+import static com.dingerframework.constant.DingerConstant.NEW_LINE;
 
 /**
  * XML字符串JavaBean对象互转工具类

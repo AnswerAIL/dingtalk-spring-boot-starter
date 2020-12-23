@@ -16,8 +16,6 @@
 package com.dingerframework.core.entity;
 
 import com.dingerframework.core.entity.enums.DingerType;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -35,15 +33,24 @@ public class MsgType implements Serializable {
     /**
      * 消息类型
      * */
-    @Getter
     private volatile DingerType dingerType;
 
-    @Getter
-    @Setter
     private String msgtype;
 
-    protected void setDingerType(DingerType dingerType) {
+    public DingerType getDingerType() {
+        return dingerType;
+    }
+
+    public void setDingerType(DingerType dingerType) {
         this.dingerType = dingerType;
+    }
+
+    public String getMsgtype() {
+        return msgtype;
+    }
+
+    public void setMsgtype(String msgtype) {
+        this.msgtype = msgtype;
     }
 
     /**
