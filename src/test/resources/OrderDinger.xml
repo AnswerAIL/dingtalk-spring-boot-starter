@@ -6,7 +6,7 @@
 	spring.dinger.dinger-locations: classpath*:dinger/*.xml
 -->
 
-<dinger namespace="com.jaemon.dingerframework.core.OrderDinger">
+<dinger namespace="com.dingerframework.core.OrderDinger">
 
 	<message id="orderSuccess" type="TEXT">
 		<body>

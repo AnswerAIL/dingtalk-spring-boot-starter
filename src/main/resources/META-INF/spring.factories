@@ -1,15 +1,15 @@
 # Auto Configuration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.jaemon.dingerframework.config.DingerConfiguration,\
-com.jaemon.dingerframework.config.OkHttpConfiguration,\
-com.jaemon.dingerframework.config.NoticeConfig,\
-com.jaemon.dingerframework.config.BeanConfiguration,\
-com.jaemon.dingerframework.config.DkThreadPoolConfig
+com.dingerframework.config.DingerConfiguration,\
+com.dingerframework.config.OkHttpConfiguration,\
+com.dingerframework.config.NoticeConfig,\
+com.dingerframework.config.BeanConfiguration,\
+com.dingerframework.config.DkThreadPoolConfig
 
 # Application Listeners
 org.springframework.context.ApplicationListener=\
-com.jaemon.dingerframework.listeners.StartEventListener,\
-com.jaemon.dingerframework.listeners.SuccessEventListener,\
-com.jaemon.dingerframework.listeners.FailedEventListener,\
-com.jaemon.dingerframework.listeners.ExitEventListener,\
-com.jaemon.dingerframework.listeners.DingerXmlPreparedEvent
+com.dingerframework.listeners.StartEventListener,\
+com.dingerframework.listeners.SuccessEventListener,\
+com.dingerframework.listeners.FailedEventListener,\
+com.dingerframework.listeners.ExitEventListener,\
+com.dingerframework.listeners.DingerXmlPreparedEvent
