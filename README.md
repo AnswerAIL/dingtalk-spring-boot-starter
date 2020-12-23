@@ -1,6 +1,6 @@
 # dingtalk-spring-boot-starter ![GitHub license](https://img.shields.io/github/license/AnswerAIL/dingtalk-spring-boot-starter)
 
-![Dinger](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/blob/4.x/img/dinger.png)
+![Dinger](https://gitee.com/jaemon/docs/raw/master/dinger.png)
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.answerail/dingtalk-spring-boot-starter)](https://mvnrepository.com/artifact/com.github.answerail/dingtalk-spring-boot-starter)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/AnswerAIL/dingtalk-spring-boot-starter)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases)
