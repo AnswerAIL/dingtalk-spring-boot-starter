@@ -15,9 +15,8 @@
  */
 package com.github.jaemon.dinger.config;
 
-import com.github.jaemon.dinger.sign.DingTalkSignAlgorithm;
-import com.github.jaemon.dinger.sign.DingerSignAlgorithm;
-import com.dingerframework.support.*;
+import com.github.jaemon.dinger.support.sign.DingTalkSignAlgorithm;
+import com.github.jaemon.dinger.support.sign.DingerSignAlgorithm;
 import com.github.jaemon.dinger.multi.MultiDingerAlgorithmInjectRegister;
 import com.github.jaemon.dinger.support.*;
 import com.github.jaemon.dinger.support.client.DingerHttpClient;
@@ -104,17 +103,6 @@ public class BeanConfiguration {
     @ConditionalOnMissingBean(DingerExceptionCallback.class)
     public DingerExceptionCallback dingerExceptionCallback() {
         return new DefaultDingerExceptionCallback();
-    }
-
-    /**
-     * 自定义监控事件
-     *
-     * @return notification instance
-     */
-    @Bean
-    @ConditionalOnMissingBean(MonitorEventNotification.class)
-    public MonitorEventNotification monitorEventNotification() {
-        return new DefaultApplicationEventNotification();
     }
 
     @Bean

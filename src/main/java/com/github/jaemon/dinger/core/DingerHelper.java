@@ -21,7 +21,7 @@ import com.github.jaemon.dinger.core.entity.enums.DingerType;
  * DingerHelper
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public abstract class DingerHelper {
     protected static final ThreadLocal<DingerConfig> LOCAL_DINGER = new ThreadLocal<>();
@@ -31,18 +31,22 @@ public abstract class DingerHelper {
      *
      * @param dingerConfig
      *      dingerConfig {@link DingerConfig}
+     * @return
+     *      dingerConfig {@link DingerConfig}
      */
-    public static void assignDinger(DingerConfig dingerConfig) {
+    public static DingerConfig assignDinger(DingerConfig dingerConfig) {
         dingerConfig.check();
         if (dingerConfig.checkEmpty()) {
             // use default
-            return;
+            return null;
         }
         setLocalDinger(dingerConfig);
+
+        return dingerConfig;
     }
 
     /**
-     * assignDinger for dingtalk
+     * assignDinger for dingtalk(使用原有dingerType)
      *
      * @param tokenId
      *      dingtalk tokenId
@@ -50,7 +54,8 @@ public abstract class DingerHelper {
      *      dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(String tokenId) {
-        return assignDinger(tokenId, false);
+        DingerConfig dingerConfig = DingerConfig.instance(tokenId);
+        return assignDinger(dingerConfig);
     }
 
     /**
@@ -64,7 +69,8 @@ public abstract class DingerHelper {
      *          dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(DingerType dingerType, String tokenId) {
-        return assignDinger(dingerType, tokenId, false);
+        DingerConfig dingerConfig = DingerConfig.instance(dingerType, tokenId);
+        return assignDinger(dingerConfig);
     }
 
     /**
@@ -78,7 +84,8 @@ public abstract class DingerHelper {
      *      dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(String tokenId, boolean asyncExecute) {
-        return assignDinger(tokenId, null, asyncExecute);
+        DingerConfig dingerConfig = DingerConfig.instance(tokenId, asyncExecute);
+        return assignDinger(dingerConfig);
     }
 
     /**
@@ -94,7 +101,8 @@ public abstract class DingerHelper {
      *          dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(DingerType dingerType, String tokenId, boolean asyncExecute) {
-        return assignDinger(dingerType, tokenId, null, asyncExecute);
+        DingerConfig dingerConfig = DingerConfig.instance(dingerType, tokenId, asyncExecute);
+        return assignDinger(dingerConfig);
     }
 
     /**
@@ -109,7 +117,26 @@ public abstract class DingerHelper {
      *      dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(String tokenId, String secret) {
-        return assignDinger(DingerType.DINGTALK, tokenId, null, secret, false);
+        DingerConfig dingerConfig = DingerConfig.instance(tokenId, secret);
+        return assignDinger(dingerConfig);
+    }
+
+    /**
+     * assignDinger for dingtalk
+     *
+     * @param dingerType
+     *      dingerType
+     * @param tokenId
+     *      dingtalk tokenId
+     * @param secret
+     *      dingtalk secret
+     *
+     * @return
+     *      dingerConfig {@link DingerConfig}
+     */
+    public static DingerConfig assignDinger(DingerType dingerType, String tokenId, String secret) {
+        DingerConfig dingerConfig = DingerConfig.instance(dingerType, tokenId, secret);
+        return assignDinger(dingerConfig);
     }
 
     /**
@@ -125,7 +152,9 @@ public abstract class DingerHelper {
      *      dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(String tokenId, String decryptKey, boolean asyncExecute) {
-        return assignDinger(DingerType.DINGTALK, tokenId, decryptKey, null, asyncExecute);
+        DingerConfig dingerConfig = DingerConfig.instance(tokenId, asyncExecute);
+        dingerConfig.setDecryptKey(decryptKey);
+        return assignDinger(dingerConfig);
     }
 
     /**
@@ -143,7 +172,10 @@ public abstract class DingerHelper {
      *          dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(DingerType dingerType, String tokenId, String decryptKey, boolean asyncExecute) {
-        return assignDinger(dingerType, tokenId, decryptKey, null, asyncExecute);
+        DingerConfig dingerConfig = DingerConfig.instance(dingerType, tokenId);
+        dingerConfig.setDecryptKey(decryptKey);
+        dingerConfig.setAsyncExecute(asyncExecute);
+        return assignDinger(dingerConfig);
     }
 
     /**
@@ -159,7 +191,27 @@ public abstract class DingerHelper {
      *      dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(String tokenId, String decryptKey, String secret) {
-        return assignDinger(DingerType.DINGTALK, tokenId, decryptKey, secret, false);
+        DingerConfig dingerConfig = DingerConfig.instance(tokenId, secret, decryptKey);
+        return assignDinger(dingerConfig);
+    }
+
+    /**
+     * assignDinger for dingtalk
+     *
+     * @param dingerType
+     *      dingerType
+     * @param tokenId
+     *      dingtalk tokenId
+     * @param decryptKey
+     *      tokenId decrypt key
+     * @param secret
+     *      dingtalk secret
+     * @return
+     *      dingerConfig {@link DingerConfig}
+     */
+    public static DingerConfig assignDinger(DingerType dingerType, String tokenId, String decryptKey, String secret) {
+        DingerConfig dingerConfig = DingerConfig.instance(dingerType, tokenId, secret, decryptKey);
+        return assignDinger(dingerConfig);
     }
 
     /**
@@ -179,17 +231,10 @@ public abstract class DingerHelper {
      *          dingerConfig {@link DingerConfig}
      */
     public static DingerConfig assignDinger(DingerType dingerType, String tokenId, String decryptKey, String secret, boolean asyncExecute) {
-        DingerConfig dingerConfig = new DingerConfig();
-        if (dingerType != null) {
-            dingerConfig.setDingerType(dingerType);
-        }
-        dingerConfig.setTokenId(tokenId);
-        dingerConfig.setDecryptKey(decryptKey);
-        dingerConfig.setSecret(secret);
-        dingerConfig.setAsyncExecute(asyncExecute);
-
-        assignDinger(dingerConfig);
-        return dingerConfig;
+        DingerConfig dingerConfig = DingerConfig.instance(
+                dingerType, tokenId, decryptKey, secret, asyncExecute
+        );
+        return assignDinger(dingerConfig);
     }
 
 

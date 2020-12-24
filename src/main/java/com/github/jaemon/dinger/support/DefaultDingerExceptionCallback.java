@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.support;
 
-import com.github.jaemon.dinger.entity.DingerCallback;
+import com.github.jaemon.dinger.core.entity.DingerCallback;
 import com.github.jaemon.dinger.exception.DingerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

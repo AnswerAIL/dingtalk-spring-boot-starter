@@ -19,7 +19,7 @@ package com.github.jaemon.dinger.core.entity.enums;
  * 消息体定义主类型(消息体xml定义和注解定义)
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public enum MessageMainType {
     /** xml dinger msg */

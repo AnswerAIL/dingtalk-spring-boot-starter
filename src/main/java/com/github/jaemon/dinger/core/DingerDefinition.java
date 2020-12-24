@@ -25,7 +25,7 @@ import com.github.jaemon.dinger.core.entity.enums.MessageSubType;
  * DingerDefinition
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public interface DingerDefinition {
 

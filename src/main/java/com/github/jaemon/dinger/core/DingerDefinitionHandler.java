@@ -16,11 +16,9 @@
 package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.core.annatations.DingerTokenId;
-import com.dingerframework.core.entity.enums.*;
 import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
 import com.github.jaemon.dinger.core.annatations.DingerText;
 import com.github.jaemon.dinger.core.entity.MsgType;
-import com.dingerframework.core.entity.xml.*;
 import com.github.jaemon.dinger.core.entity.enums.*;
 import com.github.jaemon.dinger.core.entity.xml.*;
 import com.github.jaemon.dinger.exception.DingerException;
@@ -33,13 +31,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.github.jaemon.dinger.entity.enums.ExceptionEnum.DINGERDEFINITIONTYPE_ERROR;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.DINGERDEFINITIONTYPE_ERROR;
 
 /**
  * DefinitionGenerator
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class DingerDefinitionHandler {
     private static final Logger log = LoggerFactory.getLogger(DingerDefinitionHandler.class);

@@ -15,7 +15,6 @@
  */
 package com.github.jaemon.dinger.multi.handler;
 
-import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.multi.DingerConfigHandler;
 import com.github.jaemon.dinger.multi.algorithm.AlgorithmHandler;
 import com.github.jaemon.dinger.multi.algorithm.DingerHandler;
@@ -28,19 +27,14 @@ import java.util.List;
  * UserDingerConfigHandler
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class UserDingerConfigHandler implements DingerConfigHandler {
     @Override
-    public DingerType dinger() {
-        return DingerType.DINGTALK;
-    }
-
-    @Override
     public List<DingerConfig> dingerConfigs() {
         ArrayList<DingerConfig> dingerConfigs = new ArrayList<>();
-        dingerConfigs.add(new DingerConfig("tokenId1", "secret1"));
-        dingerConfigs.add(new DingerConfig("tokenId2", "secret2"));
+        dingerConfigs.add(DingerConfig.instance("tokenId1", "secret1"));
+        dingerConfigs.add(DingerConfig.instance("tokenId2", "secret2"));
         // 如需配置更多机器人信息，可继续添加...
         return dingerConfigs;
     }

@@ -24,7 +24,7 @@ import java.util.List;
  * 企业微信-消息类型-图文类型
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class WeNews extends WeTalkMessage {
     /** 图文类型 */

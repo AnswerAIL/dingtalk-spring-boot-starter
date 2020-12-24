@@ -15,9 +15,9 @@
  */
 
 /**
- * DingTalk适配包
+ * 支持DingTalk包
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 package com.github.jaemon.dinger.dingtalk;

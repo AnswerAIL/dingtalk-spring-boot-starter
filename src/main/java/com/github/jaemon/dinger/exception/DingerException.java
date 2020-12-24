@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.exception;
 
-import com.github.jaemon.dinger.entity.enums.Pairs;
+import com.github.jaemon.dinger.core.entity.Pairs;
 
 /**
  * 异常类
@@ -26,17 +26,22 @@ import com.github.jaemon.dinger.entity.enums.Pairs;
 public class DingerException extends RuntimeException {
     private Pairs<Integer, String> pairs;
 
-    public DingerException(Pairs pairs) {
-        super(pairs.desc().toString());
+    public DingerException(Pairs<Integer, String> pairs) {
+        super(pairs.desc());
         this.pairs = pairs;
     }
 
-    public DingerException(String msg, Pairs pairs) {
+    public DingerException(String msg, Pairs<Integer, String> pairs) {
         super(msg);
         this.pairs = pairs;
     }
 
-    public DingerException(Throwable cause, Pairs pairs) {
+    public DingerException(Pairs<Integer, String> pairs, Object... msgArgs) {
+        super(String.format(pairs.desc(), msgArgs));
+        this.pairs = pairs;
+    }
+
+    public DingerException(Throwable cause, Pairs<Integer, String> pairs) {
         super(cause);
         this.pairs = pairs;
     }

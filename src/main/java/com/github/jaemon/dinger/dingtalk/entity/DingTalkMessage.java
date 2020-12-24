@@ -22,7 +22,7 @@ import com.github.jaemon.dinger.core.entity.enums.DingerType;
  * DingTalk请求体
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class DingTalkMessage extends MsgType {
     public DingTalkMessage() {

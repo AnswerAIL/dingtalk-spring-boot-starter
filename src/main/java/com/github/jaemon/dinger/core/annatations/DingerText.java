@@ -28,7 +28,7 @@ import java.lang.annotation.*;
  * </code>
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})

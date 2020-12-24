@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.entity.enums;
+package com.github.jaemon.dinger.core.entity.enums;
 
 /**
- * Result Code
+ * Dinger响应码
  *
  * @author Jaemon
  * @since 1.0
  */
-public enum ResultCode {
+public enum DingerResponseCodeEnum {
     SUCCESS("D000", "success"),
 
     DINGER_DISABLED("D101", "Dinger未启用"),
@@ -36,7 +36,7 @@ public enum ResultCode {
     private String code;
     private String message;
 
-    ResultCode(String code, String message) {
+    DingerResponseCodeEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

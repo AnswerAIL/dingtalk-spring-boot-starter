@@ -33,7 +33,7 @@ import static com.github.jaemon.dinger.utils.DingerUtils.uuid;
  * Dinger钉钉机器人算法-测试用例 {@link DingerHandler}
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class DingerHandlerTest {
 
@@ -45,7 +45,7 @@ public class DingerHandlerTest {
 
         List<DingerConfig> dingerConfigs = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            DingerConfig dingerConfig = new DingerConfig(uuid());
+            DingerConfig dingerConfig = DingerConfig.instance(uuid());
             dingerConfigs.add(dingerConfig);
         }
         System.out.println(objectMapper.writeValueAsString(

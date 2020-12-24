@@ -17,7 +17,7 @@ package com.github.jaemon.dinger.core;
 
 import com.dingerframework.core.annatations.*;
 import com.github.jaemon.dinger.core.annatations.*;
-import com.github.jaemon.dinger.entity.DingerResult;
+import com.github.jaemon.dinger.core.entity.DingerResponse;
 
 import java.math.BigDecimal;
 
@@ -25,14 +25,14 @@ import java.math.BigDecimal;
  * OrderDinger template
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 //@Dinger
 //@@DingerClose
 public interface OrderDinger {
 
     @DingerText(value = "订单号${orderNum}下单成功啦, 下单金额${amt}", phones = {"13520200906"})
-    DingerResult orderSuccess(
+    DingerResponse orderSuccess(
             @Keyword String keyword,
             @Parameter("orderNum") String orderNo,
             @Parameter("amt") BigDecimal amt);
@@ -47,7 +47,7 @@ public interface OrderDinger {
                     value = "87dbeb7bc28894c3bdcc3d12457228ad590164327b5f427cd85f9025ebb350cf",
                     secret = "SAQ23a9039bb01f2dcd017b90ab8e9dda1355f97c9016f37ff371ec8124327c7f09")
     )
-    DingerResult orderFailed(
+    DingerResponse orderFailed(
             String orderNo,
             int num,
             boolean flag);

@@ -22,7 +22,7 @@ import java.util.Random;
  * Random methods via the {@link java.lang.Math#random()} method
  * and its system-wide {@link Random} object.</p>
  *
- * @since 2.0
+ * @since 1.0
  * @version $Id: JVMRandom.java 471626 2006-11-06 04:02:09Z bayard $
  */
 public final class JVMRandom extends Random {

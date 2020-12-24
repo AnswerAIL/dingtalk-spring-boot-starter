@@ -15,13 +15,11 @@
  */
 package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.DingerSender;
 import com.github.jaemon.dinger.core.annatations.Dinger;
-import com.github.jaemon.dinger.core.annatations.Keyword;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.core.entity.MsgType;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
-import com.github.jaemon.dinger.entity.DingerResult;
+import com.github.jaemon.dinger.core.entity.DingerResponse;
 import com.github.jaemon.dinger.listeners.DingerXmlPreparedEvent;
 import com.github.jaemon.dinger.multi.MultiDingerConfigContainer;
 import com.github.jaemon.dinger.multi.MultiDingerProperty;
@@ -45,45 +43,33 @@ import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
  * DingerMessageHandler
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class DingerMessageHandler
         extends MultiDingerProperty
-        implements ParamHandle, MessageTransfer, ResultHandle<DingerResult> {
+        implements ParamHandler, MessageTransfer, ResultHandler<DingerResponse> {
     private static final Logger log = LoggerFactory.getLogger(DingerMessageHandler.class);
-    protected static final String KEYWORD = "DINGTALK_DINGER_METHOD_SENDER_KEYWORD";
-    protected static final String CONNECTOR = "_";
 
-    protected DingerSender dingerSender;
+    protected DingerRobot dingerRobot;
     protected DingerProperties dingerProperties;
 
     @Override
-    public Map<String, Object> paramsHandle(Parameter[] parameters, Object[] values) {
+    public Map<String, Object> paramsHandler(Parameter[] parameters, Object[] values) {
         Map<String, Object> params = new HashMap<>();
         if (parameters.length == 0) {
             return params;
         }
 
-        int keyWordIndex = -1;
-        String keywordValue = null;
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
             String paramName = parameter.getName();
             com.github.jaemon.dinger.core.annatations.Parameter[] panno =
                     parameter.getDeclaredAnnotationsByType(com.github.jaemon.dinger.core.annatations.Parameter.class);
-            Keyword[] kanno = parameter.getDeclaredAnnotationsByType(Keyword.class);
+//            Keyword[] kanno = parameter.getDeclaredAnnotationsByType(Keyword.class);
             if (panno != null && panno.length > 0) {
                 paramName = panno[0].value();
-            } else if (kanno != null && kanno.length > 0) {
-                keyWordIndex = i;
-                keywordValue = values[i].toString();
-                continue;
             }
             params.put(paramName, values[i]);
-        }
-
-        if (keyWordIndex != -1) {
-            params.put(KEYWORD, keywordValue);
         }
 
         return params;
@@ -99,12 +85,12 @@ public class DingerMessageHandler
 
 
     @Override
-    public Object resultHandle(Class<?> resultType, DingerResult dingerResult) {
+    public Object resultHandler(Class<?> resultType, DingerResponse dingerResponse) {
         String name = resultType.getName();
         if (String.class.getName().equals(name)) {
-            return Optional.ofNullable(dingerResult).map(e -> e.getData()).orElse(null);
-        } else if (DingerResult.class.getName().equals(name)) {
-            return dingerResult;
+            return Optional.ofNullable(dingerResponse).map(e -> e.getData()).orElse(null);
+        } else if (DingerResponse.class.getName().equals(name)) {
+            return dingerResponse;
         }
         return null;
     }
@@ -160,20 +146,24 @@ public class DingerMessageHandler
     /**
      * 获取Dinger定义
      *
-     * @param defaultDinger
-     *          代理方法默认Dinger
+     * <pre>
+     *     优先级: local(dinger为空使用默认 {@link DingerMessageHandler#dingerType}) > multi > default
+     * </pre>
+     *
+     * @param useDinger
+     *          代理方法使用的Dinger
      * @param keyName
      *          keyName
      * @return
      *          dingerDefinition {@link DingerDefinition}
      */
-    DingerDefinition dingerDefinition(DingerType defaultDinger, String keyName) {
+    DingerDefinition dingerDefinition(DingerType useDinger, String keyName) {
         DingerDefinition dingerDefinition;
         DingerConfig localDinger = DingerHelper.getLocalDinger();
 
         // 优先使用用户设定 dingerConfig
         if (localDinger == null) {
-            keyName = defaultDinger + SPOT_SEPERATOR + keyName;
+            keyName = useDinger + SPOT_SEPERATOR + keyName;
             dingerDefinition = DingerXmlPreparedEvent
                     .Container.INSTANCE.get(keyName);
 
@@ -208,7 +198,11 @@ public class DingerMessageHandler
             }
 
         } else {
-            keyName = localDinger.getDingerType() + SPOT_SEPERATOR + keyName;
+            DingerType dingerType = localDinger.getDingerType();
+            if (dingerType == null) {
+                dingerType = useDinger;
+            }
+            keyName = dingerType + SPOT_SEPERATOR + keyName;
             dingerDefinition = DingerXmlPreparedEvent
                     .Container.INSTANCE.get(keyName);
 

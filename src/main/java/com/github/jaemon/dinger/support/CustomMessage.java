@@ -34,8 +34,6 @@ public interface CustomMessage {
      *              projectId
      * @param title
      *              标题-{@link DingerType#DINGTALK}Markdown使用
-     * @param keyword
-     *              关键字(方便日志检索)
      * @param content
      *              内容
      * @param phones
@@ -43,6 +41,6 @@ public interface CustomMessage {
      * @return
      *              消息内容字符串
      */
-    String message(String projectId, String title, String keyword, String content, List<String> phones);
+    String message(String projectId, String title, String content, List<String> phones);
 
 }

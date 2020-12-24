@@ -28,7 +28,7 @@ import java.util.List;
  * </blockquote>
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class DefaultHandler implements AlgorithmHandler {
     @Override

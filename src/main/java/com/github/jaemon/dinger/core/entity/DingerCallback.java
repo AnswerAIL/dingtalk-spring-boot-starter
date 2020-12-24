@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.entity;
+package com.github.jaemon.dinger.core.entity;
 
 import com.github.jaemon.dinger.exception.DingerException;
 
@@ -30,10 +30,6 @@ public class DingerCallback<T> {
      */
     private String dkid;
     /**
-     * 检索关键字(方便日志查询)
-     */
-    private String keyword;
-    /**
      * 通知信息
      */
     private T message;
@@ -45,9 +41,8 @@ public class DingerCallback<T> {
     public DingerCallback() {
     }
 
-    public DingerCallback(String dkid, String keyword, T message, DingerException ex) {
+    public DingerCallback(String dkid, T message, DingerException ex) {
         this.dkid = dkid;
-        this.keyword = keyword;
         this.message = message;
         this.ex = ex;
     }
@@ -58,14 +53,6 @@ public class DingerCallback<T> {
 
     public void setDkid(String dkid) {
         this.dkid = dkid;
-    }
-
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
     }
 
     public T getMessage() {

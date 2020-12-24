@@ -15,9 +15,9 @@
  */
 
 /**
- * WeTalk适配包
+ * 支持WeTalk包
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 package com.github.jaemon.dinger.wetalk;

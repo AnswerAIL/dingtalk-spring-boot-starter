@@ -27,7 +27,7 @@ import static com.github.jaemon.dinger.constant.DingerConstant.NEW_LINE;
  * XML字符串JavaBean对象互转工具类
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class XmlUtils {
 

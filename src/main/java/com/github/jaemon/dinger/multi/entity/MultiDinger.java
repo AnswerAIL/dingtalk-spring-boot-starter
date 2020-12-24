@@ -21,7 +21,7 @@ import com.github.jaemon.dinger.multi.DingerConfigHandler;
  * MultiDinger
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class MultiDinger {
     private String key;

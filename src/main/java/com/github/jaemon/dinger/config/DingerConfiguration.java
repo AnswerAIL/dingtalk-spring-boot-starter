@@ -15,12 +15,11 @@
  */
 package com.github.jaemon.dinger.config;
 
-import com.github.jaemon.dinger.DingerManagerBuilder;
-import com.github.jaemon.dinger.DingerRobot;
+import com.github.jaemon.dinger.core.DingerManagerBuilder;
+import com.github.jaemon.dinger.core.DingerRobot;
 import com.github.jaemon.dinger.core.DingerConfigurerAdapter;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.exception.ConfigurationException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -44,24 +43,24 @@ public class DingerConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DingerConfigurerAdapter.class)
-    public DingerConfigurerAdapter dingTalkConfigurerAdapter() {
+    public DingerConfigurerAdapter dingerConfigurerAdapter() {
         return new DingerConfigurerAdapter();
     }
 
     @Bean
-    public DingerManagerBuilder dingTalkManagerBuilder() {
+    public DingerManagerBuilder dingerManagerBuilder() {
         return new DingerManagerBuilder();
     }
 
 
     @Bean
-    public DingerRobot dingerSender(DingerConfigurerAdapter dingTalkConfigurerAdapter, DingerManagerBuilder dingTalkManagerBuilder, ObjectMapper objectMapper){
+    public DingerRobot dingerSender(DingerConfigurerAdapter dingerConfigurerAdapter, DingerManagerBuilder dingerManagerBuilder){
         try {
-            dingTalkConfigurerAdapter.configure(dingTalkManagerBuilder);
+            dingerConfigurerAdapter.configure(dingerManagerBuilder);
         } catch (Exception ex) {
             throw new ConfigurationException(ex);
         }
-        return new DingerRobot(dingerProperties, dingTalkManagerBuilder, objectMapper);
+        return new DingerRobot(dingerProperties, dingerManagerBuilder);
     }
 
 }

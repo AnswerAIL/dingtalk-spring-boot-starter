@@ -13,22 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.exception;
+package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+import java.lang.reflect.Parameter;
+import java.util.Map;
 
 /**
- * DingerXmlAnalysisException
+ * ParamHandler
  *
  * @author Jaemon
  * @since 1.0
  */
-public class DingerXmlAnalysisException extends DingerException {
-    public DingerXmlAnalysisException(String msg) {
-        super(msg, ExceptionEnum.DINER_XML_ANALYSIS_EXCEPTION);
-    }
+public interface ParamHandler {
 
-    public DingerXmlAnalysisException(Throwable cause) {
-        super(cause, ExceptionEnum.DINER_XML_ANALYSIS_EXCEPTION);
-    }
+    /**
+     * paramsHandler
+     *
+     * @param parameters parameters
+     * @param values values
+     * @return params map
+     */
+    Map<String, Object> paramsHandler(Parameter[] parameters, Object[] values);
+
 }

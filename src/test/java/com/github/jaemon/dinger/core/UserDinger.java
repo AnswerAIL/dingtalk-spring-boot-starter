@@ -19,14 +19,14 @@ import com.github.jaemon.dinger.core.annatations.Parameter;
 import com.github.jaemon.dinger.multi.annotations.MultiHandler;
 import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
 import com.github.jaemon.dinger.core.annatations.DingerText;
-import com.github.jaemon.dinger.entity.DingerResult;
+import com.github.jaemon.dinger.core.entity.DingerResponse;
 import com.github.jaemon.dinger.multi.handler.UserDingerConfigHandler;
 
 /**
  * UserDinger
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 // 标识对应的处理器
 @MultiHandler(UserDingerConfigHandler.class)
@@ -40,7 +40,7 @@ public interface UserDinger {
      *          result
      */
     @DingerText(value = "恭喜用户${userName}注册成功!", phones = {"13520200906"})
-    DingerResult userRegister(String userName);
+    DingerResponse userRegister(String userName);
 
     /**
      * 用户注销通知
@@ -57,5 +57,5 @@ public interface UserDinger {
             title = "用户注销反馈",
             phones = {"13520200906"}
     )
-    DingerResult userLogout(@Parameter("userId") Long id, String userName);
+    DingerResponse userLogout(@Parameter("userId") Long id, String userName);
 }

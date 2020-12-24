@@ -19,7 +19,7 @@ package com.github.jaemon.dinger.core.entity.enums;
  * AsyncExecuteType
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public enum AsyncExecuteType {
     TRUE(true),

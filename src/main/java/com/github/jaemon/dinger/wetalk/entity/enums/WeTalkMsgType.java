@@ -19,7 +19,7 @@ package com.github.jaemon.dinger.wetalk.entity.enums;
  * WeTalk支持的消息类型
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public enum WeTalkMsgType {
     /**

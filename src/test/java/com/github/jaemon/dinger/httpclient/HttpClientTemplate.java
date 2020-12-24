@@ -28,7 +28,7 @@ import java.util.List;
  * HttpClientTemplate
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class HttpClientTemplate {
     public static void main(String[] args) {

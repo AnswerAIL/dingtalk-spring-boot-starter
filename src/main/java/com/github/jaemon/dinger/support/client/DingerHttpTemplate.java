@@ -30,7 +30,7 @@ import java.util.Map;
  * Dinger默认Http客户端
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class DingerHttpTemplate extends AbstractDingerHttpClient {
     @Autowired

@@ -15,24 +15,21 @@
  */
 package com.github.jaemon.dinger.exception;
 
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.core.entity.Pairs;
 
 /**
- * DingerConfigRepeatedException
+ * 多Dinger配置注册异常
  *
  * @author Jaemon
  * @since 1.0
  */
-public class DingerConfigRepeatedException extends DingerException {
-    public DingerConfigRepeatedException() {
-        super(ExceptionEnum.DINGER_CONFIG_REPEATED_EXCEPTION);
+public class MultiDingerRegisterException extends DingerException {
+    public MultiDingerRegisterException(Pairs pairs) {
+        super(pairs);
     }
 
-    public DingerConfigRepeatedException(String msg) {
-        super(msg, ExceptionEnum.DINGER_CONFIG_REPEATED_EXCEPTION);
+    public MultiDingerRegisterException(Pairs pairs, String message) {
+        super(message, pairs);
     }
 
-    public DingerConfigRepeatedException(Throwable cause) {
-        super(cause, ExceptionEnum.DINGER_CONFIG_REPEATED_EXCEPTION);
-    }
 }

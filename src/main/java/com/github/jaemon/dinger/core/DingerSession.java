@@ -15,7 +15,6 @@
  */
 package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.DingerSender;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 
 import java.lang.reflect.Proxy;
@@ -24,14 +23,14 @@ import java.lang.reflect.Proxy;
  * DingerSession
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class DingerSession {
-    private DingerSender dingerSender;
+    private DingerRobot dingerRobot;
     private DingerProperties dingerProperties;
 
-    public DingerSession(DingerSender dingerSender, DingerProperties dingerProperties) {
-        this.dingerSender = dingerSender;
+    public DingerSession(DingerRobot dingerRobot, DingerProperties dingerProperties) {
+        this.dingerRobot = dingerRobot;
         this.dingerProperties = dingerProperties;
     }
 
@@ -40,7 +39,7 @@ public class DingerSession {
                 // bugfix gitee#I29N15
                 Thread.currentThread().getContextClassLoader(),
                 new Class[]{type},
-                new DingerHandleProxy(dingerSender, dingerProperties)
+                new DingerHandleProxy(dingerRobot, dingerProperties)
         );
     }
 

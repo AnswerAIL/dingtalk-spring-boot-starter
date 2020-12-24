@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.exception;
 
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
 
 /**
  * 发送消息异常

@@ -19,7 +19,7 @@ package com.github.jaemon.dinger.core;
  * DingerDefinitionGeneratorContext
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class DingerDefinitionGeneratorContext<T> {
     private String keyName;

@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * PackageUtils
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class PackageUtils {
     private static final Logger log = LoggerFactory.getLogger(PackageUtils.class);

@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * 钉钉消息体定义生成类
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
     private static final Logger log = LoggerFactory.getLogger(DingerDefinitionGenerator.class);

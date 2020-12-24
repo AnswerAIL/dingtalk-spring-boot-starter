@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  * DingerScan
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

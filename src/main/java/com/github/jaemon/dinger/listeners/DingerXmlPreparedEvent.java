@@ -17,7 +17,8 @@ package com.github.jaemon.dinger.listeners;
 
 import com.github.jaemon.dinger.core.DingerDefinitionResolver;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.exception.DingerAnalysisException;
 import com.github.jaemon.dinger.exception.DingerException;
 import com.github.jaemon.dinger.utils.DingerUtils;
 import com.github.jaemon.dinger.core.DingerConfig;
@@ -33,7 +34,7 @@ import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
  * DingerXmlPreparedEvent
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class DingerXmlPreparedEvent
         extends DingerDefinitionResolver
@@ -47,7 +48,9 @@ public class DingerXmlPreparedEvent
         registerDefaultDingerConfig(event.getEnvironment());
 
         try {
-            ApplicationEventTimeTable.dingerClasses = doAnalysis(event);
+            DingerListenersProperty.dingerClasses = doAnalysis(event);
+        } catch (DingerException ex) {
+            throw new DingerAnalysisException(ex.getPairs(), ex.getMessage());
         } catch (Exception ex) {
             throw new DingerException(ex, ExceptionEnum.UNKNOWN);
         }
@@ -78,7 +81,7 @@ public class DingerXmlPreparedEvent
             String secret = environment.getProperty(secretProp);
             boolean decrypt = getProperty(environment, decryptProp);
             boolean async = getProperty(environment, asyncExecuteProp);
-            DingerConfig defaultDingerConfig = new DingerConfig(tokenId);
+            DingerConfig defaultDingerConfig = DingerConfig.instance(tokenId);
             defaultDingerConfig.setDingerType(dingerType);
             defaultDingerConfig.setSecret(secret);
             if (decrypt) {

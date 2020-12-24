@@ -35,15 +35,6 @@ public class StartEventListener implements ApplicationListener<ApplicationStarti
 
     @Override
     public void onApplicationEvent(ApplicationStartingEvent event) {
-        if (ApplicationEventTimeTable.startTime > 0) {
-            log.info("dingtalk has already been initialized.");
-            return;
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("ready to execute ApplicationStartingEvent.");
-        }
-        ApplicationEventTimeTable.startTime = event.getTimestamp();
-
         Set<Object> allSources = event.getSpringApplication().getAllSources();
         Set<Class<?>> primarySources = new HashSet<>();
         for (Object source : allSources) {
@@ -54,6 +45,6 @@ public class StartEventListener implements ApplicationListener<ApplicationStarti
                 }
             }
         }
-        ApplicationEventTimeTable.primarySources = primarySources;
+        DingerListenersProperty.primarySources = primarySources;
     }
 }

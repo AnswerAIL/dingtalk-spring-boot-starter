@@ -23,7 +23,7 @@ import java.io.Serializable;
  * 企业微信-消息类型-图片类型
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class WeImage extends WeTalkMessage {
 

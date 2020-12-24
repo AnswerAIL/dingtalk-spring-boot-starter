@@ -15,12 +15,11 @@
  */
 package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.DingerSender;
 import com.github.jaemon.dinger.core.annatations.DingerClose;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.core.entity.MsgType;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
-import com.github.jaemon.dinger.entity.DingerResult;
+import com.github.jaemon.dinger.core.entity.DingerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,14 +33,14 @@ import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
  * Dinger Handle Proxy
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class DingerHandleProxy extends DingerMessageHandler implements InvocationHandler {
     private static final Logger log = LoggerFactory.getLogger(DingerHandleProxy.class);
     private static final String DEFAULT_STRING_METHOD = "java.lang.Object.toString";
 
-    public DingerHandleProxy(DingerSender dingerSender, DingerProperties dingerProperties) {
-        this.dingerSender = dingerSender;
+    public DingerHandleProxy(DingerRobot dingerRobot, DingerProperties dingerProperties) {
+        this.dingerRobot = dingerRobot;
         this.dingerProperties = dingerProperties;
     }
 
@@ -68,7 +67,7 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
 
         try {
             // method params map
-            Map<String, Object> params = paramsHandle(method.getParameters(), args);
+            Map<String, Object> params = paramsHandler(method.getParameters(), args);
 
             DingerType useDinger = dingerType(method);
             DingerDefinition dingerDefinition = dingerDefinition(
@@ -80,17 +79,10 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
 
             MsgType message = transfer(dingerDefinition, params);
 
-            // when keyword is null, use methodName + timestamps
-            String keyword = params.getOrDefault(
-                    KEYWORD,
-                    keyName + CONNECTOR + System.currentTimeMillis()
-            ).toString();
-            DingerResult dingerResult = dingerSender.send(
-                    keyword, message
-            );
+            DingerResponse dingerResponse = dingerRobot.send(message);
 
             // return...
-            return resultHandle(method.getReturnType(), dingerResult);
+            return resultHandler(method.getReturnType(), dingerResponse);
         } finally {
             DingerHelper.clearDinger();
         }

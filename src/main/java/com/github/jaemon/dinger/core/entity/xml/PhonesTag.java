@@ -25,7 +25,7 @@ import java.util.List;
  * PhonesTag
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @XmlRootElement(name = "phones")
 public class PhonesTag {

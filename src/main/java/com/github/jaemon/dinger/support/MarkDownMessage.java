@@ -27,7 +27,7 @@ import java.util.List;
 public class MarkDownMessage implements CustomMessage {
 
     @Override
-    public String message(String projectId, String title, String keyword, String content, List<String> phones) {
+    public String message(String projectId, String title, String content, List<String> phones) {
         // markdown在text内容里需要有@手机号
         StringBuilder text = new StringBuilder(title);
         if (phones != null && !phones.isEmpty()) {
@@ -36,7 +36,7 @@ public class MarkDownMessage implements CustomMessage {
             }
         }
         return MessageFormat.format(
-                "#### 【Dinger通知】 {0} \n - 项目名称: {1}\n- 检索关键字: {2}\n- 内容: {3}",
-                text, projectId, keyword, content);
+                "#### 【Dinger通知】 {0} \n - 项目名称: {1}\n- 内容: {2}",
+                text, projectId, content);
     }
 }

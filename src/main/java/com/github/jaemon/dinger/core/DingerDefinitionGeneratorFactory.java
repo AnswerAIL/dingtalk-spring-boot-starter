@@ -20,13 +20,13 @@ import com.github.jaemon.dinger.exception.DingerException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.jaemon.dinger.entity.enums.ExceptionEnum.DINGERDEFINITION_ERROR;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.DINGERDEFINITION_ERROR;
 
 /**
  * Dinger Definition工厂类
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class DingerDefinitionGeneratorFactory {
     /** dingerDefinition生成器 */

@@ -56,11 +56,6 @@ public class DingerProperties implements InitializingBean {
     private String projectId;
 
     /**
-     * 可选, 应用程序状态监控
-     */
-    private MonitorStatus monitor = new MonitorStatus();
-
-    /**
      * 使用dinger时, 对应的 xml配置路径.
      *
      * <blockquote>
@@ -95,14 +90,6 @@ public class DingerProperties implements InitializingBean {
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
-    }
-
-    public MonitorStatus getMonitor() {
-        return monitor;
-    }
-
-    public void setMonitor(MonitorStatus monitor) {
-        this.monitor = monitor;
     }
 
     public String getDingerLocations() {
@@ -159,7 +146,7 @@ public class DingerProperties implements InitializingBean {
          *
          * <b>解密密钥获取方式</b>
          * <ul>
-         *     <li>java -jar dingtalk-spring-boot-starter-[4.0.0].jar [tokenId]</li>
+         *     <li>java -jar dinger-spring-boot-starter-[1.0.0].jar [tokenId]</li>
          *     <li>ConfigTools.encrypt(tokenId)</li>
          * </ul>
          */
@@ -219,53 +206,14 @@ public class DingerProperties implements InitializingBean {
         }
     }
 
-    public static class MonitorStatus {
-        /**
-         * 应用启动成功是否通知
-         */
-        private boolean success = false;
-        /**
-         * 应用启动失败是否通知
-         */
-        private boolean falied = false;
-        /**
-         * 应用退出是否通知
-         */
-        private boolean exit = false;
-
-        public boolean isSuccess() {
-            return success;
-        }
-
-        public void setSuccess(boolean success) {
-            this.success = success;
-        }
-
-        public boolean isFalied() {
-            return falied;
-        }
-
-        public void setFalied(boolean falied) {
-            this.falied = falied;
-        }
-
-        public boolean isExit() {
-            return exit;
-        }
-
-        public void setExit(boolean exit) {
-            this.exit = exit;
-        }
-    }
-
     @Override
     public void afterPropertiesSet() throws Exception {
         for (Map.Entry<DingerType, Dinger> entry : dingers.entrySet()) {
             DingerType dingerType = entry.getKey();
             if (!dingerType.isEnabled()) {
-                log.warn("dinger={} is disabled.", dingerType);
-                dingers.remove(dingerType);
-                continue;
+                throw new InvalidPropertiesFormatException(
+                        String.format("dinger=%s is disabled", dingerType)
+                );
             }
             Dinger dinger = entry.getValue();
 

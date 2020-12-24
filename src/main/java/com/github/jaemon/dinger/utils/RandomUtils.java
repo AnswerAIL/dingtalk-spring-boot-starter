@@ -23,7 +23,7 @@ import java.util.Random;
  * method and its system-wide <code>Random</code> object.
  *
  * @author Gary D. Gregory
- * @since 2.0
+ * @since 1.0
  * @version $Id: RandomUtils.java 471626 2006-11-06 04:02:09Z bayard $
  */
 public class RandomUtils {

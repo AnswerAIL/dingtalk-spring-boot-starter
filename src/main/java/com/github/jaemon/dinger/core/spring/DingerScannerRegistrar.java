@@ -16,9 +16,8 @@
 package com.github.jaemon.dinger.core.spring;
 
 import com.github.jaemon.dinger.core.annatations.DingerScan;
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
 import com.github.jaemon.dinger.exception.DingerException;
-import com.github.jaemon.dinger.listeners.ApplicationEventTimeTable;
 import com.github.jaemon.dinger.listeners.DingerListenersProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,7 @@ import static com.github.jaemon.dinger.utils.PackageUtils.classNames;
  * DingerScannerRegistrar
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class DingerScannerRegistrar
         extends DingerListenersProperty
@@ -53,7 +52,7 @@ public class DingerScannerRegistrar
         boolean isDebugEnabled = log.isDebugEnabled();
         log.info("ready to execute dingerScanner...");
         try {
-            List<Class<?>> dingerClasses = ApplicationEventTimeTable.dingerClasses();
+            List<Class<?>> dingerClasses = DingerListenersProperty.dingerClasses();
 
             if (!dingerClasses.isEmpty()) {
                 registerBeanDefinition(registry, dingerClasses);

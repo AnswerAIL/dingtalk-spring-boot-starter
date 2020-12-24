@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.sign;
-
-import com.github.jaemon.dinger.core.entity.enums.DingerType;
-import com.github.jaemon.dinger.entity.SignResult;
+package com.github.jaemon.dinger.support.sign;
 
 /**
- * 默认签名算法 {@link DingerType#DINGTALK}
+ * 签名返回体基础类
  *
  * @author Jaemon
  * @since 1.0
  */
-public class DingTalkSignAlgorithm implements DingerSignAlgorithm<SignResult> {
-    @Override
-    public SignResult sign(String secret) throws Exception {
-        Long timestamp = System.currentTimeMillis();
+public abstract class SignBase {
+    protected final static String SEPERATOR = "&";
 
-        String sign = algorithm(timestamp, secret);
-
-        return new SignResult(sign, timestamp);
-    }
+    /**
+     * 签名对象转字符串
+     *
+     * @return 返回转换后结果
+     */
+    public abstract String transfer();
 }

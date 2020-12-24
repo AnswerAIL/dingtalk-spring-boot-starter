@@ -19,13 +19,10 @@ import com.github.jaemon.dinger.constant.DingerConstant;
 import com.github.jaemon.dinger.core.annatations.DingerScan;
 import com.github.jaemon.dinger.core.entity.enums.DingerDefinitionType;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
 import com.github.jaemon.dinger.exception.DingerException;
-import com.github.jaemon.dinger.listeners.ApplicationEventTimeTable;
 import com.github.jaemon.dinger.listeners.DingerListenersProperty;
 import com.github.jaemon.dinger.utils.PackageUtils;
-import com.github.jaemon.dinger.exception.DingerConfigRepeatedException;
-import com.github.jaemon.dinger.exception.DingerScanRepeatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -36,12 +33,14 @@ import java.util.*;
 import java.util.List;
 
 import static com.github.jaemon.dinger.core.AbstractDingerDefinitionResolver.Container.INSTANCE;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.DINGER_REPEATED_EXCEPTION;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.MULTI_DINGER_SCAN_ERROR;
 
 /**
  * AbstractDingerDefinitionResolver
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public abstract class AbstractDingerDefinitionResolver
         extends DingerListenersProperty {
@@ -129,7 +128,7 @@ public abstract class AbstractDingerDefinitionResolver
         DingerScan dingerScan = null;
         List<Class<?>> dingerClasses = new ArrayList<>();
         // 获取启动类下所有Dinger标注的类信息
-        for (Class<?> primarySource : ApplicationEventTimeTable.primarySources()) {
+        for (Class<?> primarySource : DingerListenersProperty.primarySources()) {
             if (debugEnabled) {
                 log.debug("ready to analysis primarySource[{}].", primarySource.getName());
             }
@@ -139,7 +138,7 @@ public abstract class AbstractDingerDefinitionResolver
                 if (dingerScan == null) {
                     dingerScan = primarySource.getAnnotation(DingerScan.class);
                 } else {
-                    throw new DingerScanRepeatedException();
+                    throw new DingerException(MULTI_DINGER_SCAN_ERROR);
                 }
             }
         }
@@ -201,7 +200,7 @@ public abstract class AbstractDingerDefinitionResolver
             Class<? extends DingerDefinitionGenerator> dingerDefinitionGeneratorClass =
                     dingerDefinitionGeneratorMap.get(key);
             if (dingerDefinitionGeneratorClass == null) {
-                throw new DingerException(key + "无效.", ExceptionEnum.REGISTER_DINGERDEFINITION_ERROR);
+                throw new DingerException(ExceptionEnum.DINGERDEFINITIONTYPE_UNDEFINED_KEY, key);
             }
 
             DingerDefinitionGenerator dingerDefinitionGenerator = DingerDefinitionGeneratorFactory.get(
@@ -218,7 +217,7 @@ public abstract class AbstractDingerDefinitionResolver
                 continue;
             }
             if (INSTANCE.contains(keyName)) {
-                throw new DingerConfigRepeatedException("Dinger[" + keyName + "]消息对象重复定义了.");
+                throw new DingerException(DINGER_REPEATED_EXCEPTION, keyName);
             }
 
             // DingerConfig Priority： `@DingerText | @DingerMarkdown | XML` > `@DingerConfiguration` > `***.yml | ***.properties`

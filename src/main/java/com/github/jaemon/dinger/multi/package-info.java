@@ -18,6 +18,6 @@
  * 多DingerConfig配置
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 package com.github.jaemon.dinger.multi;

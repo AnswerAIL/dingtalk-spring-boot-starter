@@ -35,7 +35,7 @@ import static com.github.jaemon.dinger.utils.DingerUtils.uuid;
  * 轮询算法-测试用例 {@link RoundRobinHandler}
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class RoundRobinHandlerTest {
 
@@ -47,7 +47,7 @@ public class RoundRobinHandlerTest {
 
         List<DingerConfig> dingerConfigs = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            DingerConfig dingerConfig = new DingerConfig(uuid());
+            DingerConfig dingerConfig = DingerConfig.instance(uuid());
             dingerConfigs.add(dingerConfig);
         }
         System.out.println(objectMapper.writeValueAsString(

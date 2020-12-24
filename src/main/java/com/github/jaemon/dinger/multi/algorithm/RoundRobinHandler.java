@@ -25,7 +25,7 @@ import java.util.List;
  * 轮询算法
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class RoundRobinHandler implements AlgorithmHandler {
     private static final Logger log = LoggerFactory.getLogger(RoundRobinHandler.class);

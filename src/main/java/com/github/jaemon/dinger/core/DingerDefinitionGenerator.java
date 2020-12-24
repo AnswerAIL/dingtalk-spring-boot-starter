@@ -20,7 +20,7 @@ package com.github.jaemon.dinger.core;
  * Diner消息体定义生成
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public abstract class DingerDefinitionGenerator<T> {
 

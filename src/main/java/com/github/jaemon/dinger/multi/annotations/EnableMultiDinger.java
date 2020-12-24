@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger.multi.annotations;
 
+import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.multi.DingerConfigHandler;
 import com.github.jaemon.dinger.multi.MultiDingerScannerRegistrar;
 import org.springframework.context.annotation.Import;
@@ -25,7 +26,7 @@ import java.lang.annotation.*;
  * EnableMultiDinger
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -33,10 +34,6 @@ import java.lang.annotation.*;
 @Import(MultiDingerScannerRegistrar.class)
 public @interface EnableMultiDinger {
 
-    /**
-     * global dingerHandler
-     *
-     * @return {@link DingerConfigHandler}
-     */
-    Class<? extends DingerConfigHandler> value() default DingerConfigHandler.class;
+    MultiDinger[] value() default {};
+
 }

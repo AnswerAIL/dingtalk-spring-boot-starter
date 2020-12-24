@@ -18,6 +18,6 @@
  * Dinger框架核心包
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 package com.github.jaemon.dinger.core;

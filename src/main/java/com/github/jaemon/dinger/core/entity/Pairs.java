@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.exception;
-
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+package com.github.jaemon.dinger.core.entity;
 
 /**
- * DingerScanRepeatedException
+ * K-V对
  *
  * @author Jaemon
  * @since 1.0
  */
-public class DingerScanRepeatedException extends DingerException {
-    public DingerScanRepeatedException() {
-        super(ExceptionEnum.DINGERSCAN_REPEATED_EXCEPTION);
-    }
+public interface Pairs<K, V> {
 
-    public DingerScanRepeatedException(String msg) {
-        super(msg, ExceptionEnum.DINGERSCAN_REPEATED_EXCEPTION);
-    }
+    /**
+     * 消息码
+     *
+     * @return K
+     */
+    K code();
 
-    public DingerScanRepeatedException(Throwable cause) {
-        super(cause, ExceptionEnum.DINGERSCAN_REPEATED_EXCEPTION);
-    }
+    /**
+     * 消息描述
+     *
+     * @return V
+     */
+    V desc();
+
 }

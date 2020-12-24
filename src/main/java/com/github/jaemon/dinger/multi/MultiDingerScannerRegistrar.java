@@ -17,8 +17,10 @@ package com.github.jaemon.dinger.multi;
 
 import com.github.jaemon.dinger.constant.DingerConstant;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.exception.MultiDingerRegisterException;
 import com.github.jaemon.dinger.listeners.DingerListenersProperty;
+import com.github.jaemon.dinger.multi.annotations.MultiDinger;
 import com.github.jaemon.dinger.multi.entity.MultiDingerAlgorithmDefinition;
 import com.github.jaemon.dinger.core.DingerConfig;
 import com.github.jaemon.dinger.exception.DingerException;
@@ -47,15 +49,14 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
-import static com.github.jaemon.dinger.entity.enums.ExceptionEnum.GLOBAL_MULTIDINGER_CONFIG_EXCEPTION;
-import static com.github.jaemon.dinger.entity.enums.ExceptionEnum.MULTIDINGER_ALGORITHM_EXCEPTION;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.MULTIDINGER_ALGORITHM_EXCEPTION;
 import static com.github.jaemon.dinger.multi.MultiDingerConfigContainer.GLOABL_KEY;
 
 /**
  * MultiDingerScannerRegistrar
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class MultiDingerScannerRegistrar
         extends DingerListenersProperty
@@ -76,53 +77,64 @@ public class MultiDingerScannerRegistrar
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        boolean debugEnabled = log.isDebugEnabled();
         log.info("ready to execute multiDingerScanner...");
 
         try {
-            if (!importingClassMetadata.hasAnnotation(EnableMultiDinger.class.getName())) {
-                log.warn("import class can't find EnableMultiDinger annotation.");
-                return;
-            }
-
-            AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(
-                    importingClassMetadata.getAnnotationAttributes(EnableMultiDinger.class.getName())
-            );
-
-            Class<? extends DingerConfigHandler> value = annotationAttributes.getClass("value");
-            log.info("multi dinger register and is it global register? {}-{}.", !value.isInterface(), value.getName());
-            // 指定多机器人配置处理逻辑
-            if (value.isInterface()) {
-                if (DingerConfigHandler.class.equals(value)) {
-                    // 处理需要执行MultiDinger逻辑的dingerClass
-                    List<Class<?>> dingerClasses = dingerClasses();
-                    if (dingerClasses.isEmpty()) {
-                        log.warn("dinger class is empty, so no need to deal with multiDinger.");
-                        return;
-                    }
-
-                    multiDingerHandler(registry, dingerClasses);
-
-                    if (!MultiDingerConfigContainer.INSTANCE.isEmpty()) {
-                        MultiDingerProperty.multiDinger = true;
-                    }
-                } else {
-                    throw new DingerException(GLOBAL_MULTIDINGER_CONFIG_EXCEPTION);
-                }
-            // 全局多机器人配置处理逻辑
-            } else {
-                if (debugEnabled) {
-                    log.debug("enable global multi dinger, and multiDinger handler class={}.", value.getName());
-                }
-                DingerConfigHandler dingerConfigHandler = BeanUtils.instantiateClass(value);
-                registerHandler(registry, GLOABL_KEY, dingerConfigHandler);
-                MultiDingerProperty.multiDinger = true;
-            }
-
+            doScanAndRegister(importingClassMetadata, registry);
+        } catch (DingerException ex) {
+            throw new MultiDingerRegisterException(ex.getPairs(), ex.getMessage());
+        } catch (Exception ex) {
+            throw new DingerException(ex, ExceptionEnum.UNKNOWN);
         } finally {
             emptyDingerClasses();
         }
 
+    }
+
+
+    private void doScanAndRegister(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+        boolean debugEnabled = log.isDebugEnabled();
+        if (!importingClassMetadata.hasAnnotation(EnableMultiDinger.class.getName())) {
+            log.warn("import class can't find EnableMultiDinger annotation.");
+            return;
+        }
+
+        AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(
+                importingClassMetadata.getAnnotationAttributes(EnableMultiDinger.class.getName())
+        );
+
+        AnnotationAttributes[] value = annotationAttributes.getAnnotationArray("value");
+        boolean aloneMulti = value.length == 0;
+        log.info("multi dinger register and is it global register? {}.", !aloneMulti);
+        // 指定多机器人配置处理逻辑
+        if (aloneMulti) {
+            // 处理需要执行MultiDinger逻辑的dingerClass
+            List<Class<?>> dingerClasses = dingerClasses();
+            if (dingerClasses.isEmpty()) {
+                log.warn("dinger class is empty, so no need to deal with multiDinger.");
+                return;
+            }
+
+            multiDingerHandler(registry, dingerClasses);
+
+            if (!MultiDingerConfigContainer.INSTANCE.isEmpty()) {
+                MultiDingerProperty.multiDinger = true;
+            }
+            // 全局多机器人配置处理逻辑
+        } else {
+            for (AnnotationAttributes attributes : value) {
+                DingerType dinger = attributes.getEnum("dinger");
+                Class<? extends DingerConfigHandler> handler = attributes.getClass("handler");
+
+                if (debugEnabled) {
+                    log.debug("enable {} global multi dinger, and multiDinger handler class={}.",
+                            dinger, handler.getName());
+                }
+                DingerConfigHandler dingerConfigHandler = BeanUtils.instantiateClass(handler);
+                registerHandler(registry, dinger, dinger + DingerConstant.SPOT_SEPERATOR + GLOABL_KEY, dingerConfigHandler);
+                MultiDingerProperty.multiDinger = true;
+            }
+        }
     }
 
 
@@ -140,7 +152,8 @@ public class MultiDingerScannerRegistrar
         for (Class<?> dingerClass : dingerClasses) {
             if (dingerClass.isAnnotationPresent(MultiHandler.class)) {
                 MultiHandler multiDinger = dingerClass.getAnnotation(MultiHandler.class);
-                Class<? extends DingerConfigHandler> dingerConfigHandler = multiDinger.value();
+                MultiDinger value = multiDinger.value();
+                Class<? extends DingerConfigHandler> dingerConfigHandler = value.handler();
                 String beanName = dingerConfigHandler.getSimpleName();
                 // 如果DingerClass指定的MultiHandler对应的处理器为接口，则直接跳过
                 if (dingerConfigHandler.isInterface()) {
@@ -150,9 +163,9 @@ public class MultiDingerScannerRegistrar
                 }
                 String key = dingerClass.getName();
                 DingerConfigHandler handler = ClassUtils.newInstance(dingerConfigHandler);
-                DingerType dinger = handler.dinger();
+                DingerType dinger = value.dinger();
 
-                registerHandler(registry, dinger + DingerConstant.SPOT_SEPERATOR + key, handler);
+                registerHandler(registry, dinger, dinger + DingerConstant.SPOT_SEPERATOR + key, handler);
 
                 if (debugEnabled) {
                     log.debug("regiseter multi dinger for dingerClass={} and dingerConfigHandler={}.",
@@ -168,20 +181,22 @@ public class MultiDingerScannerRegistrar
      *
      * @param registry
      *          注册器
+     * @param dinger
+     *          Dinger类型
      * @param key
      *          当前dingerClass类名
      * @param dingerConfigHandler
      *          dingerClass指定的multiHandler处理器
      */
-    private void registerHandler(BeanDefinitionRegistry registry, String key, DingerConfigHandler dingerConfigHandler) {
-        DingerType dinger = dingerConfigHandler.dinger();
+    private void registerHandler(BeanDefinitionRegistry registry, DingerType dinger, String key, DingerConfigHandler dingerConfigHandler) {
+        String dingerConfigHandlerClassName = dingerConfigHandler.getClass().getSimpleName();
         // 获取当前指定算法类名, 默认四种，或使用自定义
         Class<? extends AlgorithmHandler> algorithm = dingerConfigHandler.algorithmHandler();
         // if empty? use default dinger config
         List<DingerConfig> dingerConfigs = dingerConfigHandler.dingerConfigs();
 
         if (algorithm == null) {
-            throw new DingerException(MULTIDINGER_ALGORITHM_EXCEPTION);
+            throw new DingerException(MULTIDINGER_ALGORITHM_EXCEPTION, dingerConfigHandlerClassName);
         }
 
         dingerConfigs.stream().forEach(e -> {
@@ -189,9 +204,10 @@ public class MultiDingerScannerRegistrar
         });
         for (int i = 0; i < dingerConfigs.size(); i++) {
             DingerConfig dingerConfig = dingerConfigs.get(i);
-            if (DingerUtils.isEmpty(dingerConfig.getTokenId()) || dinger != dingerConfig.getDingerType()) {
-                throw new DingerException(algorithm.getSimpleName() + "第" + i + "个dingerConfig配置异常",
-                        ExceptionEnum.MULTI_DINGERCONFIGS_EXCEPTION);
+            if (DingerUtils.isEmpty(dingerConfig.getTokenId()) || (
+                    dingerConfig.getDingerType() != null && dinger != dingerConfig.getDingerType())
+            ) {
+                throw new DingerException(ExceptionEnum.DINGER_CONFIG_HANDLER_EXCEPTION, dingerConfigHandlerClassName, i);
             }
         }
 
@@ -216,7 +232,7 @@ public class MultiDingerScannerRegistrar
             String beanName = key + SPOT_SEPERATOR + algorithm.getSimpleName();
             registry.registerBeanDefinition(beanName, beanDefinition);
             MULTIDINGER_ALGORITHM_DEFINITION_MAP.put(
-                    beanName, new MultiDingerAlgorithmDefinition(key, algorithm, dingerConfigs)
+                    beanName, new MultiDingerAlgorithmDefinition(key, algorithm, dingerConfigs, dingerConfigHandlerClassName)
             );
             mode = AnalysisEnum.SPRING_CONTAINER;
         }

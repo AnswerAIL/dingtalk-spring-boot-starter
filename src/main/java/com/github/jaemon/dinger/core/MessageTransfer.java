@@ -23,7 +23,7 @@ import java.util.Map;
  * MessageTransfer
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public interface MessageTransfer {
 

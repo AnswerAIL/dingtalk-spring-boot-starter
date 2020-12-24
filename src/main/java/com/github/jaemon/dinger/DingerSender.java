@@ -15,12 +15,10 @@
  */
 package com.github.jaemon.dinger;
 
-import com.github.jaemon.dinger.core.entity.MsgType;
+import com.github.jaemon.dinger.core.entity.DingerRequest;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.entity.enums.MessageSubType;
-import com.github.jaemon.dinger.entity.DingerResult;
-
-import java.util.List;
+import com.github.jaemon.dinger.core.entity.DingerResponse;
 
 /**
  * DingTalk Sender
@@ -36,16 +34,12 @@ public interface DingerSender {
      *
      * @param messageSubType
      *              消息类型{@link MessageSubType}
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param title
-     *              标题(dingtalk-markdown)
-     * @param content
-     *              消息内容
+     * @param request
+     *              请求体 {@link DingerRequest}
      * @return
      *              响应报文
      * */
-    DingerResult send(MessageSubType messageSubType, String keyword, String title, String content);
+    DingerResponse send(MessageSubType messageSubType, DingerRequest request);
 
     /**
      * 发送预警消息到钉钉
@@ -54,134 +48,11 @@ public interface DingerSender {
      *              Dinger类型 {@link DingerType}
      * @param messageSubType
      *              消息类型{@link MessageSubType}
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param title
-     *              标题(dingtalk-markdown)
-     * @param content
-     *              消息内容
+     * @param request
+     *              请求体 {@link DingerRequest}
      * @return
      *              响应报文
      * */
-    DingerResult send(DingerType dingerType, MessageSubType messageSubType, String keyword, String title, String content);
+    DingerResponse send(DingerType dingerType, MessageSubType messageSubType, DingerRequest request);
 
-
-    /**
-     * 发送预警消息到钉钉-消息指定艾特人电话信息
-     *
-     * @param messageSubType
-     *              消息类型{@link MessageSubType}
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param title
-     *              副标题(dingtalk-markdown)
-     * @param content
-     *              消息内容
-     * @param phones
-     *              艾特人电话集
-     * @return
-     *              响应报文
-     * */
-    DingerResult send(MessageSubType messageSubType, String keyword, String title, String content, List<String> phones);
-
-    /**
-     * 发送预警消息到钉钉-消息指定艾特人电话信息
-     *
-     * @param dingerType
-     *              Dinger类型 {@link DingerType}
-     * @param messageSubType
-     *              消息类型{@link MessageSubType}
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param title
-     *              副标题(dingtalk-markdown)
-     * @param content
-     *              消息内容
-     * @param phones
-     *              艾特人电话集
-     * @return
-     *              响应报文
-     * */
-    DingerResult send(DingerType dingerType, MessageSubType messageSubType, String keyword, String title, String content, List<String> phones);
-
-
-    /**
-     * 发送预警消息到钉钉-艾特所有人(仅限{@link MessageSubType#TEXT})
-     *
-     * <pre>
-     *     markdown不支持艾特全部
-     * </pre>
-     *
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param title
-     *              副标题(dingtalk-markdown)
-     * @param content
-     *              消息内容
-     * @return
-     *              响应报文
-     * */
-    DingerResult sendAll(String keyword, String title, String content);
-
-    /**
-     * 发送预警消息到钉钉-艾特所有人(仅限{@link MessageSubType#TEXT})
-     *
-     * <pre>
-     *     markdown不支持艾特全部
-     * </pre>
-     *
-     * @param dingerType
-     *              Dinger类型 {@link DingerType}
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param title
-     *              副标题(dingtalk-markdown)
-     * @param content
-     *              消息内容
-     * @return
-     *              响应报文
-     * */
-    DingerResult sendAll(DingerType dingerType, String keyword, String title, String content);
-
-    /**
-     * 发送完全自定义消息-对象方式
-     *
-     * <blockquote>
-     *     具体报文体格式参见： <a>https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/e9d991e2</a>
-     * </blockquote>
-     *
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param message
-     *              消息内容
-     * @param <T>
-     *              T extends {@link MsgType}
-     * @return
-     *              响应报文
-     */
-    <T extends MsgType> DingerResult send(String keyword, T message);
-
-    /**
-     * 发送完全自定义消息-json字符串方式
-     *
-     * <blockquote>
-     *     具体报文体格式参见：
-     *     <ul>
-     *         <li>DingTalk: https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5h/e9d991e2</li>
-     *         <li>WeTalk: https://work.weixin.qq.com/api/doc/90000/90136/91770</li>
-     *     </ul>
-     * </blockquote>
-     *
-     * @param keyword
-     *              关键词(方便定位日志)
-     * @param dingerType
-     *              机器人类型 {@link DingerType}
-     * @param message
-     *              消息内容
-     * @param <T>
-     *              消息类型
-     * @return
-     *              响应报文
-     */
-    <T> DingerResult send(String keyword, DingerType dingerType, T message);
 }

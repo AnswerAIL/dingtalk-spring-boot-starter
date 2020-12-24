@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * DingerTokenId
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE})
@@ -33,7 +33,7 @@ public @interface DingerTokenId {
     String value();
 
     /**
-     * @return dingtalk sign key
+     * @return dinger sign key
      */
     String secret() default "";
 

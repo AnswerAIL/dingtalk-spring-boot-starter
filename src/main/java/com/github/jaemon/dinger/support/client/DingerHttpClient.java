@@ -23,7 +23,7 @@ import java.util.Map;
  * DingerHttpClient
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public interface DingerHttpClient {
 

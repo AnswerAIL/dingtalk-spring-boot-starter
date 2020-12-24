@@ -15,9 +15,8 @@
  */
 package com.github.jaemon.dinger.config;
 
-import com.github.jaemon.dinger.DingerRobot;
+import com.github.jaemon.dinger.core.DingerRobot;
 import com.github.jaemon.dinger.constant.DingerConstant;
-import com.github.jaemon.dinger.entity.DkThreadPoolProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -45,23 +44,23 @@ import java.util.concurrent.ThreadPoolExecutor;
 @ConditionalOnBean(DingerRobot.class)
 //@Conditional(AsyncCondition.class)
 @ConditionalOnMissingBean(name = DingerConstant.DINGER_EXECUTOR)
-@EnableConfigurationProperties({DkThreadPoolProperties.class})
+@EnableConfigurationProperties({DingerThreadPoolProperties.class})
 public class DingerThreadPoolConfig {
 
 
     @Bean(name = DingerConstant.DINGER_EXECUTOR)
-    public Executor dingTalkExecutor(DkThreadPoolProperties threadPoolProperties) {
+    public Executor dingTalkExecutor(DingerThreadPoolProperties dingerThreadPoolProperties) {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 核心线程数
-        executor.setCorePoolSize(threadPoolProperties.getCoreSize());
+        executor.setCorePoolSize(dingerThreadPoolProperties.getCoreSize());
         // 最大线程数
-        executor.setMaxPoolSize(threadPoolProperties.getMaxSize());
+        executor.setMaxPoolSize(dingerThreadPoolProperties.getMaxSize());
         // 线程最大空闲时间
-        executor.setKeepAliveSeconds(threadPoolProperties.getKeepAliveSeconds());
+        executor.setKeepAliveSeconds(dingerThreadPoolProperties.getKeepAliveSeconds());
         // 队列大小
-        executor.setQueueCapacity(threadPoolProperties.getQueueCapacity());
+        executor.setQueueCapacity(dingerThreadPoolProperties.getQueueCapacity());
         // 指定用于新创建的线程名称的前缀
-        executor.setThreadNamePrefix(threadPoolProperties.getThreadNamePrefix());
+        executor.setThreadNamePrefix(dingerThreadPoolProperties.getThreadNamePrefix());
 
         // 使用自定义拒绝策略, 直接抛出异常
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());

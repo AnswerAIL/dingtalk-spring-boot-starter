@@ -21,7 +21,7 @@ import com.github.jaemon.dinger.core.DingerRefresh;
  * MultiDingerRefresh
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class MultiDingerRefresh extends DingerRefresh {
 

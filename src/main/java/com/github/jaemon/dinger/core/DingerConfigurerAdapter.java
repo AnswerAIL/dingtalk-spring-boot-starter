@@ -15,8 +15,6 @@
  */
 package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.DingerManagerBuilder;
-
 /**
  *  DingTalk Configurer Adapter
  *

@@ -25,7 +25,7 @@ import com.github.jaemon.dinger.wetalk.WeTalkDefinitionGenerator;
  * Dinger消息体定义类型
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public enum DingerDefinitionType {
 

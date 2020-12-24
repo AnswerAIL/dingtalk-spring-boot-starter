@@ -20,13 +20,13 @@ import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import java.lang.annotation.*;
 
 /**
- * Dinger
+ * 指定当前 <code>***Dinger</code> 使用的 Dinger 类型
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target(ElementType.TYPE)
 @Documented
 public @interface Dinger {
     /**

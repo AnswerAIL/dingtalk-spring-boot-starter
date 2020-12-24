@@ -25,7 +25,7 @@ import static com.github.jaemon.dinger.utils.DingerUtils.replaceHeadTailLineBrea
  * TokenId
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @XmlRootElement(name = "token-id")
 public class TokenId {

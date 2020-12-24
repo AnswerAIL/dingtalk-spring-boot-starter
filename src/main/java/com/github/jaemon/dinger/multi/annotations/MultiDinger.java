@@ -13,21 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.entity;
+package com.github.jaemon.dinger.multi.annotations;
+
+import com.github.jaemon.dinger.core.entity.enums.DingerType;
+import com.github.jaemon.dinger.multi.DingerConfigHandler;
+
+import java.lang.annotation.*;
 
 /**
- * 签名返回体基础类
+ * MultiDinger
  *
  * @author Jaemon
  * @since 1.0
  */
-public abstract class SignBase {
-    protected final static String SEPERATOR = "&";
-
+@Target(ElementType.ANNOTATION_TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface MultiDinger {
     /**
-     * 签名对象转字符串
+     * 指定Dinger类型
      *
-     * @return 返回转换后结果
+     * @return
+     *      dinger {@link DingerType}
      */
-    public abstract String transfer();
+    DingerType dinger();
+    /**
+     * global dingerHandler
+     *
+     * @return {@link DingerConfigHandler}
+     */
+    Class<? extends DingerConfigHandler> handler();
 }

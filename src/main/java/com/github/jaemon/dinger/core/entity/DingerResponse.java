@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.entity;
+package com.github.jaemon.dinger.core.entity;
 
-import com.github.jaemon.dinger.entity.enums.ResultCode;
+import com.github.jaemon.dinger.core.entity.enums.DingerResponseCodeEnum;
 
 /**
- * DingTalk Result
+ * Dinger响应体
  *
  * @author Jaemon
  * @since 1.0
  */
-public class DingerResult {
+public class DingerResponse {
     /**
      * 响应码
      */
@@ -41,33 +41,33 @@ public class DingerResult {
      */
     private String data;
 
-    private DingerResult(ResultCode resultCode, String logid) {
+    private DingerResponse(DingerResponseCodeEnum resultCode, String logid) {
         this.code = resultCode.code();
         this.message = resultCode.message();
         this.logid = logid;
     }
 
-    private DingerResult(ResultCode resultCode, String logid, String data) {
+    private DingerResponse(DingerResponseCodeEnum resultCode, String logid, String data) {
         this.code = resultCode.code();
         this.message = resultCode.message();
         this.logid = logid;
         this.data = data;
     }
 
-    public static <T> DingerResult success(String logId, String data) {
-        return new DingerResult(ResultCode.SUCCESS, logId, data);
+    public static <T> DingerResponse success(String logId, String data) {
+        return new DingerResponse(DingerResponseCodeEnum.SUCCESS, logId, data);
     }
 
-    public static <T> DingerResult success(ResultCode resultCode, String logId, String data) {
-        return new DingerResult(resultCode, logId, data);
+    public static <T> DingerResponse success(DingerResponseCodeEnum resultCode, String logId, String data) {
+        return new DingerResponse(resultCode, logId, data);
     }
 
-    public static DingerResult failed(String logid) {
-        return new DingerResult(ResultCode.FAILED, logid);
+    public static DingerResponse failed(String logid) {
+        return new DingerResponse(DingerResponseCodeEnum.FAILED, logid);
     }
 
-    public static DingerResult failed(ResultCode resultCode, String logid) {
-        return new DingerResult(resultCode, logid);
+    public static DingerResponse failed(DingerResponseCodeEnum resultCode, String logid) {
+        return new DingerResponse(resultCode, logid);
     }
 
     public String getCode() {

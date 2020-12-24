@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.core;
+package com.github.jaemon.dinger.exception;
 
-import java.lang.reflect.Parameter;
-import java.util.Map;
+import com.github.jaemon.dinger.core.entity.Pairs;
 
 /**
- * ParamHandle
+ * Dinger解析异常
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
-public interface ParamHandle {
+public class DingerAnalysisException extends DingerException {
+    public DingerAnalysisException(Pairs pairs) {
+        super(pairs);
+    }
 
-    /**
-     * paramsHandle
-     *
-     * @param parameters parameters
-     * @param values values
-     * @return params map
-     */
-    Map<String, Object> paramsHandle(Parameter[] parameters, Object[] values);
-
+    public DingerAnalysisException(Pairs pairs, String message) {
+        super(message, pairs);
+    }
 }

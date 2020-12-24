@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * Dinger类型
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public enum DingerType {
     DINGTALK("钉钉", "https://oapi.dingtalk.com/robot/send?access_token", true),

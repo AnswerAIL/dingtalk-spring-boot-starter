@@ -25,7 +25,7 @@ import java.util.Map;
  * 企业微信-消息类型-文本类型
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class WeText extends WeTalkMessage {
     private Text text;

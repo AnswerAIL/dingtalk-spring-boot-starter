@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger;
+package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.core.entity.enums.MessageSubType;
-import com.github.jaemon.dinger.sign.DingerSignAlgorithm;
+import com.github.jaemon.dinger.support.sign.DingerSignAlgorithm;
 import com.github.jaemon.dinger.support.DingerExceptionCallback;
 import com.github.jaemon.dinger.support.CustomMessage;
 import com.github.jaemon.dinger.support.DingerAsyncCallback;

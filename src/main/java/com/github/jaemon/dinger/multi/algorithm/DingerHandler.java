@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </blockquote>
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class DingerHandler implements AlgorithmHandler {
     private static final Logger log = LoggerFactory.getLogger(DingerHandler.class);

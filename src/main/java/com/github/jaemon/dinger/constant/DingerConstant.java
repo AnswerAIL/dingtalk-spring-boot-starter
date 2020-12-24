@@ -45,10 +45,6 @@ public interface DingerConstant {
     /** 自定义restTemplate名称 */
     String DINGER_REST_TEMPLATE = "dingerRestTemplate";
 
-    String SUCCESS_KEYWORD = "_SUCCESS";
-    String FAILED_KEYWORD = "_FAILED";
-    String EXIT_KEYWORD = "_EXIT";
-
     String NEW_LINE = "\r\n";
     String SPOT_SEPERATOR = ".";
 

@@ -16,7 +16,6 @@
 package com.github.jaemon.dinger.multi;
 
 import com.github.jaemon.dinger.core.DingerConfig;
-import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.multi.algorithm.AlgorithmHandler;
 import com.github.jaemon.dinger.multi.algorithm.DefaultHandler;
 import com.github.jaemon.dinger.multi.algorithm.DingerHandler;
@@ -27,17 +26,9 @@ import java.util.List;
  * DingerConfigHandler
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public interface DingerConfigHandler {
-
-    /**
-     * 指定当前handler处理的dinger
-     *
-     * @return
-     *          dinger {@link DingerType}
-     */
-    DingerType dinger();
 
     /**
      * 多钉钉机器人配置

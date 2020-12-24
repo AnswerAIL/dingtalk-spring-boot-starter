@@ -32,7 +32,7 @@ import static com.github.jaemon.dinger.core.DingerDefinitionHandler.WETALK_AT_AL
  * 消息体定义子类型
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public enum MessageSubType {
     TEXT {

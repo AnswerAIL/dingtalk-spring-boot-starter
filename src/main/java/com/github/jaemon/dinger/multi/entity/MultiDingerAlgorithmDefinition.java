@@ -25,7 +25,7 @@ import java.util.List;
  * MultiDingerAlgorithmDefinition
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class MultiDingerAlgorithmDefinition {
     /**
@@ -46,11 +46,17 @@ public class MultiDingerAlgorithmDefinition {
      * 有效的钉钉机器人配置集合
      */
     private List<DingerConfig> dingerConfigs;
+    /** handler name */
+    private String dingerConfigHandlerClassName;
 
-    public MultiDingerAlgorithmDefinition(String key, Class<? extends AlgorithmHandler> algorithm, List<DingerConfig> dingerConfigs) {
+    public MultiDingerAlgorithmDefinition(
+            String key, Class<? extends AlgorithmHandler> algorithm,
+            List<DingerConfig> dingerConfigs, String dingerConfigHandlerClassName
+    ) {
         this.key = key;
         this.algorithm = algorithm;
         this.dingerConfigs = dingerConfigs;
+        this.dingerConfigHandlerClassName = dingerConfigHandlerClassName;
     }
 
     public String getKey() {
@@ -75,5 +81,13 @@ public class MultiDingerAlgorithmDefinition {
 
     public void setDingerConfigs(List<DingerConfig> dingerConfigs) {
         this.dingerConfigs = dingerConfigs;
+    }
+
+    public String getDingerConfigHandlerClassName() {
+        return dingerConfigHandlerClassName;
+    }
+
+    public void setDingerConfigHandlerClassName(String dingerConfigHandlerClassName) {
+        this.dingerConfigHandlerClassName = dingerConfigHandlerClassName;
     }
 }

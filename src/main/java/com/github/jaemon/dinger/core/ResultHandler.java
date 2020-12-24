@@ -13,28 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.entity.enums;
+package com.github.jaemon.dinger.core;
 
 /**
- * K-V对
+ * ResultHandler
  *
  * @author Jaemon
  * @since 1.0
  */
-public interface Pairs<K, V> {
-
+public interface ResultHandler<T> {
     /**
-     * 消息码
+     * resultHandler
      *
-     * @return K
+     * @param resultType resultType
+     * @param t T
+     * @return object
      */
-    K code();
-
-    /**
-     * 消息描述
-     *
-     * @return V
-     */
-    V desc();
-
+    Object resultHandler(Class<?> resultType, T t);
 }

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.sign;
-
-import com.github.jaemon.dinger.entity.SignBase;
+package com.github.jaemon.dinger.support.sign;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

@@ -19,7 +19,7 @@ package com.github.jaemon.dinger.support.client;
  * 内容类型枚举
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public enum MediaTypeEnum {
     /** html */

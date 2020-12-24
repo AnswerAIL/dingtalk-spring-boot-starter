@@ -21,11 +21,12 @@ import java.lang.annotation.*;
  * Keyword(quick locate to servive log)
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
+@Deprecated
 public @interface Keyword {
     boolean keyword() default true;
 }

@@ -23,17 +23,17 @@ import com.github.jaemon.dinger.utils.DingerUtils;
  * DingerConfig
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class DingerConfig {
     /**
-     * dinger类型 {@link DingerType}
+     * dinger类型 {@link DingerType},不指定默认使用默认的
      */
-    private DingerType dingerType = DingerType.DINGTALK;
+    private DingerType dingerType;
     private String tokenId;
     /** 内部解密秘钥 */
     private String decryptKey;
-    /** dingtalk签名秘钥 */
+    /** dinger签名秘钥 */
     private String secret;
     /** 异步执行 */
     private Boolean asyncExecute;
@@ -41,46 +41,96 @@ public class DingerConfig {
     protected DingerConfig() {
     }
 
-    public DingerConfig(String tokenId) {
+    private DingerConfig(String tokenId) {
         this.tokenId = tokenId;
     }
 
-    public DingerConfig(DingerType dingerType, String tokenId) {
+    private DingerConfig(DingerType dingerType, String tokenId) {
         this(tokenId);
         this.dingerType = dingerType;
     }
 
-    public DingerConfig(String tokenId, String secret) {
+    private DingerConfig(String tokenId, String secret) {
         this.tokenId = tokenId;
         this.secret = secret;
     }
 
-    public DingerConfig(DingerType dingerType, String tokenId, String secret) {
+    private DingerConfig(DingerType dingerType, String tokenId, String secret) {
         this(tokenId, secret);
         this.dingerType = dingerType;
     }
 
-    public DingerConfig(String tokenId, String secret, String decryptKey) {
+    private DingerConfig(String tokenId, boolean async) {
+        this.tokenId = tokenId;
+        this.asyncExecute = async;
+    }
+
+    private DingerConfig(DingerType dingerType, String tokenId, boolean async) {
+        this(tokenId, async);
+        this.dingerType = dingerType;
+    }
+
+    private DingerConfig(String tokenId, String secret, String decryptKey) {
         this.tokenId = tokenId;
         this.decryptKey = decryptKey;
         this.secret = secret;
     }
 
-    public DingerConfig(DingerType dingerType, String tokenId, String secret, String decryptKey) {
+    private DingerConfig(DingerType dingerType, String tokenId, String secret, String decryptKey) {
         this(tokenId, secret, decryptKey);
         this.dingerType = dingerType;
     }
 
-    public DingerConfig(String tokenId, String secret, String decryptKey, boolean asyncExecute) {
+    private DingerConfig(String tokenId, String secret, String decryptKey, boolean asyncExecute) {
         this.tokenId = tokenId;
         this.decryptKey = decryptKey;
         this.secret = secret;
         this.asyncExecute = asyncExecute;
     }
 
-    public DingerConfig(DingerType dingerType, String tokenId, String secret, String decryptKey, boolean asyncExecute) {
+    private DingerConfig(DingerType dingerType, String tokenId, String secret, String decryptKey, boolean asyncExecute) {
         this(tokenId, secret, decryptKey, asyncExecute);
         this.dingerType = dingerType;
+    }
+
+    public static DingerConfig instance(String tokenId) {
+        return new DingerConfig(tokenId);
+    }
+
+    public static DingerConfig instance(DingerType dingerType, String tokenId) {
+        return new DingerConfig(dingerType, tokenId);
+    }
+
+    public static DingerConfig instance(String tokenId, String secret) {
+        return new DingerConfig(tokenId, secret);
+    }
+
+    public static DingerConfig instance(DingerType dingerType, String tokenId, String secret) {
+        return new DingerConfig(dingerType, tokenId, secret);
+    }
+
+    public static DingerConfig instance(String tokenId, boolean asyncExecute) {
+        return new DingerConfig(tokenId, asyncExecute);
+    }
+
+    public static DingerConfig instance(DingerType dingerType, String tokenId, boolean asyncExecute) {
+        return new DingerConfig(dingerType, tokenId, asyncExecute);
+    }
+
+    public static DingerConfig instance(String tokenId, String secret, String decryptKey) {
+        return new DingerConfig(tokenId, secret, decryptKey);
+    }
+
+    public static DingerConfig instance(DingerType dingerType, String tokenId, String secret, String decryptKey) {
+        return new DingerConfig(dingerType, tokenId, secret, decryptKey);
+    }
+
+    public static DingerConfig instance(String tokenId, String secret, String decryptKey, boolean asyncExecute) {
+        return new DingerConfig(tokenId, secret, decryptKey, asyncExecute);
+    }
+
+    public static DingerConfig instance(DingerType dingerType, String tokenId, String secret, String decryptKey, boolean asyncExecute) {
+        return new DingerConfig(dingerType, tokenId, secret, decryptKey, asyncExecute);
     }
 
     /**

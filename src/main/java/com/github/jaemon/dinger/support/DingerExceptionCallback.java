@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.support;
 
-import com.github.jaemon.dinger.entity.DingerCallback;
+import com.github.jaemon.dinger.core.entity.DingerCallback;
 
 /**
  * 发送异常回调接口

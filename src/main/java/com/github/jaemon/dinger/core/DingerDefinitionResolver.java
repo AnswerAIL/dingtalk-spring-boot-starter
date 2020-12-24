@@ -40,13 +40,13 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
-import static com.github.jaemon.dinger.entity.enums.ExceptionEnum.DINER_XML_ANALYSIS_EXCEPTION;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.*;
 
 /**
  * DingerDefinitionResolver
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
     private static final Logger log = LoggerFactory.getLogger(DingerDefinitionResolver.class);
@@ -99,7 +99,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
             String namespace = dingerBean.getNamespace();
             Class<?> dingerClass = Class.forName(namespace);
             if (dingerClass == null) {
-                throw new DingerException(DINER_XML_ANALYSIS_EXCEPTION);
+                throw new DingerException(namespace, DINER_XML_NAMESPACE_INVALID);
             }
 
             DingerConfig dingerConfiguration = dingerConfiguration(dingerClass);
@@ -109,7 +109,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                 String dingerName = namespace + SPOT_SEPERATOR + message.getIdentityId();
                 String messageSubType = message.getDingerType();
                 if (!MessageSubType.contains(messageSubType)) {
-                    throw new DingerException(dingerName + "中定义了无效的messageType" + messageSubType, DINER_XML_ANALYSIS_EXCEPTION);
+                    throw new DingerException(dingerName + "-" + messageSubType, DINER_XML_MSGTYPE_INVALID);
                 }
                 String dingerDefinitionKey = MessageMainType.XML + SPOT_SEPERATOR + message.getDingerType();
 

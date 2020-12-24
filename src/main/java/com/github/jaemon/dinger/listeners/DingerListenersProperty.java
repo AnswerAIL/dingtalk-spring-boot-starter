@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * ApplicationEventTimeTable
  *
  * @author Jaemon
- * @since 4.0
+ * @since 1.0
  */
 public class DingerListenersProperty {
     /**
@@ -53,6 +53,11 @@ public class DingerListenersProperty {
     protected final static List<DingerType> enabledDingerTypes;
     static {
         enabledDingerTypes = Arrays.stream(DingerType.values()).filter(e -> e.isEnabled()).collect(Collectors.toList());
+    }
+
+    protected static void clear() {
+        DingerListenersProperty.primarySources().clear();
+        DingerListenersProperty.dingerClasses().clear();
     }
 
 }

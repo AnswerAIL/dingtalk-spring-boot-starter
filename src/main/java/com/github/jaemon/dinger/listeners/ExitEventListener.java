@@ -16,21 +16,10 @@
 package com.github.jaemon.dinger.listeners;
 
 import com.github.jaemon.dinger.multi.MultiDingerRefresh;
-import com.github.jaemon.dinger.DingerSender;
-import com.github.jaemon.dinger.core.entity.DingerProperties;
-import com.github.jaemon.dinger.entity.DingerResult;
-import com.github.jaemon.dinger.core.entity.MsgType;
-import com.github.jaemon.dinger.support.MonitorEventNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
-
-import static com.github.jaemon.dinger.constant.DingerConstant.DINGER_PREFIX;
-import static com.github.jaemon.dinger.constant.DingerConstant.EXIT_KEYWORD;
-import static com.github.jaemon.dinger.listeners.ApplicationEventTimeTable.DISABLED_DINTALK_MONITOR;
 
 /**
  * Exit Listener
@@ -45,50 +34,12 @@ public class ExitEventListener
 
     @Override
     public void onApplicationEvent(ContextClosedEvent event) {
-        boolean debugEnabled = log.isDebugEnabled();
-
-        try {
-            String monitor = System.getProperty(DISABLED_DINTALK_MONITOR);
-            if (monitor != null && "true".equals(monitor.trim())) {
-                return;
-            }
-
-            ApplicationContext applicationContext = event.getApplicationContext();
-
-            if (AnnotationConfigServletWebServerApplicationContext.class.isInstance(applicationContext)
-                    && ApplicationEventTimeTable.exitTime == 0) {
-                if (debugEnabled) {
-                    log.debug("ready to execute ContextClosedEvent.");
-                }
-                ApplicationEventTimeTable.exitTime = event.getTimestamp();
-                DingerProperties properties = applicationContext.getBean(DingerProperties.class);
-
-                if (properties.isEnabled()
-                        && properties.getMonitor().isExit()
-                        // exclude start-up failed
-                        && ApplicationEventTimeTable.successTime() > 0) {
-                    DingerSender dingTalkRobot = applicationContext.getBean(DingerSender.class);
-                    MonitorEventNotification monitorEventNotification = applicationContext.getBean(MonitorEventNotification.class);
-                    String projectId = properties.getProjectId();
-                    projectId = projectId == null ? DINGER_PREFIX : projectId;
-
-                    MsgType message = monitorEventNotification.exit(event, projectId);
-                    String keyword = projectId + EXIT_KEYWORD;
-                    DingerResult result = dingTalkRobot.send(keyword, message);
-                    if (debugEnabled) {
-                        log.debug("keyword={}, result={}.", keyword, result.toString());
-                    }
-                }
-            }
-        } finally {
-            // support devtools
-            refresh();
-        }
-
+        // support devtools
+        refresh();
     }
 
     private void refresh() {
         multiDingerRefresh();
-        ApplicationEventTimeTable.clear();
+        DingerListenersProperty.clear();
     }
 }

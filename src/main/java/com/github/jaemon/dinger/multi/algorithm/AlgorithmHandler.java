@@ -24,7 +24,7 @@ import java.util.List;
  * AlgorithmHandler
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public interface AlgorithmHandler {
     /** 默认索引号从0开始 */

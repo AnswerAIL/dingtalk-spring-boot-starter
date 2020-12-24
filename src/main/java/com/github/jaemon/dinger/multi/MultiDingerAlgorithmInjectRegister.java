@@ -16,8 +16,9 @@
 package com.github.jaemon.dinger.multi;
 
 import com.github.jaemon.dinger.core.DingerConfig;
-import com.github.jaemon.dinger.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
 import com.github.jaemon.dinger.exception.DingerException;
+import com.github.jaemon.dinger.exception.MultiDingerRegisterException;
 import com.github.jaemon.dinger.multi.algorithm.AlgorithmHandler;
 import com.github.jaemon.dinger.multi.entity.MultiDingerAlgorithmDefinition;
 import com.github.jaemon.dinger.multi.entity.MultiDingerConfig;
@@ -33,6 +34,9 @@ import org.springframework.context.ApplicationContextAware;
 
 import java.lang.reflect.Field;
 import java.util.*;
+
+import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.ALGORITHM_FIELD_INJECT_FAILED;
 
 /**
  * MultiDingerAlgorithmInjuctRegister
@@ -51,7 +55,7 @@ import java.util.*;
  * </pre>
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class MultiDingerAlgorithmInjectRegister implements ApplicationContextAware, InitializingBean {
     private static final Logger log = LoggerFactory.getLogger(MultiDingerAlgorithmInjectRegister.class);
@@ -74,7 +78,13 @@ public class MultiDingerAlgorithmInjectRegister implements ApplicationContextAwa
             return;
         }
 
-        multiDingerWithInjectAttributeHandler();
+        try {
+            multiDingerWithInjectAttributeHandler();
+        } catch (DingerException ex) {
+            throw new MultiDingerRegisterException(ex.getPairs(), ex.getMessage());
+        } catch (Exception ex) {
+            throw new DingerException(ex, ExceptionEnum.UNKNOWN);
+        }
     }
 
     /**
@@ -87,7 +97,7 @@ public class MultiDingerAlgorithmInjectRegister implements ApplicationContextAwa
                 MultiDingerScannerRegistrar.MULTIDINGER_ALGORITHM_DEFINITION_MAP.entrySet();
 
         for (Map.Entry<String, MultiDingerAlgorithmDefinition> entry : entries) {
-            //  v.key + SPOT_SEPERATOR + AlgorithmHandler.getSimpleName
+            //  v.key(dinger) + SPOT_SEPERATOR + AlgorithmHandler.getSimpleName
             String beanName = entry.getKey();
             MultiDingerAlgorithmDefinition v = entry.getValue();
             Class<? extends AlgorithmHandler> algorithm = v.getAlgorithm();
@@ -97,13 +107,7 @@ public class MultiDingerAlgorithmInjectRegister implements ApplicationContextAwa
             algorithmFieldInjection(algorithm, algorithmHandler);
 
             List<DingerConfig> dingerConfigs = v.getDingerConfigs();
-            // check dingerConfig is valid
-            dingerConfigs.forEach(e -> {
-                e.check();
-                if (e.checkEmpty()) {
-                    throw new DingerException(algorithm.getSimpleName() + " dingerConfigs配置异常", ExceptionEnum.MULTI_DINGERCONFIGS_EXCEPTION);
-                }
-            });
+
             // v.getKey() is dingerClassName or MultiDingerConfigContainer#GLOABL_KEY
             MultiDingerConfigContainer.INSTANCE.put(
                     v.getKey(), new MultiDingerConfig(algorithmHandler, dingerConfigs)
@@ -127,7 +131,7 @@ public class MultiDingerAlgorithmInjectRegister implements ApplicationContextAwa
      *          algorithmHandler
      */
     private void algorithmFieldInjection(Class<? extends AlgorithmHandler> algorithm, AlgorithmHandler algorithmHandler) {
-        boolean debugEnabled = log.isDebugEnabled();
+        String algorithmSimpleName = algorithm.getSimpleName();
         OK:
         for (Field declaredField : algorithm.getDeclaredFields()) {
             if (declaredField.isAnnotationPresent(Autowired.class)) {
@@ -142,35 +146,29 @@ public class MultiDingerAlgorithmInjectRegister implements ApplicationContextAwa
                 // 从spring容器上下文中获取属性对应的实例
                 String[] actualBeanNames = applicationContext.getBeanNamesForType(declaredField.getType());
                 int length = actualBeanNames.length;
-                if (length == 0) {
-                    // throw exception
-                    if (debugEnabled) {
-                        log.debug("algorithm={}'s field object {} can't be found from spring container.",
-                                algorithm.getSimpleName(), fieldBeanName);
-                    }
-                    continue;
-                } else if (length == 1) {
+                if (length == 1) {
                     fieldBeanName = actualBeanNames[0];
-                } else {
+                } else if (length > 1) {
                     final String fbn = fieldBeanName;
                     long count = Arrays.stream(actualBeanNames).filter(e -> Objects.equals(e, fbn)).count();
-                    // throw exception
                     if (count == 0) {
-                        if (debugEnabled) {
-                            log.debug("algorithm={}'s field object {} can't find a match from objects {}.",
-                                    algorithm.getSimpleName(), fieldBeanName, Arrays.asList(actualBeanNames));
-                        }
-                        continue OK;
+                        throw new DingerException(
+                                ExceptionEnum.ALGORITHM_FIELD_INSTANCE_NOT_MATCH, algorithmSimpleName, fieldBeanName
+                        );
                     }
+                } else {
+                    throw new DingerException(
+                            ExceptionEnum.ALGORITHM_FIELD_INSTANCE_NOT_EXISTS, algorithmSimpleName, fieldBeanName
+                    );
                 }
 
                 try {
                     declaredField.setAccessible(true);
                     declaredField.set(algorithmHandler, applicationContext.getBean(fieldBeanName));
                 } catch (IllegalAccessException e) {
-                    log.warn("algorithm={}'s field={} injection failed, because of {}.",
-                            algorithm.getSimpleName(), fieldBeanName, e.getMessage());
-                    continue OK;
+                    throw new DingerException(
+                            ALGORITHM_FIELD_INJECT_FAILED, algorithmSimpleName, fieldBeanName
+                    );
                 }
 
             }

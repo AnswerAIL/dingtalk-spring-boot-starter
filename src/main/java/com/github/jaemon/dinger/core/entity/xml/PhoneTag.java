@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * PhoneTag
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @XmlRootElement(name = "phone")
 public class PhoneTag {

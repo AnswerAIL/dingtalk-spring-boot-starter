@@ -15,20 +15,18 @@
  */
 package com.github.jaemon.dinger.multi.annotations;
 
-import com.github.jaemon.dinger.multi.DingerConfigHandler;
-
 import java.lang.annotation.*;
 
 /**
  * MultiHandler, 作用于 XXXDinger层，标识当前Dinger为多Dinger接口
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface MultiHandler {
 
-    Class<? extends DingerConfigHandler> value();
+    MultiDinger value();
 }

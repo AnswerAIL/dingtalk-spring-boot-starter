@@ -19,7 +19,7 @@ package com.github.jaemon.dinger.core;
  * DingerRefresh
  *
  * @author Jaemon
- * @since 3.0
+ * @since 1.0
  */
 public class DingerRefresh {
 

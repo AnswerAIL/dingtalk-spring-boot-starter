@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger;
+package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.core.DingerHelper;
+import com.github.jaemon.dinger.DingerSender;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.core.entity.enums.MessageSubType;
 import com.github.jaemon.dinger.exception.DingerException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jaemon.dinger.entity.DingerCallback;
+import com.github.jaemon.dinger.core.entity.DingerCallback;
 import com.github.jaemon.dinger.support.CustomMessage;
 
 /**
@@ -33,14 +32,12 @@ public abstract class AbstractDingerSender
         extends DingerHelper
         implements DingerSender {
 
-    DingerProperties dingerProperties;
-    DingerManagerBuilder dingTalkManagerBuilder;
-    ObjectMapper objectMapper;
+    protected DingerProperties dingerProperties;
+    protected DingerManagerBuilder dingTalkManagerBuilder;
 
-    public AbstractDingerSender(DingerProperties dingerProperties, DingerManagerBuilder dingTalkManagerBuilder, ObjectMapper objectMapper) {
+    public AbstractDingerSender(DingerProperties dingerProperties, DingerManagerBuilder dingTalkManagerBuilder) {
         this.dingerProperties = dingerProperties;
         this.dingTalkManagerBuilder = dingTalkManagerBuilder;
-        this.objectMapper = objectMapper;
     }
 
     /**
@@ -51,19 +48,24 @@ public abstract class AbstractDingerSender
      * @return
      *              消息生成器
      */
-    CustomMessage customMessage(MessageSubType messageSubType) {
+    protected CustomMessage customMessage(MessageSubType messageSubType) {
         return messageSubType == MessageSubType.TEXT ? dingTalkManagerBuilder.textMessage : dingTalkManagerBuilder.markDownMessage;
     }
 
     /**
      * 异常回调
      *
-     * @param keyword keyword
-     * @param message message
-     * @param ex ex
+     * @param dingerId
+     *          dingerId
+     * @param message
+     *          message
+     * @param ex
+     *          ex
+     * @param <T>
+     *          T
      */
-    <T> void exceptionCallback(String dingerId, String keyword, T message, DingerException ex) {
-        DingerCallback dkExCallable = new DingerCallback(dingerId, keyword, message, ex);
+    protected <T> void exceptionCallback(String dingerId, T message, DingerException ex) {
+        DingerCallback dkExCallable = new DingerCallback(dingerId, message, ex);
         dingTalkManagerBuilder.dingerExceptionCallback.execute(dkExCallable);
     }
 }

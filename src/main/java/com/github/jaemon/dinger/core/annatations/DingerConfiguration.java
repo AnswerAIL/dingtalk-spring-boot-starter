@@ -21,14 +21,14 @@ import java.lang.annotation.*;
  * DingerConfiguration(xml and annotation)
  *
  * @author Jaemon
- * @since 2.0
+ * @since 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
 public @interface DingerConfiguration {
     /**
-     * dingtalk tokenId
+     * dinger tokenId
      *
      * @return tokenId
      */
@@ -42,7 +42,7 @@ public @interface DingerConfiguration {
     String decryptKey() default "";
 
     /**
-     * dingtalk secret
+     * dinger secret
      *
      * @return secret
      */
