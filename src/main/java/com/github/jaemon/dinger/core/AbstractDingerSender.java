@@ -21,6 +21,8 @@ import com.github.jaemon.dinger.core.entity.enums.MessageSubType;
 import com.github.jaemon.dinger.exception.DingerException;
 import com.github.jaemon.dinger.core.entity.DingerCallback;
 import com.github.jaemon.dinger.support.CustomMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * AbstractDingTalkSender
@@ -31,6 +33,7 @@ import com.github.jaemon.dinger.support.CustomMessage;
 public abstract class AbstractDingerSender
         extends DingerHelper
         implements DingerSender {
+    protected static final Logger log = LoggerFactory.getLogger(AbstractDingerSender.class);
 
     protected DingerProperties dingerProperties;
     protected DingerManagerBuilder dingTalkManagerBuilder;

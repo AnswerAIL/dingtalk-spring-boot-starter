@@ -76,11 +76,11 @@ public class Message extends DingTalkMessage implements Serializable {
             this.atMobiles = atMobiles;
         }
 
-        public Boolean getAtAll() {
+        public Boolean getIsAtAll() {
             return isAtAll;
         }
 
-        public void setAtAll(Boolean atAll) {
+        public void setIsAtAll(Boolean atAll) {
             isAtAll = atAll;
         }
     }

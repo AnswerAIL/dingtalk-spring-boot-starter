@@ -48,7 +48,6 @@ public class DingerScannerRegistrar
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        boolean isTraceEnabled = log.isTraceEnabled();
         boolean isDebugEnabled = log.isDebugEnabled();
         log.info("ready to execute dingerScanner...");
         try {

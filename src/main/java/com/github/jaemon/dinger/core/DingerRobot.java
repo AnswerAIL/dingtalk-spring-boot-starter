@@ -129,6 +129,10 @@ public class DingerRobot extends AbstractDingerSender {
             StringBuilder webhook = new StringBuilder();
             webhook.append(dinger.getRobotUrl()).append("=").append(dinger.getTokenId());
 
+            if (log.isDebugEnabled()) {
+                log.debug("dingerId={} send message and use dinger={}, tokenId={}.", dkid, dingerType, dinger.getTokenId());
+            }
+
             // 处理签名问题(只支持DingTalk)
             if (dingerType == DingerType.DINGTALK &&
                     DingerUtils.isNotEmpty((dinger.getSecret()))) {
@@ -137,14 +141,14 @@ public class DingerRobot extends AbstractDingerSender {
             }
 
             Map<String, String> headers = new HashMap<>();
-            headers.put("Content-Type", "application/json; charset=utf-8");
+            headers.put("Content-Type", MediaTypeEnum.JSON.type());
 
             // 异步处理, 直接返回标识id
             if (dinger.isAsync()) {
                 dingTalkManagerBuilder.dingTalkExecutor.execute(() -> {
                     try {
                         String result = dingTalkManagerBuilder.dingerHttpClient.post(
-                                webhook.toString(), headers, message, MediaTypeEnum.JSON
+                                webhook.toString(), headers, message
                         );
                         dingTalkManagerBuilder.dingerAsyncCallback.execute(dkid, result);
                     } catch (Exception e) {
@@ -155,7 +159,7 @@ public class DingerRobot extends AbstractDingerSender {
             }
 
             String response = dingTalkManagerBuilder.dingerHttpClient.post(
-                    webhook.toString(), headers, message, MediaTypeEnum.JSON
+                    webhook.toString(), headers, message
             );
             return DingerResponse.success(dkid, response);
         } catch (Exception e) {

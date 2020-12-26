@@ -16,6 +16,8 @@
 package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.core.annatations.Parameter;
+import com.github.jaemon.dinger.core.entity.enums.DingerType;
+import com.github.jaemon.dinger.multi.annotations.MultiDinger;
 import com.github.jaemon.dinger.multi.annotations.MultiHandler;
 import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
 import com.github.jaemon.dinger.core.annatations.DingerText;
@@ -29,7 +31,9 @@ import com.github.jaemon.dinger.multi.handler.UserDingerConfigHandler;
  * @since 1.0
  */
 // 标识对应的处理器
-@MultiHandler(UserDingerConfigHandler.class)
+@MultiHandler(
+        @MultiDinger(dinger = DingerType.DINGTALK, handler = UserDingerConfigHandler.class)
+)
 public interface UserDinger {
     /**
      * 用户注册通知

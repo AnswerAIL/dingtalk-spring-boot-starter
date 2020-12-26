@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.exception;
 
-import com.github.jaemon.dinger.core.entity.Pairs;
+import com.github.jaemon.dinger.core.entity.ExceptionPairs;
 
 /**
  * 多Dinger配置注册异常
@@ -24,11 +24,11 @@ import com.github.jaemon.dinger.core.entity.Pairs;
  * @since 1.0
  */
 public class MultiDingerRegisterException extends DingerException {
-    public MultiDingerRegisterException(Pairs pairs) {
+    public MultiDingerRegisterException(ExceptionPairs pairs) {
         super(pairs);
     }
 
-    public MultiDingerRegisterException(Pairs pairs, String message) {
+    public MultiDingerRegisterException(ExceptionPairs pairs, String message) {
         super(message, pairs);
     }
 

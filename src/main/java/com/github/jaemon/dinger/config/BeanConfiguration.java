@@ -96,7 +96,7 @@ public class BeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(DingerAsyncCallback.class)
     public DingerAsyncCallback dingerAsyncCallback() {
-        return new DefaultDkCallable();
+        return new DefaultDingerAsyncCallable();
     }
 
     @Bean

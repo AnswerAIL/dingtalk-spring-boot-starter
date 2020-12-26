@@ -153,7 +153,7 @@ public abstract class AbstractDingerDefinitionResolver
                 PackageUtils.classNames(basePackage, dingerClasses, true);
             }
         } else {
-            log.warn("annotation dingerScan is not configured.");
+            log.warn("annotation dingerScan is not configured and will execute Dinger scanner registrar.");
         }
 
         if (dingerClasses.isEmpty()) {

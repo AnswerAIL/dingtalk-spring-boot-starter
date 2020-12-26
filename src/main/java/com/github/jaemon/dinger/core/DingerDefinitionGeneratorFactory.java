@@ -16,6 +16,8 @@
 package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.exception.DingerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,7 @@ import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.DINGERDEF
  * @since 1.0
  */
 public class DingerDefinitionGeneratorFactory {
+    private static final Logger log = LoggerFactory.getLogger(DingerDefinitionGeneratorFactory.class);
     /** dingerDefinition生成器 */
     static final Map<String, DingerDefinitionGenerator> dingTalkDefinitionGeneratorMap = new HashMap<>();
 
@@ -43,13 +46,13 @@ public class DingerDefinitionGeneratorFactory {
     public static DingerDefinitionGenerator get(String key) {
         DingerDefinitionGenerator dingTalkDefinitionGenerator = dingTalkDefinitionGeneratorMap.get(key);
         if (dingTalkDefinitionGenerator == null) {
-            throw new DingerException(key + "无对应的Dinger定义生成器", DINGERDEFINITION_ERROR);
+            if (log.isDebugEnabled()) {
+                log.debug("key={}, dingTalkDefinitionGeneratorMap={}.",
+                        key, dingTalkDefinitionGeneratorMap.keySet());
+            }
+            throw new DingerException(DINGERDEFINITION_ERROR, key);
         }
         return dingTalkDefinitionGenerator;
-    }
-
-    static void clear() {
-        dingTalkDefinitionGeneratorMap.clear();
     }
 
 }

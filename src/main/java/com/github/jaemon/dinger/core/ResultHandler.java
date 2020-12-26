@@ -23,11 +23,14 @@ package com.github.jaemon.dinger.core;
  */
 public interface ResultHandler<T> {
     /**
-     * resultHandler
+     * Dinger方法返回结果处理
      *
-     * @param resultType resultType
+     * @param resultType
+     *          返回结果类型
      * @param t T
-     * @return object
+     *          实际返回信息
+     * @return
+     *          最终返回信息
      */
     Object resultHandler(Class<?> resultType, T t);
 }

@@ -15,6 +15,8 @@
  */
 package com.github.jaemon.dinger.multi;
 
+import com.github.jaemon.dinger.constant.DingerConstant;
+import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.multi.entity.MultiDingerConfig;
 
 import java.util.HashMap;
@@ -64,11 +66,12 @@ public enum MultiDingerConfigContainer {
         return this.container.isEmpty();
     }
 
-    public MultiDingerConfig get(String key) {
+    public MultiDingerConfig get(DingerType dingerType, String key) {
+        key = dingerType + DingerConstant.SPOT_SEPERATOR + key;
         if (this.container.containsKey(key)) {
             return this.container.get(key);
         }
-        return this.container.get(GLOABL_KEY);
+        return this.container.get(dingerType + DingerConstant.SPOT_SEPERATOR + GLOABL_KEY);
     }
 
     protected static void clear() {

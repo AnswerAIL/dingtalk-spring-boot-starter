@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.core.entity.enums;
 
-import com.github.jaemon.dinger.core.entity.Pairs;
+import com.github.jaemon.dinger.core.entity.ExceptionPairs;
 
 /**
  * 异常枚举
@@ -23,7 +23,7 @@ import com.github.jaemon.dinger.core.entity.Pairs;
  * @author Jaemon
  * @since 1.0
  */
-public enum ExceptionEnum implements Pairs<Integer, String> {
+public enum ExceptionEnum implements ExceptionPairs {
     /** 发送异常, 1XXX, {@link com.github.jaemon.dinger.exception.SendMsgException} */
     SEND_MSG(1000, "发送消息异常"),
 
@@ -51,6 +51,7 @@ public enum ExceptionEnum implements Pairs<Integer, String> {
     MULTI_DINGER_SCAN_ERROR(4000, "配置了多个DingerScan注解"),
     /** {@link com.github.jaemon.dinger.exception.ConfigurationException} */
     CONFIG_ERROR(4001, "配置异常"),
+    RESOURCE_CONFIG_EXCEPTION(4002, "读取资源[%s]信息异常"),
 
 
 
@@ -64,12 +65,11 @@ public enum ExceptionEnum implements Pairs<Integer, String> {
 
 
     /** Dinger解析XML相关异常, 60XX */
-    DINER_XML_NAMESPACE_INVALID(6000, "xml文件namespace=%s无效"),
-    DINER_XML_MSGTYPE_INVALID(6001, "xml文件message type=%s无效"),
+    DINER_XML_NAMESPACE_INVALID(6000, "xml文件namespace=%s对应的类不存在"),
+    DINER_XML_MSGTYPE_INVALID(6001, "xml id=%s文件message type=%s无效"),
 
-    // TODO
-    DINGERDEFINITION_ERROR(6004, "dingerDefinition异常"),
-    DINGERDEFINITIONTYPE_ERROR(6005, "DingerDefinitionType异常"),
+    DINGERDEFINITION_ERROR(6004, "key=%s无对应的DingerDefinitionGenerator"),
+    DINGERDEFINITIONTYPE_ERROR(6005, "%s中消息体定义主类型期望=%s, 实际=%s"),
 
 
     /** Dinger解析注解相关异常, 63XX */
@@ -85,8 +85,9 @@ public enum ExceptionEnum implements Pairs<Integer, String> {
 
 
     /** Multi Dinger解析相关异常, 70XX */
-    DINGER_CONFIG_HANDLER_EXCEPTION(7000, "DingerConfigHandler=%s中指定的dingerconfigs[%d]数据异常"),
-    MULTIDINGER_ALGORITHM_EXCEPTION(7001, "DingerConfigHandler=%s中算法为空"),
+    DINGER_CONFIG_HANDLER_EXCEPTION(7000, "%s中指定的dingerconfigs[%d]数据异常"),
+    MULTIDINGER_ALGORITHM_EXCEPTION(7001, "%s中算法为空"),
+    MULTIDINGER_ANNOTATTION_EXCEPTION(7002, "%s中的MultiDinger.dinger=%s已经被警用"),
 
     /** Multi Dinger属性注入相关异常, 75XX */
     ALGORITHM_FIELD_INSTANCE_NOT_EXISTS(7500, "算法[%s]中属性字段[%s]实例不存在"),

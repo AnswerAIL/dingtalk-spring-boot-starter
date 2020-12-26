@@ -34,8 +34,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.File;
-import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -86,20 +84,25 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
     void analysisDingerXml(Resource[] resources) throws Exception {
         boolean debugEnabled = log.isDebugEnabled();
         for (Resource resource : resources) {
-            File file = resource.getFile();
-            String xml = FileCopyUtils.copyToString(new FileReader(file));
+            if (!resource.isReadable()) {
+                if (debugEnabled) {
+                    log.debug("Ignored because not readable: {} ", resource.getFilename());
+                }
+                continue;
+            }
+            String xml = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
             xml = transferXml(xml);
             BeanTag dingerBean = XmlUtils.xmlToJavaBean(xml, BeanTag.class);
             if (dingerBean == null) {
                 if (debugEnabled) {
-                    log.debug("dinger xml file: {} content is empty.", file.getName());
+                    log.debug("dinger xml file: {} content is empty.", resource.getFilename());
                 }
                 continue;
             }
             String namespace = dingerBean.getNamespace();
             Class<?> dingerClass = Class.forName(namespace);
             if (dingerClass == null) {
-                throw new DingerException(namespace, DINER_XML_NAMESPACE_INVALID);
+                throw new DingerException(DINER_XML_NAMESPACE_INVALID, namespace);
             }
 
             DingerConfig dingerConfiguration = dingerConfiguration(dingerClass);
@@ -109,7 +112,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                 String dingerName = namespace + SPOT_SEPERATOR + message.getIdentityId();
                 String messageSubType = message.getDingerType();
                 if (!MessageSubType.contains(messageSubType)) {
-                    throw new DingerException(dingerName + "-" + messageSubType, DINER_XML_MSGTYPE_INVALID);
+                    throw new DingerException(DINER_XML_MSGTYPE_INVALID, dingerName, messageSubType);
                 }
                 String dingerDefinitionKey = MessageMainType.XML + SPOT_SEPERATOR + message.getDingerType();
 
@@ -149,7 +152,9 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                             dingerConfiguration
                     );
                 } else {
-                    log.info("register dingerDefinition and skip method={}.", dingerName);
+                    if (log.isDebugEnabled()) {
+                        log.debug("register annotation dingerDefinition and skip method={}(possible use xml definition).", dingerName);
+                    }
                 }
             }
 

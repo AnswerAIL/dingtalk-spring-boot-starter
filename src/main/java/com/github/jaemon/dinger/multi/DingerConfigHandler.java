@@ -19,6 +19,7 @@ import com.github.jaemon.dinger.core.DingerConfig;
 import com.github.jaemon.dinger.multi.algorithm.AlgorithmHandler;
 import com.github.jaemon.dinger.multi.algorithm.DefaultHandler;
 import com.github.jaemon.dinger.multi.algorithm.DingerHandler;
+import com.github.jaemon.dinger.multi.annotations.MultiDinger;
 
 import java.util.List;
 
@@ -31,7 +32,12 @@ import java.util.List;
 public interface DingerConfigHandler {
 
     /**
-     * 多钉钉机器人配置
+     * 多Dinger机器人配置
+     *
+     * <pre>
+     *     1. DingerConfig中的DingerType统一使用 {@link MultiDinger#dinger()} 中指定的
+     *     2. dingerConfigs的配置信息必须是 {@link MultiDinger#dinger()} 指定的机器人配置信息
+     * </pre>
      *
      * @return dingerConfigs
      * */

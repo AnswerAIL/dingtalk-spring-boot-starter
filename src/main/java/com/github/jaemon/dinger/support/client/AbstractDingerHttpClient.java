@@ -43,11 +43,6 @@ public abstract class AbstractDingerHttpClient implements DingerHttpClient {
     }
 
     @Override
-    public String get(String url, Map<String, String> headers, Map<String, ?> params, MediaTypeEnum mediaType) throws SendMsgException {
-        return null;
-    }
-
-    @Override
     public String post(String url, String message) throws SendMsgException {
         return null;
     }
@@ -61,11 +56,4 @@ public abstract class AbstractDingerHttpClient implements DingerHttpClient {
     public String post(String url, Map<String, String> headers, Map<String, ?> params) throws SendMsgException {
         return null;
     }
-
-
-    @Override
-    public String post(String url, Map<String, String> headers, Map<String, ?> params, MediaTypeEnum mediaType) {
-        return null;
-    }
-
 }

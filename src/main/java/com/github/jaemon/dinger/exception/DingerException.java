@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.exception;
 
-import com.github.jaemon.dinger.core.entity.Pairs;
+import com.github.jaemon.dinger.core.entity.ExceptionPairs;
 
 /**
  * 异常类
@@ -24,29 +24,29 @@ import com.github.jaemon.dinger.core.entity.Pairs;
  * @since 1.0
  */
 public class DingerException extends RuntimeException {
-    private Pairs<Integer, String> pairs;
+    private ExceptionPairs pairs;
 
-    public DingerException(Pairs<Integer, String> pairs) {
+    public DingerException(ExceptionPairs pairs) {
         super(pairs.desc());
         this.pairs = pairs;
     }
 
-    public DingerException(String msg, Pairs<Integer, String> pairs) {
+    public DingerException(String msg, ExceptionPairs pairs) {
         super(msg);
         this.pairs = pairs;
     }
 
-    public DingerException(Pairs<Integer, String> pairs, Object... msgArgs) {
-        super(String.format(pairs.desc(), msgArgs));
+    public DingerException(ExceptionPairs pairs, Object... msgArgs) {
+        super(pairs.message(msgArgs));
         this.pairs = pairs;
     }
 
-    public DingerException(Throwable cause, Pairs<Integer, String> pairs) {
+    public DingerException(Throwable cause, ExceptionPairs pairs) {
         super(cause);
         this.pairs = pairs;
     }
 
-    public Pairs<Integer, String> getPairs() {
+    public ExceptionPairs getPairs() {
         return pairs;
     }
 }

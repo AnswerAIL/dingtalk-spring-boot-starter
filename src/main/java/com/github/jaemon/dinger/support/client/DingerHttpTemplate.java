@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -38,9 +37,12 @@ public class DingerHttpTemplate extends AbstractDingerHttpClient {
     private RestTemplate restTemplate;
 
     @Override
-    public <T> String post(String url, Map<String, String> headers, T message, MediaTypeEnum mediaType) throws SendMsgException {
+    public <T> String post(String url, Map<String, String> headers, T message) throws SendMsgException {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.parseMediaType(mediaType.type()));
+        headers.forEach((headerName, headerValue) -> {
+            httpHeaders.set(headerName, headerValue);
+        });
+
         HttpEntity<T> request = new HttpEntity<>(message, httpHeaders);
         return restTemplate.postForObject(url, request, String.class);
     }

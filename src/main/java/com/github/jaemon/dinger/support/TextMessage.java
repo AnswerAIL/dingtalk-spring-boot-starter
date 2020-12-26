@@ -29,7 +29,7 @@ public class TextMessage implements CustomMessage {
     @Override
     public String message(String projectId, String title, String content, List<String> phones) {
         return MessageFormat.format(
-                "【Dinger通知】 {0}\n- 项目名称: {1}\n- 内容: {2}.",
-                title, projectId, content);
+                "【Dinger通知】 {0}\n- 内容: {1}.",
+                projectId, content);
     }
 }

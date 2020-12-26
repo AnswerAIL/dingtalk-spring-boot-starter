@@ -1,50 +1,106 @@
 # Dinger(叮鸽) ![GitHub license](https://img.shields.io/github/license/AnswerAIL/dingtalk-spring-boot-starter)
+[![Dinger Logo](https://gitee.com/jaemon/docs/raw/master/dinger.png)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)
+
+
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.answerail/dingtalk-spring-boot-starter)](https://mvnrepository.com/artifact/com.github.answerail/dingtalk-spring-boot-starter)
 [![GitHub stars](https://img.shields.io/github/stars/AnswerAIL/dingtalk-spring-boot-starter.svg?style=social)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)
 [![Gitee stars](https://gitee.com/jaemon/dingtalk-spring-boot-starter/badge/star.svg?theme=dark)](https://gitee.com/jaemon/dingtalk-spring-boot-starter)
-[![GitHub issues](https://img.shields.io/github/issues/AnswerAIL/dingtalk-spring-boot-starter)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues?q=is%3Aopen+is%3Aissue)
-[![GitHub closed issues](https://img.shields.io/github/issues-closed/AnswerAIL/dingtalk-spring-boot-starter)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues?q=is%3Aissue+is%3Aclosed)
 ![JDK](https://img.shields.io/badge/JDK-%3E=1.8-green?logo=appveyor)
-
-&nbsp;
-
-
-## What
-springboot集成钉钉机器人实现消息通知中间件。项目基于[钉钉开放平台-群机器人](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5) API的基础上做了一层封装，让使用更简单便捷。
-
-只需要简单的配置（最简单的发送功能只需要一行代码），即可快速的在springboot项目中将消息发送到指定的钉钉群聊中。
+![SpringBoot](https://img.shields.io/badge/springboot-1.x%20&%202.x-green?logo=appveyor)
 
 
 &nbsp;
 
 
-## Why
- - **`上手简单`**： 配置简单，无需花费太多精力在群机器人的使用上；
- - **`代码解耦`**： 插拔式功能组件，和业务代码解耦；
- - **`扩展性强`**： 核心功能面向接口编程, 可以据具体业务对功能进行定制化；
- - **`用法多样`**： 消息体支持[DingTalk V1.x](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Docs-for-DingTalk-1.x)的完全自定义和[DingTalk V2.x](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Docs-for-DingTalk-2.x)的XML方式配置及注解方式定义；
+## What(Dinger是什么)
+Dinger一个是以SpringBoot框架为基础开发的消息发送中间件， 对现有两大移动办公系统[钉钉](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5)和[企业微信](https://work.weixin.qq.com/api/doc/90000/90136/91770)的群机器人API做了一层封装，让使用更简单便捷。
+
+只需要简单的配置（最简单的发送功能只需要一行代码），即可快速的在springboot项目中将消息发送到指定的钉钉或企业微信群聊中。
 
 
 &nbsp;
 
 
-## How
-- [V1.X快速入门](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Getting-Started-V1.x)
+## Why(为什么用Dinger)
+ - 配置简单，上手容易，无需花费太多精力在群机器人API的使用上；
+ - 插拔式功能组件，和业务代码解耦；
+ - 核心功能面向接口编程, 可以据具体业务对功能进行定制化来满足不同的业务需求；
+ - 支持集中式管理消息，提供xml标签，支持编写动态消息体；
+ - 基于具体消息编程，消息体可支持XML标签方式配置和注解方式定义；
+ - 支持钉钉和企业微信群机器人一键切换使用和混合使用；
 
-- [V2.X快速入门](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Getting-Started-V2.x)
+
+&nbsp;
+
+
+## How(如何使用Dinger-快速使用)
+### 引入依赖
+```xml
+<dependency>
+    <groupId>com.github.answerail</groupId>
+    <artifactId>dinger-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+### 配置文件配置
+**使用钉钉群机器人配置**
+```yaml
+spring:
+  dinger:
+    project-id: ${spring.application.name}
+    dingers:
+      # 使用钉钉机器人, 请根据自己机器人配置信息进行修改
+      dingtalk:
+        tokenId: 87dbeb7bc28894c3ycyl3d12457228ad309966275b5f427cd85f9025ebb520cf
+        secret: AEQ74a9039ai01f2ljm017b90ycye9asg6335f97c658ff37ff371ec8120581c7f09
+```
+
+**使用企业群机器人配置**
+```yaml
+spring:
+  dinger:
+    project-id: ${spring.application.name}
+    dingers:
+      # 使用企业微信机器人, 请根据自己机器人配置信息进行修改
+      wetalk:
+        token-id: 32865206-7082-46l5-8j39-2m7ycy6d868
+```
+
+### 代码中使用
+```java
+@Component
+public class AppInit implements InitializingBean {
+    @Autowired
+    private DingerSender dingerSender;
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        // 发送text类型消息
+        dingerSender.send(
+                MessageSubType.TEXT,
+                DingerRequest.request("Hello World, Hello Dinger")
+        );
+
+        // 发送markdown类型消息
+        dingerSender.send(
+                MessageSubType.MARKDOWN,
+                DingerRequest.request("Hello World, Hello Dinger", "启动通知")
+        );
+    }
+}
+```
 
 
 &nbsp;
 
 ## Documentation, Getting Started and Developer Guides
-- [Dingtalk Wiki](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki)
+- [Dinger Wiki](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki)
 
 &nbsp;
 
 
 ## Upgrade Log
-- [版本变更日志](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dingtalk-Upgrade-Log)
-
+- [版本变更日志](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-Upgrade-Log)
 
 
 &nbsp;

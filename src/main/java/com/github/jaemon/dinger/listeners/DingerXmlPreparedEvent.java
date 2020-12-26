@@ -16,6 +16,7 @@
 package com.github.jaemon.dinger.listeners;
 
 import com.github.jaemon.dinger.core.DingerDefinitionResolver;
+import com.github.jaemon.dinger.core.annatations.DingerScan;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
 import com.github.jaemon.dinger.exception.DingerAnalysisException;
@@ -24,9 +25,13 @@ import com.github.jaemon.dinger.utils.DingerUtils;
 import com.github.jaemon.dinger.core.DingerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
 
@@ -44,7 +49,7 @@ public class DingerXmlPreparedEvent
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         log.info("ready to execute dinger analysis.");
-
+        loadPrimarySources(event);
         registerDefaultDingerConfig(event.getEnvironment());
 
         try {
@@ -54,6 +59,31 @@ public class DingerXmlPreparedEvent
         } catch (Exception ex) {
             throw new DingerException(ex, ExceptionEnum.UNKNOWN);
         }
+    }
+
+    /**
+     * loadPrimarySources
+     *
+     * @param event
+     *          event {@link ApplicationEnvironmentPreparedEvent}
+     */
+    private void loadPrimarySources(ApplicationEnvironmentPreparedEvent event) {
+        Set<?> allSources;
+        if (SpringBootVersion.getVersion().startsWith("1.")) {
+            allSources = event.getSpringApplication().getSources();
+        } else {
+            allSources = event.getSpringApplication().getAllSources();
+        }
+        Set<Class<?>> primarySources = new HashSet<>();
+        for (Object source : allSources) {
+            if (Class.class.isInstance(source)) {
+                Class<?> clazz = (Class<?>) source;
+                if (clazz.isAnnotationPresent(DingerScan.class)) {
+                    primarySources.add(clazz);
+                }
+            }
+        }
+        DingerListenersProperty.primarySources = primarySources;
     }
 
     /**

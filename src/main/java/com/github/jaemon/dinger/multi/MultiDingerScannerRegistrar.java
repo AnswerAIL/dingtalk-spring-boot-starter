@@ -50,6 +50,7 @@ import java.util.Map;
 
 import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
 import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.MULTIDINGER_ALGORITHM_EXCEPTION;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.MULTIDINGER_ANNOTATTION_EXCEPTION;
 import static com.github.jaemon.dinger.multi.MultiDingerConfigContainer.GLOABL_KEY;
 
 /**
@@ -186,10 +187,15 @@ public class MultiDingerScannerRegistrar
      * @param key
      *          当前dingerClass类名
      * @param dingerConfigHandler
-     *          dingerClass指定的multiHandler处理器
+     *          dingerClass指定的multiHandler处理器实例
      */
     private void registerHandler(BeanDefinitionRegistry registry, DingerType dinger, String key, DingerConfigHandler dingerConfigHandler) {
         String dingerConfigHandlerClassName = dingerConfigHandler.getClass().getSimpleName();
+
+        if (!dinger.isEnabled()) {
+            throw new DingerException(MULTIDINGER_ANNOTATTION_EXCEPTION, key, dinger);
+        }
+
         // 获取当前指定算法类名, 默认四种，或使用自定义
         Class<? extends AlgorithmHandler> algorithm = dingerConfigHandler.algorithmHandler();
         // if empty? use default dinger config
@@ -199,14 +205,10 @@ public class MultiDingerScannerRegistrar
             throw new DingerException(MULTIDINGER_ALGORITHM_EXCEPTION, dingerConfigHandlerClassName);
         }
 
-        dingerConfigs.stream().forEach(e -> {
-
-        });
         for (int i = 0; i < dingerConfigs.size(); i++) {
             DingerConfig dingerConfig = dingerConfigs.get(i);
-            if (DingerUtils.isEmpty(dingerConfig.getTokenId()) || (
-                    dingerConfig.getDingerType() != null && dinger != dingerConfig.getDingerType())
-            ) {
+            dingerConfig.setDingerType(dinger);
+            if (DingerUtils.isEmpty(dingerConfig.getTokenId())) {
                 throw new DingerException(ExceptionEnum.DINGER_CONFIG_HANDLER_EXCEPTION, dingerConfigHandlerClassName, i);
             }
         }

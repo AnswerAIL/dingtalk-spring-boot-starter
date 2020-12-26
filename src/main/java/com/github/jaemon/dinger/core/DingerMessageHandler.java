@@ -131,10 +131,6 @@ public class DingerMessageHandler
      *          返回Dinger
      */
     DingerType dingerType(Method method) {
-        if (method.isAnnotationPresent(Dinger.class)) {
-            return method.getAnnotation(Dinger.class).value();
-        }
-
         Class<?> dingerClass = method.getDeclaringClass();
         if (dingerClass.isAnnotationPresent(Dinger.class)) {
             return dingerClass.getAnnotation(Dinger.class).value();
@@ -147,7 +143,7 @@ public class DingerMessageHandler
      * 获取Dinger定义
      *
      * <pre>
-     *     优先级: local(dinger为空使用默认 {@link DingerMessageHandler#dingerType}) > multi > default
+     *     优先级: local(dinger为空使用默认 {@link DingerMessageHandler#dingerType}) > multi > default({@link DingerMessageHandler#dingerType})
      * </pre>
      *
      * @param useDinger
@@ -163,38 +159,39 @@ public class DingerMessageHandler
 
         // 优先使用用户设定 dingerConfig
         if (localDinger == null) {
-            keyName = useDinger + SPOT_SEPERATOR + keyName;
+            String dingerName = useDinger + SPOT_SEPERATOR + keyName;
             dingerDefinition = DingerXmlPreparedEvent
-                    .Container.INSTANCE.get(keyName);
+                    .Container.INSTANCE.get(dingerName);
 
             if (dingerDefinition == null) {
-                log.warn("{} there is no corresponding dinger message config", keyName);
+                log.warn("{} there is no corresponding dinger message config", dingerName);
                 return null;
             }
+            DingerConfig dingerMethodDefaultDingerConfig = dingerDefinition.dingerConfig();
 
             // 判断是否是multiDinger
             if (multiDinger()) {
                 MultiDingerConfig multiDingerConfig =
                         MultiDingerConfigContainer
-                                .INSTANCE.get(keyName);
+                                .INSTANCE.get(useDinger, keyName);
                 DingerConfig dingerConfig = null;
                 if (multiDingerConfig != null) {
                     // 拿到MultiDingerConfig中当前应该使用的DingerConfig
                     dingerConfig = multiDingerConfig.getAlgorithmHandler()
                             .dingerConfig(
                                     multiDingerConfig.getDingerConfigs(),
-                                    dingerDefinition.dingerConfig()
+                                    dingerMethodDefaultDingerConfig
                             );
                 }
 
                 // use default dingerConfig
                 if (dingerConfig == null) {
-                    dingerConfig = dingerDefinition.dingerConfig();
+                    dingerConfig = dingerMethodDefaultDingerConfig;
                 }
 
                 DingerHelper.assignDinger(dingerConfig);
             } else {
-                DingerHelper.assignDinger(dingerDefinition.dingerConfig());
+                DingerHelper.assignDinger(dingerMethodDefaultDingerConfig);
             }
 
         } else {

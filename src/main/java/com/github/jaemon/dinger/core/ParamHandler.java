@@ -27,11 +27,14 @@ import java.util.Map;
 public interface ParamHandler {
 
     /**
-     * paramsHandler
+     * Dinger方法参数处理
      *
-     * @param parameters parameters
-     * @param values values
-     * @return params map
+     * @param parameters
+     *          Dinger方法形参集
+     * @param values
+     *          Dinger方法实参
+     * @return
+     *          形参和实参的映射关系
      */
     Map<String, Object> paramsHandler(Parameter[] parameters, Object[] values);
 

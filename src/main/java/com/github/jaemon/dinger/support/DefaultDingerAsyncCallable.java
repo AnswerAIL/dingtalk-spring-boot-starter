@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
  * @author Jaemon
  * @since 1.0
  */
-public class DefaultDkCallable implements DingerAsyncCallback {
-    private static final Logger log = LoggerFactory.getLogger(DefaultDkCallable.class);
+public class DefaultDingerAsyncCallable implements DingerAsyncCallback {
+    private static final Logger log = LoggerFactory.getLogger(DefaultDingerAsyncCallable.class);
     
     @Override
     public void execute(String dingerId, String result) {

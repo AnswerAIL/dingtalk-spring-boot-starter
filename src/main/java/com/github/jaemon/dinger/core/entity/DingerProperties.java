@@ -41,22 +41,22 @@ public class DingerProperties implements InitializingBean {
     private static final Logger log = LoggerFactory.getLogger(DingerProperties.class);
 
     /**
-     * 是否启用DingTalk, 默认true
+     * 是否启用DingTalk, 默认true, 选填
      */
     private boolean enabled = true;
 
     /**
-     * dinger类型-必填
+     * dinger类型 <code>key={@link DingerType}, value={@link Dinger}</code>, 必填
      */
     private Map<DingerType, Dinger> dingers = new HashMap<>();
 
     /**
-     * 必填, 项目名称
+     * 项目名称, 必填 <code>eg: ${spring.application.name}</code>
      * */
     private String projectId;
 
     /**
-     * 使用dinger时, 对应的 xml配置路径.
+     * dinger xml配置路径(需要配置xml方式Dinger时必填), 选填
      *
      * <blockquote>
      *     spring.dinger.dinger-locations: classpath*:dinger/*.xml
@@ -65,8 +65,8 @@ public class DingerProperties implements InitializingBean {
      * */
     private String dingerLocations;
 
-    /** 默认的Dinger, default {@link DingerType#DINGTALK} */
-    private DingerType defaultDinger = DingerType.DINGTALK;
+    /** 默认的Dinger, 不指定则使用{@link DingerProperties#dingers}中的第一个, 选填 */
+    private DingerType defaultDinger;
 
     public boolean isEnabled() {
         return enabled;
@@ -114,7 +114,7 @@ public class DingerProperties implements InitializingBean {
          * */
         private String robotUrl;
         /**
-         * 获取 access_token
+         * 获取 access_token, 必填
          *
          * <blockquote>
          *     填写Dinger机器人设置中 webhook access_token | key后面的值
@@ -130,17 +130,17 @@ public class DingerProperties implements InitializingBean {
          * */
         private String tokenId;
         /**
-         * 可选, 签名秘钥。 需要验签时必填(钉钉机器人提供)
+         * 选填, 签名秘钥。 需要验签时必填(钉钉机器人提供)
          */
         private String secret;
 
         /**
-         * 可选, 是否需要对tokenId进行解密, 默认false
+         * 选填, 是否需要对tokenId进行解密, 默认false
          */
         private boolean decrypt = false;
 
         /**
-         * 可选(当decrypt=true时, 必填), 解密密钥
+         * 选填(当decrypt=true时, 必填), 解密密钥
          *
          * <br /><br />
          *
@@ -153,7 +153,7 @@ public class DingerProperties implements InitializingBean {
         private String decryptKey;
 
         /**
-         * 可选, 是否开启异步处理, 默认： false
+         * 选填, 是否开启异步处理, 默认： false
          */
         private boolean async = false;
 
@@ -246,6 +246,11 @@ public class DingerProperties implements InitializingBean {
                 dinger.tokenId = ConfigTools.decrypt(dinger.decryptKey, dinger.tokenId);
             } else {
                 dinger.decryptKey = null;
+            }
+
+            if (defaultDinger == null) {
+                defaultDinger = dingerType;
+                log.warn("defaultDinger undeclared and use fisrt dingers dingerType, defaultDinger={}", defaultDinger);
             }
         }
 

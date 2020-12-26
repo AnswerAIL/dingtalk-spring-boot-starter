@@ -15,7 +15,6 @@
  */
 package com.github.jaemon.dinger.core;
 
-import com.dingerframework.core.annatations.*;
 import com.github.jaemon.dinger.core.annatations.*;
 import com.github.jaemon.dinger.core.entity.DingerResponse;
 

@@ -43,7 +43,7 @@ public enum MessageSubType {
 
                 if (atAll) {
                     message.setAt(new Message.At(true));
-                } else if (!phones.isEmpty()) {
+                } else if (phones != null && !phones.isEmpty()) {
                     message.setAt(new Message.At(phones));
                 }
 
@@ -53,7 +53,7 @@ public enum MessageSubType {
                 WeText weText = new WeText(text);
                 if (atAll) {
                     text.setMentioned_mobile_list(Arrays.asList(WETALK_AT_ALL));
-                } else if (!phones.isEmpty()) {
+                } else if (phones != null && !phones.isEmpty()) {
                     text.setMentioned_mobile_list(phones);
                 }
                 return weText;

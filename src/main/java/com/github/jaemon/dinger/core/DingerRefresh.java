@@ -25,7 +25,6 @@ public class DingerRefresh {
 
     protected static void dingerFresh() {
         AbstractDingerDefinitionResolver.clear();
-        DingerDefinitionGeneratorFactory.clear();
     }
 
 }

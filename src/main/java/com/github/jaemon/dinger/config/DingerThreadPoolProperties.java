@@ -28,23 +28,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DingerThreadPoolProperties {
     private static final int DEFAULT_CORE_SIZE = Runtime.getRuntime().availableProcessors() + 1;
     /**
-     * 线程池维护线程的最小数量
+     * 线程池维护线程的最小数量, 选填
      */
     private int coreSize = DEFAULT_CORE_SIZE;
     /**
-     * 线程池维护线程的最大数量
+     * 线程池维护线程的最大数量, 选填
      */
     private int maxSize = DEFAULT_CORE_SIZE * 2;
     /**
-     * 空闲线程的存活时间
+     * 空闲线程的存活时间, 选填
      */
     private int keepAliveSeconds = 60;
     /**
-     * 持有等待执行的任务队列
+     * 持有等待执行的任务队列, 选填
      */
     private int queueCapacity = 10;
     /**
-     * 线程名称前缀
+     * 线程名称前缀, 选填
      */
     private String threadNamePrefix = DingerConstant.DEFAULT_THREAD_NAME_PREFIX;
 

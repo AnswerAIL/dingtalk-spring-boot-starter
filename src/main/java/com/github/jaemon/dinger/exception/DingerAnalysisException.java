@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.exception;
 
-import com.github.jaemon.dinger.core.entity.Pairs;
+import com.github.jaemon.dinger.core.entity.ExceptionPairs;
 
 /**
  * Dinger解析异常
@@ -24,11 +24,11 @@ import com.github.jaemon.dinger.core.entity.Pairs;
  * @since 1.0
  */
 public class DingerAnalysisException extends DingerException {
-    public DingerAnalysisException(Pairs pairs) {
+    public DingerAnalysisException(ExceptionPairs pairs) {
         super(pairs);
     }
 
-    public DingerAnalysisException(Pairs pairs, String message) {
+    public DingerAnalysisException(ExceptionPairs pairs, String message) {
         super(message, pairs);
     }
 }

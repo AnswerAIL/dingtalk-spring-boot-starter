@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger;
 
+import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.core.entity.DingerRequest;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.entity.enums.MessageSubType;
@@ -31,6 +32,10 @@ public interface DingerSender {
 
     /**
      * 发送预警消息到钉钉
+     *
+     * <pre>
+     *     使用配置的默认钉钉机器人, {@link DingerProperties#getDefaultDinger()}
+     * </pre>
      *
      * @param messageSubType
      *              消息类型{@link MessageSubType}

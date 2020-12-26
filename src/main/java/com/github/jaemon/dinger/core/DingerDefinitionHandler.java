@@ -116,7 +116,7 @@ public class DingerDefinitionHandler {
         MessageMainType messageMainType = dingerDefinitionType.messageMainType();
         if (messageMainType != MessageMainType.XML) {
             throw new DingerException(
-                    dingerDefinitionType + "中消息体定义主类型应该为" + MessageMainType.XML, DINGERDEFINITIONTYPE_ERROR
+                    DINGERDEFINITIONTYPE_ERROR, dingerDefinitionType, MessageMainType.XML, messageMainType
             );
         }
 

@@ -16,35 +16,17 @@
 package com.github.jaemon.dinger.core.entity;
 
 /**
- * K-V对
+ * 异常对
  *
  * @author Jaemon
  * @since 1.0
  */
-public interface Pairs<K, V> {
+public interface ExceptionPairs extends Pairs<Integer, String> {
 
-    /**
-     * 消息码
-     *
-     * @return K
-     */
-    K code();
-
-    /**
-     * 消息描述
-     *
-     * @return V
-     */
-    V desc();
-
-    /**
-     * message
-     *
-     * @param args
-     *          args
-     * @return
-     *          message
-     */
-    V message(Object... args);
+    @Override
+    default String message(Object... args) {
+        String message = String.format(this.desc(), args);
+        return String.format("{code=%d, message=%s}", code(), message);
+    }
 
 }
