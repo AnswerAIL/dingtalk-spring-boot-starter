@@ -15,6 +15,8 @@
  */
 package com.github.jaemon.dinger.support;
 
+import com.github.jaemon.dinger.core.entity.DingerRequest;
+
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -27,7 +29,10 @@ import java.util.List;
 public class MarkDownMessage implements CustomMessage {
 
     @Override
-    public String message(String projectId, String title, String content, List<String> phones) {
+    public String message(String projectId, DingerRequest request) {
+        String content = request.getContent();
+        String title = request.getTitle();
+        List<String> phones = request.getPhones();
         // markdown在text内容里需要有@手机号
         StringBuilder text = new StringBuilder(title);
         if (phones != null && !phones.isEmpty()) {

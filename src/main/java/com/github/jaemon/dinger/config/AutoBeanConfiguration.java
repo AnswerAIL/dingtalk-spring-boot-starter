@@ -13,28 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.support;
+package com.github.jaemon.dinger.config;
 
-import com.github.jaemon.dinger.core.entity.DingerRequest;
+import com.github.jaemon.dinger.support.client.DingerHttpClient;
+import com.github.jaemon.dinger.support.client.DingerHttpTemplate;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * 自定义消息接口
+ *  实例化bean配置
  *
  * @author Jaemon
  * @since 1.0
  */
-public interface CustomMessage {
-
-    /**
-     * 自定义消息
-     *
-     * @param projectId
-     *              projectId
-     * @param request
-     *              消息请求体 {@link DingerRequest}
-     * @return
-     *              消息内容字符串
-     */
-    String message(String projectId, DingerRequest request);
-
+@Configuration
+@AutoConfigureAfter(DingerHttpClientConfig.class)
+public class AutoBeanConfiguration {
+    @Bean
+    public DingerHttpClient dingerHttpClient() {
+        return new DingerHttpTemplate();
+    }
 }

@@ -18,6 +18,7 @@ package com.github.jaemon.dinger.core;
 import com.github.jaemon.dinger.core.annatations.DingerTokenId;
 import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
 import com.github.jaemon.dinger.core.annatations.DingerText;
+import com.github.jaemon.dinger.core.entity.DingerRequest;
 import com.github.jaemon.dinger.core.entity.MsgType;
 import com.github.jaemon.dinger.core.entity.enums.*;
 import com.github.jaemon.dinger.core.entity.xml.*;
@@ -63,9 +64,16 @@ public class DingerDefinitionHandler {
         dingerDefinition.setDingerType(dingerType);
         dingerDefinition.setMessageSubType(MessageSubType.TEXT);
 
+        DingerRequest request;
+
+        if (dinger.atAll()) {
+            request = DingerRequest.request(dinger.value(), true);
+        } else {
+            request = DingerRequest.request(dinger.value(), Arrays.asList(dinger.phones()));
+        }
+
         MsgType msgType = dingerDefinition.messageSubType().msgType(
-                dingerType, dinger.value(), null, Arrays.asList(dinger.phones()), dinger.atAll()
-        );
+                dingerType, request);
         dingerDefinition.setMessage(msgType);
 
         return dingerDefinition;
@@ -90,9 +98,8 @@ public class DingerDefinitionHandler {
         dingerDefinition.setMessageSubType(MessageSubType.MARKDOWN);
 
         // markdown not support at all members
-        MsgType msgType = dingerDefinition.messageSubType().msgType(
-                dingerType, dinger.value(), dinger.title(), Arrays.asList(dinger.phones()), false
-        );
+        DingerRequest request  = DingerRequest.request(dinger.value(), dinger.title(), Arrays.asList(dinger.phones()));
+        MsgType msgType = dingerDefinition.messageSubType().msgType(dingerType, request);
         dingerDefinition.setMessage(msgType);
 
         return dingerDefinition;
@@ -153,8 +160,14 @@ public class DingerDefinitionHandler {
         String content = contentTag.map(e -> e.getContent()).orElse("");
         String title = contentTag.map(e -> e.getTitle()).orElse("Dinger Title");
 
-        MsgType message = dingerDefinitionType.messageSubType().msgType(
-                dingerDefinitionType.dingerType(), content, title, phones, atAll);
+        DingerRequest request;
+        if (atAll) {
+            request = DingerRequest.request(content, title, true);
+        } else {
+            request = DingerRequest.request(content, title, phones);
+        }
+
+        MsgType message = dingerDefinitionType.messageSubType().msgType(dingerDefinitionType.dingerType(), request);
         dingerDefinition.setMessage(message);
 
         return dingerDefinition;

@@ -49,48 +49,24 @@ public class DingerRobot extends AbstractDingerSender {
 
     @Override
     public DingerResponse send(MessageSubType messageSubType, DingerRequest request) {
-        return send(dingerProperties.getDefaultDinger(), messageSubType, request.getTitle(), request.getContent(), request.getPhones(), request.isAtAll());
+        return send(dingerProperties.getDefaultDinger(), messageSubType, request);
     }
 
     @Override
     public DingerResponse send(DingerType dingerType, MessageSubType messageSubType, DingerRequest request) {
-        return send(dingerType, messageSubType, request.getTitle(), request.getContent(), request.getPhones(), request.isAtAll());
-    }
-
-    /**
-     * 发送预警消息到钉钉-艾特所有人
-     *
-     * <pre>
-     *     markdown不支持艾特全部
-     * </pre>
-     *
-     * @param dingerType
-     *              Dinger类型 {@link DingerType}
-     * @param messageSubType
-     *              消息类型{@link MessageSubType}
-     * @param title
-     *              副标题
-     * @param content
-     *              消息内容
-     * @param phones
-     *              艾特成员
-     * @param atAll
-     *              是否艾特所有人
-     * @return
-     *              响应报文
-     * */
-    private DingerResponse send(DingerType dingerType, MessageSubType messageSubType, String title, String content, List<String> phones, boolean atAll) {
         CustomMessage customMessage = customMessage(messageSubType);
         String msgContent = customMessage.message(
-                dingerProperties.getProjectId(), title, content, phones
+                dingerProperties.getProjectId(), request
         );
+        request.setContent(msgContent);
 
         MsgType msgType = messageSubType.msgType(
-                dingerType, msgContent, title, phones, atAll
+                dingerType, request
         );
 
         return send(msgType);
     }
+
 
     /**
      * @param message
@@ -121,6 +97,7 @@ public class DingerRobot extends AbstractDingerSender {
             if (dingerConfig) {
                 dinger = new DingerProperties.Dinger();
                 BeanUtils.copyProperties(localDinger, dinger);
+                dinger.setAsync(localDinger.getAsyncExecute());
                 dinger.setRobotUrl(dingers.get(dingerType).getRobotUrl());
             } else {
                 dinger = dingers.get(dingerType);

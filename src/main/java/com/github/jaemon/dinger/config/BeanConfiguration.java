@@ -19,11 +19,10 @@ import com.github.jaemon.dinger.support.sign.DingTalkSignAlgorithm;
 import com.github.jaemon.dinger.support.sign.DingerSignAlgorithm;
 import com.github.jaemon.dinger.multi.MultiDingerAlgorithmInjectRegister;
 import com.github.jaemon.dinger.support.*;
-import com.github.jaemon.dinger.support.client.DingerHttpClient;
-import com.github.jaemon.dinger.support.client.DingerHttpTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import static com.github.jaemon.dinger.constant.DingerConstant.MARKDOWN_MESSAGE;
 import static com.github.jaemon.dinger.constant.DingerConstant.TEXT_MESSAGE;
@@ -35,12 +34,8 @@ import static com.github.jaemon.dinger.constant.DingerConstant.TEXT_MESSAGE;
  * @since 1.0
  */
 @Configuration
+@Import(AutoBeanConfiguration.class)
 public class BeanConfiguration {
-
-    @Bean
-    public DingerHttpClient dingerHttpClient() {
-        return new DingerHttpTemplate();
-    }
 
     /**
      * 默认Text消息格式配置

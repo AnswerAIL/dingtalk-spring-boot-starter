@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger.core.entity.enums;
 
+import com.github.jaemon.dinger.core.entity.DingerRequest;
 import com.github.jaemon.dinger.dingtalk.entity.DingMarkDown;
 import com.github.jaemon.dinger.dingtalk.entity.DingText;
 import com.github.jaemon.dinger.core.entity.MsgType;
@@ -37,7 +38,10 @@ import static com.github.jaemon.dinger.core.DingerDefinitionHandler.WETALK_AT_AL
 public enum MessageSubType {
     TEXT {
         @Override
-        public MsgType msgType(DingerType dingerType, String content, String title, List<String> phones, boolean atAll) {
+        public MsgType msgType(DingerType dingerType, DingerRequest request) {
+            String content = request.getContent();
+            boolean atAll = request.isAtAll();
+            List<String> phones = request.getPhones();
             if (dingerType == DingerType.DINGTALK) {
                 Message message = new DingText(new DingText.Text(content));
 
@@ -63,7 +67,10 @@ public enum MessageSubType {
 
     MARKDOWN {
         @Override
-        public MsgType msgType(DingerType dingerType, String content, String title, List<String> phones, boolean atAll) {
+        public MsgType msgType(DingerType dingerType, DingerRequest request) {
+            String content = request.getContent();
+            String title = request.getTitle();
+            List<String> phones = request.getPhones();
             if (dingerType == DingerType.DINGTALK) {
                 Message message = new DingMarkDown(new DingMarkDown.MarkDown(title, content));
 
@@ -90,18 +97,12 @@ public enum MessageSubType {
      *
      * @param dingerType
      *          Dinger类型 {@link DingerType}
-     * @param content
-     *          消息内容
-     * @param title
-     *          消息标题(dingtalk-markdown)
-     * @param phones
-     *          艾特成员列表
-     * @param atAll
-     *          是否艾特全部
+     * @param request
+     *          消息请求体 {@link  DingerRequest}
      * @return
      *          消息体 {@link MsgType}
      */
-    public abstract MsgType msgType(DingerType dingerType, String content, String title, List<String> phones, boolean atAll);
+    public abstract MsgType msgType(DingerType dingerType, DingerRequest request);
 
     public static boolean contains(String value) {
         return Arrays.stream(MessageSubType.values()).filter(e -> Objects.equals(e.name(), value)).count() > 0;

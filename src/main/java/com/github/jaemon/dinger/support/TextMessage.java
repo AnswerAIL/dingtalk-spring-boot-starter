@@ -15,8 +15,9 @@
  */
 package com.github.jaemon.dinger.support;
 
+import com.github.jaemon.dinger.core.entity.DingerRequest;
+
 import java.text.MessageFormat;
-import java.util.List;
 
 /**
  * 默认Text消息格式
@@ -27,7 +28,8 @@ import java.util.List;
 public class TextMessage implements CustomMessage {
 
     @Override
-    public String message(String projectId, String title, String content, List<String> phones) {
+    public String message(String projectId, DingerRequest request) {
+        String content = request.getContent();
         return MessageFormat.format(
                 "【Dinger通知】 {0}\n- 内容: {1}.",
                 projectId, content);

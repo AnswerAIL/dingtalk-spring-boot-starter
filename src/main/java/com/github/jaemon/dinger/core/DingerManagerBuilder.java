@@ -15,15 +15,15 @@
  */
 package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.core.entity.enums.MessageSubType;
+import com.github.jaemon.dinger.support.client.DingerHttpClient;
 import com.github.jaemon.dinger.support.sign.DingerSignAlgorithm;
 import com.github.jaemon.dinger.support.DingerExceptionCallback;
 import com.github.jaemon.dinger.support.CustomMessage;
 import com.github.jaemon.dinger.support.DingerAsyncCallback;
 import com.github.jaemon.dinger.support.DingerIdGenerator;
-import com.github.jaemon.dinger.support.client.DingerHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.Executor;
 
@@ -37,7 +37,8 @@ import static com.github.jaemon.dinger.constant.DingerConstant.*;
  */
 public class DingerManagerBuilder {
     @Autowired
-    DingerHttpClient dingerHttpClient;
+    @Qualifier(DINGER_REST_TEMPLATE)
+    RestTemplate dingerRestTemplate;
     @Autowired
     DingerExceptionCallback dingerExceptionCallback;
     @Autowired
@@ -55,25 +56,27 @@ public class DingerManagerBuilder {
     Executor dingTalkExecutor;
     @Autowired
     DingerAsyncCallback dingerAsyncCallback;
+    @Autowired
+    DingerHttpClient dingerHttpClient;
 
     public DingerManagerBuilder() {
     }
 
     /**
-     * custom http client
+     * 自定义restTemplate客户端
      *
-     * @param dingerHttpClient dingerHttpClient
+     * @param dingerRestTemplate restTemplate
      * @return this
      */
-    public DingerManagerBuilder dingerHttpClient(DingerHttpClient dingerHttpClient) {
-        if (dingerHttpClient != null) {
-            this.dingerHttpClient = dingerHttpClient;
+    public DingerManagerBuilder dingerRestTemplate(RestTemplate dingerRestTemplate) {
+        if (dingerRestTemplate != null) {
+            this.dingerRestTemplate = dingerRestTemplate;
         }
         return this;
     }
 
     /**
-     * custom exception callback
+     * 自定义异常回调
      *
      * @param dingerExceptionCallback dingerExceptionCallback
      * @return this
@@ -86,7 +89,15 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * custom text message format for {@link MessageSubType#TEXT}
+     * 自定义text文本消息体-仅限手动发送方式
+     *
+     * <pre>
+     *     // 该方式为手动发送消息体方式
+     *     dingerSender.send(...);
+     *
+     *     // 该方式为统一管理消息体方式
+     *     userDinger.success(...);
+     * </pre>
      *
      * @param textMessage textMessage
      * @return this
@@ -99,7 +110,15 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * custom markdown message format for {@link MessageSubType#MARKDOWN}
+     * 自定义markdown消息体-仅限手动发送方式
+     *
+     * <pre>
+     *     // 该方式为手动发送消息体方式
+     *     dingerSender.send(...);
+     *
+     *     // 该方式为统一管理消息体方式
+     *     userDinger.success(...);
+     * </pre>
      *
      * @param markDownMessage markDownMessage
      * @return this
@@ -112,7 +131,7 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * custom sign algorithm
+     * 自定义签名算法，仅限钉钉签名算法更改情况下使用
      *
      * @param dingerSignAlgorithm dingerSignAlgorithm
      * @return this
@@ -125,7 +144,7 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * custom id generator
+     * 自定义DingerId生成器，dingerId为每次调用返回体中的logid值
      *
      * @param dingerIdGenerator dingerIdGenerator
      * @return this
@@ -138,7 +157,7 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * custom async executor
+     * 自定义异步执行线程池
      *
      * @param dingTalkExecutor dingTalkExecutor
      * @return this
@@ -151,7 +170,7 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * custom async callback
+     * 自定义异步回调函数-用于异步发送时
      *
      * @param dingerAsyncCallback dingerAsyncCallback
      * @return this

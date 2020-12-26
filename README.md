@@ -39,9 +39,10 @@ Dinger一个是以SpringBoot框架为基础开发的消息发送中间件， 对
 <dependency>
     <groupId>com.github.answerail</groupId>
     <artifactId>dinger-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>${dinger.version}</version>
 </dependency>
 ```
+> [dinger.version版本号取值](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-1.1-Upgrade-Log)
 
 ### 配置文件配置
 **使用钉钉群机器人配置**
@@ -89,30 +90,35 @@ public class AppInit implements InitializingBean {
     }
 }
 ```
+更多功能请移步[Github Dinger wiki](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki) OR [Gitee Dinger wiki](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis)
 
 
 &nbsp;
 
 ## Documentation, Getting Started and Developer Guides
-- [Dinger Wiki](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki)
+- [Dinger Wiki-Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki)
+
+- [Dinger Wiki-Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis)
+
 
 &nbsp;
 
 
 ## Upgrade Log
-- [版本变更日志](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-Upgrade-Log)
+- [版本变更日志-Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-1.2-Upgrade-Log)
+
+- [版本变更日志-Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis/Dinger-1.2-Upgrade-Log)
 
 
 &nbsp;
 
 
 ## Feedback
-***
-> 有问题欢迎提Issue
->
-> [github issues](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues)
->
-> [gitee issues](https://gitee.com/jaemon/dingtalk-spring-boot-starter/issues)
+**有任何建议或问题欢迎提Issue~**
+
+- [Issues-Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues)
+
+- [Issues-Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter/issues)
 ***
 
 &nbsp;

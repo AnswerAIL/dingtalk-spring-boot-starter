@@ -16,7 +16,7 @@
 package com.github.jaemon.dinger.config;
 
 import com.github.jaemon.dinger.constant.DingerConstant;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.convert.DurationUnit;
@@ -40,7 +40,7 @@ import static com.github.jaemon.dinger.constant.DingerConstant.DINGER_PROPERTIES
 @Configuration
 @ConditionalOnMissingBean(name = DingerConstant.DINGER_REST_TEMPLATE)
 @ConfigurationProperties(prefix = DINGER_PROPERTIES_PREFIX + "http-client")
-@AutoConfigureBefore(BeanConfiguration.class)
+@AutoConfigureAfter(BeanConfiguration.class)
 public class DingerHttpClientConfig {
 
     /**
