@@ -2,7 +2,7 @@
 [![Dinger Logo](https://gitee.com/jaemon/docs/raw/master/dinger.png)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)
 
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.answerail/dingtalk-spring-boot-starter)](https://mvnrepository.com/artifact/com.github.answerail/dingtalk-spring-boot-starter)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.answerail/dinger-spring-boot-starter)](https://mvnrepository.com/artifact/com.github.answerail/dingtalk-spring-boot-starter)
 [![GitHub stars](https://img.shields.io/github/stars/AnswerAIL/dingtalk-spring-boot-starter.svg?style=social)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)
 [![Gitee stars](https://gitee.com/jaemon/dingtalk-spring-boot-starter/badge/star.svg?theme=dark)](https://gitee.com/jaemon/dingtalk-spring-boot-starter)
 ![JDK](https://img.shields.io/badge/JDK-%3E=1.8-green?logo=appveyor)
