@@ -105,9 +105,9 @@ public class AppInit implements InitializingBean {
 
 
 ## Upgrade Log
-- [版本变更日志-Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-1.2-Upgrade-Log)
+- [版本变更日志-Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-1.1-Upgrade-Log)
 
-- [版本变更日志-Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis/Dinger-1.2-Upgrade-Log)
+- [版本变更日志-Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis/Dinger-1.1-Upgrade-Log)
 
 
 &nbsp;
