@@ -90,7 +90,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                 }
                 continue;
             }
-            String xml = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
+            String xml = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()), "UTF-8");
             xml = transferXml(xml);
             BeanTag dingerBean = XmlUtils.xmlToJavaBean(xml, BeanTag.class);
             if (dingerBean == null) {
@@ -104,12 +104,19 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
             if (dingerClass == null) {
                 throw new DingerException(DINER_XML_NAMESPACE_INVALID, namespace);
             }
+            Map<String, String[]> dingerClassMethods = dingerClassMethods(dingerClass);
 
             DingerConfig dingerConfiguration = dingerConfiguration(dingerClass);
 
             List<MessageTag> messages = dingerBean.getMessages();
             for (MessageTag message : messages) {
-                String dingerName = namespace + SPOT_SEPERATOR + message.getIdentityId();
+                String methodName = message.getIdentityId();
+                if (!dingerClassMethods.containsKey(methodName)) {
+                    log.warn("namespace={}, messageId={} undefined in dingerClass.",
+                            namespace, methodName);
+                    continue;
+                }
+                String dingerName = namespace + SPOT_SEPERATOR + methodName;
                 String messageSubType = message.getDingerType();
                 if (!MessageSubType.contains(messageSubType)) {
                     throw new DingerException(DINER_XML_MSGTYPE_INVALID, dingerName, messageSubType);
@@ -119,7 +126,8 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                 registerDingerDefinition(
                         dingerName, message,
                         dingerDefinitionKey,
-                        dingerConfiguration
+                        dingerConfiguration,
+                        dingerClassMethods.get(methodName)
                 );
             }
         }
@@ -143,13 +151,15 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                     registerDingerDefinition(
                             dingerName, method.getAnnotation(DingerText.class),
                             dingerDefinitionKey + MessageSubType.TEXT,
-                            dingerConfiguration
+                            dingerConfiguration,
+                            methodParams(method)
                     );
                 } else if (method.isAnnotationPresent(DingerMarkdown.class)) {
                     registerDingerDefinition(
                             dingerName, method.getAnnotation(DingerMarkdown.class),
                             dingerDefinitionKey + MessageSubType.MARKDOWN,
-                            dingerConfiguration
+                            dingerConfiguration,
+                            methodParams(method)
                     );
                 } else {
                     if (log.isDebugEnabled()) {

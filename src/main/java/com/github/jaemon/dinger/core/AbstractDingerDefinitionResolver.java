@@ -17,6 +17,7 @@ package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.constant.DingerConstant;
 import com.github.jaemon.dinger.core.annatations.DingerScan;
+import com.github.jaemon.dinger.core.annatations.Parameter;
 import com.github.jaemon.dinger.core.entity.enums.DingerDefinitionType;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
@@ -29,6 +30,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
 
@@ -180,11 +183,14 @@ public abstract class AbstractDingerDefinitionResolver
      *          dingerDefinitionKey
      * @param dingerConfiguration
      *          Dinger层配置DingerConfig
+     * @param methodParams
+     *          方法参数信息
      */
     void registerDingerDefinition(
             String dingerName, Object source,
             String dingerDefinitionKey,
-            DingerConfig dingerConfiguration
+            DingerConfig dingerConfiguration,
+            String[] methodParams
     ) {
         boolean debugEnabled = log.isDebugEnabled();
         for (DingerType dingerType : enabledDingerTypes) {
@@ -219,6 +225,7 @@ public abstract class AbstractDingerDefinitionResolver
             if (INSTANCE.contains(keyName)) {
                 throw new DingerException(DINGER_REPEATED_EXCEPTION, keyName);
             }
+            dingerDefinition.setMethodParams(methodParams);
 
             // DingerConfig Priority： `@DingerText | @DingerMarkdown | XML` > `@DingerConfiguration` > `***.yml | ***.properties`
             dingerDefinition.dingerConfig()
@@ -230,6 +237,52 @@ public abstract class AbstractDingerDefinitionResolver
                 log.debug("dinger definition={} has been registed.", keyName);
             }
         }
+    }
+
+    /**
+     * 获取当前Dinger接口层方法的所有参数信息
+     *
+     * @param dingerClass
+     *          Dinger接口层类
+     * @return
+     *          当前Dinger接口定义的方法的参数信息
+     */
+    protected Map<String, String[]> dingerClassMethods(Class<?> dingerClass) {
+        Method[] declaredMethods = dingerClass.getDeclaredMethods();
+        Map<String, String[]> dingerMethodParams = new HashMap<>();
+        for (Method declaredMethod : declaredMethods) {
+            String methodName = declaredMethod.getName();
+            String[] methodParams = methodParams(declaredMethod);
+            dingerMethodParams.put(methodName, methodParams);
+        }
+        return dingerMethodParams;
+    }
+
+    /**
+     * 获取当前方法的所有参数信息
+     *
+     * @param method
+     *          Dinger接口层方法
+     * @return
+     *          当前方法的参数信息
+     */
+    protected String[] methodParams(Method method) {
+        Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+        java.lang.reflect.Parameter[] parameters = method.getParameters();
+        String[] params = new String[parameterAnnotations.length];
+
+        for (int i = 0; i < parameterAnnotations.length; i++) {
+            Annotation[] parameterAnnotation = parameterAnnotations[i];
+            params[i] = parameters[i].getName();
+            for (Annotation annotation : parameterAnnotation) {
+                if (Parameter.class.isInstance(annotation)) {
+                    Parameter dingerParam = (Parameter) annotation;
+                    params[i] = dingerParam.value();
+                    break;
+                }
+            }
+        }
+        return params;
     }
 
     /**

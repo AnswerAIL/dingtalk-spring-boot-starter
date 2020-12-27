@@ -15,7 +15,7 @@
  */
 package com.github.jaemon.dinger.core;
 
-import java.lang.reflect.Parameter;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -29,6 +29,8 @@ public interface ParamHandler {
     /**
      * Dinger方法参数处理
      *
+     * @param method
+     *          执行方法
      * @param parameters
      *          Dinger方法形参集
      * @param values
@@ -36,6 +38,6 @@ public interface ParamHandler {
      * @return
      *          形参和实参的映射关系
      */
-    Map<String, Object> paramsHandler(Parameter[] parameters, Object[] values);
+    Map<String, Object> paramsHandler(Method method, String[] parameters, Object[] values);
 
 }

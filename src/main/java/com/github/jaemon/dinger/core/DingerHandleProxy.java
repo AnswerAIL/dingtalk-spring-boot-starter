@@ -66,9 +66,6 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
         }
 
         try {
-            // method params map
-            Map<String, Object> params = paramsHandler(method.getParameters(), args);
-
             DingerType useDinger = dingerType(method);
             DingerDefinition dingerDefinition = dingerDefinition(
                     useDinger, dingerClassName, keyName
@@ -76,6 +73,9 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
             if (dingerDefinition == null) {
                 return null;
             }
+
+            // method params map
+            Map<String, Object> params = paramsHandler(method, dingerDefinition.methodParams(), args);
 
             MsgType message = transfer(dingerDefinition, params);
 

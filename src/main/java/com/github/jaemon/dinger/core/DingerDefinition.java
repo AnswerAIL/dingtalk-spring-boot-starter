@@ -130,4 +130,20 @@ public interface DingerDefinition {
      */
     void setMessageSubType(MessageSubType messageSubType);
 
+    /**
+     * methodParams
+     *
+     * @return
+     *      array
+     */
+    String[] methodParams();
+
+    /**
+     * setMethodParams
+     *
+     * @param methodParams
+     *          methodParams
+     */
+    void setMethodParams(String[] methodParams);
+
 }

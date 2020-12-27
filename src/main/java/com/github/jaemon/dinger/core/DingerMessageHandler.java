@@ -54,12 +54,21 @@ public class DingerMessageHandler
     protected DingerProperties dingerProperties;
 
     @Override
-    public Map<String, Object> paramsHandler(Parameter[] parameters, Object[] values) {
+    public Map<String, Object> paramsHandler(Method method, String[] keys, Object[] values) {
         Map<String, Object> params = new HashMap<>();
-        if (parameters.length == 0) {
+        int valueLength = values.length;
+        if (valueLength == 0) {
+            return params;
+        }
+        int keyLength = keys.length;
+        if (keyLength == valueLength) {
+            for (int i = 0; i < valueLength; i++) {
+                params.put(keys[i], values[i]);
+            }
             return params;
         }
 
+        Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
             String paramName = parameter.getName();

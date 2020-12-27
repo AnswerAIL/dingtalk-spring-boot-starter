@@ -35,6 +35,7 @@ public class DefaultDingerDefinition implements DingerDefinition {
     private DingerType dingerType;
     private MessageMainType messageMainType;
     private MessageSubType messageSubType;
+    private String[] methodParams;
 
     @Override
     public String dingerName() {
@@ -105,5 +106,15 @@ public class DefaultDingerDefinition implements DingerDefinition {
     @Override
     public void setMessageSubType(MessageSubType messageSubType) {
         this.messageSubType = messageSubType;
+    }
+
+    @Override
+    public String[] methodParams() {
+        return methodParams == null ? new String[0] : methodParams;
+    }
+
+    @Override
+    public void setMethodParams(String[] methodParams) {
+        this.methodParams = methodParams;
     }
 }
