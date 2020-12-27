@@ -148,12 +148,14 @@ public class DingerMessageHandler
      *
      * @param useDinger
      *          代理方法使用的Dinger
+     * @param dingerClassName
+     *          代理类全限定名
      * @param keyName
-     *          keyName
+     *          代理方法全限定名
      * @return
      *          dingerDefinition {@link DingerDefinition}
      */
-    DingerDefinition dingerDefinition(DingerType useDinger, String keyName) {
+    DingerDefinition dingerDefinition(DingerType useDinger, String dingerClassName, String keyName) {
         DingerDefinition dingerDefinition;
         DingerConfig localDinger = DingerHelper.getLocalDinger();
 
@@ -173,7 +175,7 @@ public class DingerMessageHandler
             if (multiDinger()) {
                 MultiDingerConfig multiDingerConfig =
                         MultiDingerConfigContainer
-                                .INSTANCE.get(useDinger, keyName);
+                                .INSTANCE.get(useDinger, dingerClassName);
                 DingerConfig dingerConfig = null;
                 if (multiDingerConfig != null) {
                     // 拿到MultiDingerConfig中当前应该使用的DingerConfig

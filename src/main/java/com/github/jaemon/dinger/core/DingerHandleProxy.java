@@ -71,7 +71,7 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
 
             DingerType useDinger = dingerType(method);
             DingerDefinition dingerDefinition = dingerDefinition(
-                    useDinger, keyName
+                    useDinger, dingerClassName, keyName
             );
             if (dingerDefinition == null) {
                 return null;

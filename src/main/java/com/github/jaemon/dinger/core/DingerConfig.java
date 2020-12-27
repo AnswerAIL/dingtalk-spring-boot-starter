@@ -55,6 +55,17 @@ public class DingerConfig {
         this.secret = secret;
     }
 
+    private DingerConfig(String tokenId, String secret, boolean async) {
+        this.tokenId = tokenId;
+        this.secret = secret;
+        this.asyncExecute = async;
+    }
+
+    private DingerConfig(DingerType dingerType, String tokenId, String secret, boolean async) {
+        this(tokenId, secret, async);
+        this.dingerType = dingerType;
+    }
+
     private DingerConfig(DingerType dingerType, String tokenId, String secret) {
         this(tokenId, secret);
         this.dingerType = dingerType;
@@ -93,42 +104,194 @@ public class DingerConfig {
         this.dingerType = dingerType;
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param tokenId
+     *          机器人tokenID
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(String tokenId) {
         return new DingerConfig(tokenId);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param dingerType
+     *          Dinger机器人类型, {@link DingerType}, MultiDinger中无需指定
+     * @param tokenId
+     *          机器人tokenID
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(DingerType dingerType, String tokenId) {
         return new DingerConfig(dingerType, tokenId);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param tokenId
+     *          机器人tokenID
+     * @param secret
+     *          机器人签名秘钥
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(String tokenId, String secret) {
         return new DingerConfig(tokenId, secret);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param dingerType
+     *          Dinger机器人类型, {@link DingerType}, MultiDinger中无需指定
+     * @param tokenId
+     *          机器人tokenID
+     * @param secret
+     *          机器人签名秘钥
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(DingerType dingerType, String tokenId, String secret) {
         return new DingerConfig(dingerType, tokenId, secret);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param tokenId
+     *          机器人tokenID
+     * @param asyncExecute
+     *          是否异步发送
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(String tokenId, boolean asyncExecute) {
         return new DingerConfig(tokenId, asyncExecute);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param dingerType
+     *          Dinger机器人类型, {@link DingerType}, MultiDinger中无需指定
+     * @param tokenId
+     *          机器人tokenID
+     * @param asyncExecute
+     *          是否异步发送
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(DingerType dingerType, String tokenId, boolean asyncExecute) {
         return new DingerConfig(dingerType, tokenId, asyncExecute);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param tokenId
+     *          机器人tokenID
+     * @param secret
+     *          机器人签名秘钥
+     * @param asyncExecute
+     *          是否异步发送
+     * @return
+     *          机器人配置实例
+     */
+    public static DingerConfig instance(String tokenId, String secret, boolean asyncExecute) {
+        return new DingerConfig(tokenId, secret, asyncExecute);
+    }
+
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param dingerType
+     *          Dinger机器人类型, {@link DingerType}, MultiDinger中无需指定
+     * @param tokenId
+     *          机器人tokenID
+     * @param secret
+     *          机器人签名秘钥
+     * @param asyncExecute
+     *          是否异步发送
+     * @return
+     *          机器人配置实例
+     */
+    public static DingerConfig instance(DingerType dingerType, String tokenId, String secret, boolean asyncExecute) {
+        return new DingerConfig(dingerType, tokenId, secret, asyncExecute);
+    }
+
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param tokenId
+     *          机器人tokenID
+     * @param secret
+     *          机器人签名秘钥
+     * @param decryptKey
+     *          Dinger组件内部解密秘钥
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(String tokenId, String secret, String decryptKey) {
         return new DingerConfig(tokenId, secret, decryptKey);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param dingerType
+     *          Dinger机器人类型, {@link DingerType}, MultiDinger中无需指定
+     * @param tokenId
+     *          机器人tokenID
+     * @param secret
+     *          机器人签名秘钥
+     * @param decryptKey
+     *          Dinger组件内部解密秘钥
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(DingerType dingerType, String tokenId, String secret, String decryptKey) {
         return new DingerConfig(dingerType, tokenId, secret, decryptKey);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param tokenId
+     *          机器人tokenID
+     * @param secret
+     *          机器人签名秘钥
+     * @param decryptKey
+     *          Dinger组件内部解密秘钥
+     * @param asyncExecute
+     *          是否异步发送
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(String tokenId, String secret, String decryptKey, boolean asyncExecute) {
         return new DingerConfig(tokenId, secret, decryptKey, asyncExecute);
     }
 
+    /**
+     * Dinger机器人配置实例
+     *
+     * @param dingerType
+     *          Dinger机器人类型, {@link DingerType}, MultiDinger中无需指定
+     * @param tokenId
+     *          机器人tokenID
+     * @param secret
+     *          机器人签名秘钥
+     * @param decryptKey
+     *          Dinger组件内部解密秘钥
+     * @param asyncExecute
+     *          是否异步发送
+     * @return
+     *          机器人配置实例
+     */
     public static DingerConfig instance(DingerType dingerType, String tokenId, String secret, String decryptKey, boolean asyncExecute) {
         return new DingerConfig(dingerType, tokenId, secret, decryptKey, asyncExecute);
     }
@@ -222,7 +385,7 @@ public class DingerConfig {
     }
 
     public Boolean getAsyncExecute() {
-        return asyncExecute;
+        return asyncExecute == null ? false : asyncExecute;
     }
 
     public void setAsyncExecute(Boolean asyncExecute) {
