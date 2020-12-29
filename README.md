@@ -29,6 +29,9 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
  - 基于具体消息编程，消息体可支持XML标签方式配置和注解方式定义；
  - 支持钉钉和企业微信群机器人一键切换使用和混合使用；
 
+&nbsp;
+
+> **如果觉得项目对您的工作有帮助的话, 欢迎[Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)或[Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter)加星关注哈~**
 
 &nbsp;
 
