@@ -19,6 +19,8 @@ import com.github.jaemon.dinger.core.DingerDefinition;
 import com.github.jaemon.dinger.core.DingerDefinitionGenerator;
 import com.github.jaemon.dinger.core.DingerDefinitionGeneratorContext;
 import com.github.jaemon.dinger.core.DingerDefinitionHandler;
+import com.github.jaemon.dinger.core.annatations.DingerImageText;
+import com.github.jaemon.dinger.core.annatations.DingerLink;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.entity.xml.MessageTag;
 import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
@@ -43,9 +45,7 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerText> context) {
-            DingerDefinition dingerDefinition = dingerTextHandler(DingerType.DINGTALK, context);
-
-            return dingerDefinition;
+            return dingerTextHandler(DingerType.DINGTALK, context);
         }
     }
 
@@ -56,9 +56,7 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
     public static class AnnotationMarkdown extends DingerDefinitionGenerator<DingerMarkdown> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
-            DingerDefinition dingerDefinition = dingerMarkdownHandler(DingerType.DINGTALK, context);
-
-            return dingerDefinition;
+            return dingerMarkdownHandler(DingerType.DINGTALK, context);
         }
     }
 
@@ -70,9 +68,7 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
-            DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.DINGTALK_XML_TEXT, context);
-
-            return dingerDefinition;
+            return xmlHandler(DingerDefinitionType.DINGTALK_XML_TEXT, context);
         }
     }
 
@@ -83,11 +79,51 @@ public class DingTalkDefinitionGenerator extends DingerDefinitionHandler {
     public static class XmlMarkdown extends DingerDefinitionGenerator<MessageTag> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
-            DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.DINGTALK_XML_MARKDOWN, context);
-
-            return dingerDefinition;
+            return xmlHandler(DingerDefinitionType.DINGTALK_XML_MARKDOWN, context);
         }
     }
 
 
+    /**
+     * 生成注解 ImageText消息体定义
+     */
+    public static class AnnotationImageText extends DingerDefinitionGenerator<DingerImageText> {
+        @Override
+        public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerImageText> context) {
+            return dingerImageTextHandler(DingerType.DINGTALK, context);
+        }
+    }
+
+
+    /**
+     * 生成XML ImageText消息体定义
+     */
+    public static class XmlImageText extends DingerDefinitionGenerator<MessageTag> {
+        @Override
+        public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
+            return xmlHandler(DingerDefinitionType.DINGTALK_XML_IMAGETEXT, context);
+        }
+    }
+
+
+    /**
+     * 生成注解 Link消息体定义
+     */
+    public static class AnnotationLink extends DingerDefinitionGenerator<DingerLink> {
+        @Override
+        public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerLink> context) {
+            return dingerLinkHandler(DingerType.DINGTALK, context);
+        }
+    }
+
+
+    /**
+     * 生成XML Link消息体定义
+     */
+    public static class XmlLink extends DingerDefinitionGenerator<MessageTag> {
+        @Override
+        public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
+            return xmlHandler(DingerDefinitionType.DINGTALK_XML_LINK, context);
+        }
+    }
 }

@@ -16,6 +16,8 @@
 package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.constant.DingerConstant;
+import com.github.jaemon.dinger.core.annatations.DingerImageText;
+import com.github.jaemon.dinger.core.annatations.DingerLink;
 import com.github.jaemon.dinger.core.annatations.DingerScan;
 import com.github.jaemon.dinger.core.annatations.Parameter;
 import com.github.jaemon.dinger.core.entity.enums.DingerDefinitionType;
@@ -36,8 +38,9 @@ import java.util.*;
 import java.util.List;
 
 import static com.github.jaemon.dinger.core.AbstractDingerDefinitionResolver.Container.INSTANCE;
-import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.DINGER_REPEATED_EXCEPTION;
-import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.MULTI_DINGER_SCAN_ERROR;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.*;
+import static com.github.jaemon.dinger.utils.DingerUtils.methodParamsGenericType;
+import static com.github.jaemon.dinger.utils.DingerUtils.methodParamsType;
 
 /**
  * AbstractDingerDefinitionResolver
@@ -183,21 +186,22 @@ public abstract class AbstractDingerDefinitionResolver
      *          dingerDefinitionKey
      * @param dingerConfiguration
      *          Dinger层配置DingerConfig
-     * @param methodParams
-     *          方法参数信息
+     * @param dingerMethod
+     *          方法参数信息和方法中的泛型信息
+     *
      */
     void registerDingerDefinition(
             String dingerName, Object source,
             String dingerDefinitionKey,
             DingerConfig dingerConfiguration,
-            String[] methodParams
+            DingerMethod dingerMethod
     ) {
         boolean debugEnabled = log.isDebugEnabled();
         for (DingerType dingerType : enabledDingerTypes) {
             DingerConfig defaultDingerConfig = defaultDingerConfigs.get(dingerType);
             if (dingerConfiguration == null) {
                 if (debugEnabled) {
-                    log.info("dinger={} not open and skip the corresponding dinger registration.", dingerType);
+                    log.debug("dinger={} not open and skip the corresponding dinger registration.", dingerType);
                 }
                 continue;
             }
@@ -206,7 +210,11 @@ public abstract class AbstractDingerDefinitionResolver
             Class<? extends DingerDefinitionGenerator> dingerDefinitionGeneratorClass =
                     dingerDefinitionGeneratorMap.get(key);
             if (dingerDefinitionGeneratorClass == null) {
-                throw new DingerException(ExceptionEnum.DINGERDEFINITIONTYPE_UNDEFINED_KEY, key);
+//                throw new DingerException(ExceptionEnum.DINGERDEFINITIONTYPE_UNDEFINED_KEY, key);
+                if (debugEnabled) {
+                    log.debug("当前key=%s在DingerDefinitionType中没定义", key);
+                }
+                continue;
             }
 
             DingerDefinitionGenerator dingerDefinitionGenerator = DingerDefinitionGeneratorFactory.get(
@@ -225,7 +233,12 @@ public abstract class AbstractDingerDefinitionResolver
             if (INSTANCE.contains(keyName)) {
                 throw new DingerException(DINGER_REPEATED_EXCEPTION, keyName);
             }
-            dingerDefinition.setMethodParams(methodParams);
+
+            if (dingerMethod.check()) {
+                throw new DingerException(METHOD_DEFINITION_EXCEPTION, dingerMethod.methodName);
+            }
+            dingerDefinition.setMethodParams(dingerMethod.methodParams);
+            dingerDefinition.setGenericIndex(dingerMethod.paramTypes);
 
             // DingerConfig Priority： `@DingerText | @DingerMarkdown | XML` > `@DingerConfiguration` > `***.yml | ***.properties`
             dingerDefinition.dingerConfig()
@@ -245,15 +258,28 @@ public abstract class AbstractDingerDefinitionResolver
      * @param dingerClass
      *          Dinger接口层类
      * @return
-     *          当前Dinger接口定义的方法的参数信息
+     *          当前Dinger接口定义的方法的参数信息和泛型信息
      */
-    protected Map<String, String[]> dingerClassMethods(Class<?> dingerClass) {
-        Method[] declaredMethods = dingerClass.getDeclaredMethods();
-        Map<String, String[]> dingerMethodParams = new HashMap<>();
-        for (Method declaredMethod : declaredMethods) {
-            String methodName = declaredMethod.getName();
-            String[] methodParams = methodParams(declaredMethod);
-            dingerMethodParams.put(methodName, methodParams);
+    protected Map<String, DingerMethod> dingerClassMethods(Class<?> dingerClass) {
+        Method[] methods = dingerClass.getMethods();
+        Map<String, DingerMethod> dingerMethodParams = new HashMap<>();
+        for (Method method : methods) {
+            String methodName = method.getName();
+            String methodAllName = dingerClass.getSimpleName() + DingerConstant.SPOT_SEPERATOR + methodName;
+            int[] paramTypes = null;
+            if (method.isAnnotationPresent(DingerImageText.class)) {
+                paramTypes = methodParamsGenericType(method, DingerImageText.clazz);
+                if (paramTypes.length != 1) {
+                    throw new DingerException(IMAGETEXT_METHOD_PARAM_EXCEPTION, methodAllName);
+                }
+            } else if (method.isAnnotationPresent(DingerLink.class)) {
+                paramTypes = methodParamsType(method, DingerLink.clazz);
+                if (paramTypes.length != 1) {
+                    throw new DingerException(LINK_METHOD_PARAM_EXCEPTION, methodAllName);
+                }
+            }
+            String[] methodParams = methodParams(method);
+            dingerMethodParams.put(methodName, new DingerMethod(methodAllName, methodParams, paramTypes));
         }
         return dingerMethodParams;
     }
@@ -285,6 +311,33 @@ public abstract class AbstractDingerDefinitionResolver
         return params;
     }
 
+    static class DingerMethod {
+        String methodName;
+        String[] methodParams;
+        int[] paramTypes;
+
+        public DingerMethod(String methodName, String[] methodParams, int[] paramTypes) {
+            this.methodName = methodName;
+            this.methodParams = methodParams;
+            this.paramTypes = paramTypes;
+        }
+
+        boolean check() {
+            if (paramTypes == null) {
+                return false;
+            }
+
+            int length = this.methodParams.length;
+            for (int index : paramTypes) {
+                if (index >= length) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    }
+
     /**
      * Container for DingerDefinition
      */
@@ -293,7 +346,7 @@ public abstract class AbstractDingerDefinitionResolver
         private Map<String, DingerDefinition> container;
 
         Container() {
-            this.container = new HashMap<>(256);
+            this.container = new HashMap<>(128);
         }
 
         /**

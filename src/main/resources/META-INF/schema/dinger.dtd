@@ -23,9 +23,10 @@ namespace CDATA #REQUIRED
 
 <!ELEMENT message (body | configuration? )*>
 <!-- attribute type prior to element type, since 2.0.2. -->
+<!-- type LINK support only dingtalk -->
 <!ATTLIST message
 id ID #REQUIRED
-type(TEXT | MARKDOWN) #IMPLIED
+type(TEXT | MARKDOWN | IMAGETEXT | LINK) #IMPLIED
 >
 
 <!ELEMENT body (type? | content | phones? )>

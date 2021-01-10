@@ -35,7 +35,10 @@ public class DefaultDingerDefinition implements DingerDefinition {
     private DingerType dingerType;
     private MessageMainType messageMainType;
     private MessageSubType messageSubType;
+    /** dinger方法的参数信息 */
     private String[] methodParams;
+    /** dinger方法的泛型信息 */
+    private int[] genericIndex;
 
     @Override
     public String dingerName() {
@@ -110,11 +113,29 @@ public class DefaultDingerDefinition implements DingerDefinition {
 
     @Override
     public String[] methodParams() {
-        return methodParams == null ? new String[0] : methodParams;
+        return methodParams;
     }
 
     @Override
     public void setMethodParams(String[] methodParams) {
+        if (methodParams == null) {
+            this.methodParams = new String[0];
+            return;
+        }
         this.methodParams = methodParams;
+    }
+
+    @Override
+    public int[] genericIndex() {
+        return genericIndex;
+    }
+
+    @Override
+    public void setGenericIndex(int[] genericIndex) {
+        if (genericIndex == null) {
+            this.genericIndex = new int[0];
+            return;
+        }
+        this.genericIndex = genericIndex;
     }
 }

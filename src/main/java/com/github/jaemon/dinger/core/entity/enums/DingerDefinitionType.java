@@ -43,6 +43,24 @@ public enum DingerDefinitionType {
             DingerType.DINGTALK, MessageMainType.ANNOTATION, MessageSubType.MARKDOWN, DingTalkDefinitionGenerator.AnnotationMarkdown.class
     ),
 
+    DINGTALK_XML_IMAGETEXT(
+            DingerType.DINGTALK, MessageMainType.XML, MessageSubType.IMAGETEXT, DingTalkDefinitionGenerator.XmlImageText.class
+    ),
+
+    DINGTALK_ANNOTATION_IMAGETEXT(
+            DingerType.DINGTALK, MessageMainType.ANNOTATION, MessageSubType.IMAGETEXT, DingTalkDefinitionGenerator.AnnotationImageText.class
+    ),
+
+    DINGTALK_XML_LINK(
+            DingerType.DINGTALK, MessageMainType.XML, MessageSubType.LINK, DingTalkDefinitionGenerator.XmlLink.class
+    ),
+
+    DINGTALK_ANNOTATION_LINK(
+            DingerType.DINGTALK, MessageMainType.ANNOTATION, MessageSubType.LINK, DingTalkDefinitionGenerator.AnnotationLink.class
+    ),
+
+
+
     /** 企业微信机器人消息类型 */
     WETALK_XML_TEXT(
             DingerType.WETALK, MessageMainType.XML, MessageSubType.TEXT, WeTalkDefinitionGenerator.XmlText.class
@@ -55,7 +73,15 @@ public enum DingerDefinitionType {
     ),
     WETALK_ANNOTATION_MARKDOWN(
             DingerType.WETALK, MessageMainType.ANNOTATION, MessageSubType.MARKDOWN, WeTalkDefinitionGenerator.AnnotationMarkDown.class
-    )
+    ),
+
+    WETALK_XML_IMAGETEXT(
+            DingerType.WETALK, MessageMainType.XML, MessageSubType.IMAGETEXT, WeTalkDefinitionGenerator.XmlImageText.class
+    ),
+
+    WETALK_ANNOTATION_IMAGETEXT(
+            DingerType.WETALK, MessageMainType.ANNOTATION, MessageSubType.IMAGETEXT, WeTalkDefinitionGenerator.AnnotationImageText.class
+    ),
 
     ;
     public static final DingerDefinitionType[] dingerDefinitionTypes = values();

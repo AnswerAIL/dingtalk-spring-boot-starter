@@ -41,16 +41,24 @@ public class DingerResponse {
      */
     private String data;
 
-    private DingerResponse(DingerResponseCodeEnum resultCode, String logid) {
+
+    private DingerResponse(DingerResponseCodeEnum resultCode) {
         this.code = resultCode.code();
         this.message = resultCode.message();
+    }
+
+    private DingerResponse(String logid, DingerResponseCodeEnum resultCode) {
+        this(resultCode);
         this.logid = logid;
     }
 
+    private DingerResponse(DingerResponseCodeEnum resultCode, String data) {
+        this(resultCode);
+        this.data = data;
+    }
+
     private DingerResponse(DingerResponseCodeEnum resultCode, String logid, String data) {
-        this.code = resultCode.code();
-        this.message = resultCode.message();
-        this.logid = logid;
+        this(logid, resultCode);
         this.data = data;
     }
 
@@ -63,11 +71,19 @@ public class DingerResponse {
     }
 
     public static DingerResponse failed(String logid) {
-        return new DingerResponse(DingerResponseCodeEnum.FAILED, logid);
+        return new DingerResponse(logid, DingerResponseCodeEnum.FAILED);
     }
 
-    public static DingerResponse failed(DingerResponseCodeEnum resultCode, String logid) {
-        return new DingerResponse(resultCode, logid);
+    public static DingerResponse failed(String logid, DingerResponseCodeEnum resultCode) {
+        return new DingerResponse(logid, resultCode);
+    }
+
+    public static DingerResponse failed(DingerResponseCodeEnum resultCode, String data) {
+        return new DingerResponse(resultCode, data);
+    }
+
+    public static DingerResponse failed(DingerResponseCodeEnum resultCode) {
+        return new DingerResponse(resultCode);
     }
 
     public String getCode() {

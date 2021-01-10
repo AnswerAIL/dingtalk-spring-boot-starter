@@ -13,31 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.core;
+package com.github.jaemon.dinger.core.annatations;
 
-import java.lang.reflect.Method;
-import java.util.Map;
+import com.github.jaemon.dinger.core.entity.ImageTextDeo;
+import com.github.jaemon.dinger.core.entity.enums.AsyncExecuteType;
+
+import java.lang.annotation.*;
 
 /**
- * ParamHandler
+ * DingerImageText
  *
- * @author Jaemon
+ *  @author Jaemon
  * @since 1.0
  */
-public interface ParamHandler {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+@Documented
+public @interface DingerImageText {
+    /**
+     * tokenId
+     *
+     * @return token info
+     */
+    DingerTokenId tokenId() default @DingerTokenId("");
 
     /**
-     * Dinger方法参数处理
+     * asyncExecute
      *
-     * @param method
-     *          执行方法
-     * @param dingerDefinition
-     *          Dinger定义
-     * @param values
-     *          Dinger方法实参
-     * @return
-     *          形参和实参的映射关系
+     * @return async execute send
      */
-    Map<String, Object> paramsHandler(Method method, DingerDefinition dingerDefinition, Object[] values);
+    AsyncExecuteType asyncExecute() default AsyncExecuteType.NONE;
 
+    Class<?> clazz = ImageTextDeo.class;
 }

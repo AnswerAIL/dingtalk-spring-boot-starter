@@ -16,10 +16,7 @@
 package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.constant.DingerConstant;
-import com.github.jaemon.dinger.core.annatations.AsyncExecute;
-import com.github.jaemon.dinger.core.annatations.DingerConfiguration;
-import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
-import com.github.jaemon.dinger.core.annatations.DingerText;
+import com.github.jaemon.dinger.core.annatations.*;
 import com.github.jaemon.dinger.core.entity.enums.MessageMainType;
 import com.github.jaemon.dinger.core.entity.enums.MessageSubType;
 import com.github.jaemon.dinger.core.entity.xml.BeanTag;
@@ -39,6 +36,8 @@ import java.util.*;
 
 import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
 import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.*;
+import static com.github.jaemon.dinger.utils.DingerUtils.methodParamsGenericType;
+import static com.github.jaemon.dinger.utils.DingerUtils.methodParamsType;
 
 /**
  * DingerDefinitionResolver
@@ -104,7 +103,7 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
             if (dingerClass == null) {
                 throw new DingerException(DINER_XML_NAMESPACE_INVALID, namespace);
             }
-            Map<String, String[]> dingerClassMethods = dingerClassMethods(dingerClass);
+            Map<String, DingerMethod> dingerClassMethods = dingerClassMethods(dingerClass);
 
             DingerConfig dingerConfiguration = dingerConfiguration(dingerClass);
 
@@ -147,25 +146,42 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
                 String dingerName = namespace + SPOT_SEPERATOR + method.getName();
                 String dingerDefinitionKey = MessageMainType.ANNOTATION + SPOT_SEPERATOR;
 
+                Object source;
+                MessageSubType messageSubType;
+                int[] paramTypes = null;
                 if (method.isAnnotationPresent(DingerText.class)) {
-                    registerDingerDefinition(
-                            dingerName, method.getAnnotation(DingerText.class),
-                            dingerDefinitionKey + MessageSubType.TEXT,
-                            dingerConfiguration,
-                            methodParams(method)
-                    );
+                    source = method.getAnnotation(DingerText.class);
+                    messageSubType = MessageSubType.TEXT;
                 } else if (method.isAnnotationPresent(DingerMarkdown.class)) {
-                    registerDingerDefinition(
-                            dingerName, method.getAnnotation(DingerMarkdown.class),
-                            dingerDefinitionKey + MessageSubType.MARKDOWN,
-                            dingerConfiguration,
-                            methodParams(method)
-                    );
+                    source = method.getAnnotation(DingerMarkdown.class);
+                    messageSubType = MessageSubType.MARKDOWN;
+                } else if (method.isAnnotationPresent(DingerImageText.class)) {
+                    paramTypes = methodParamsGenericType(method, DingerImageText.clazz);
+                    if (paramTypes.length != 1) {
+                        throw new DingerException(IMAGETEXT_METHOD_PARAM_EXCEPTION, dingerName);
+                    }
+                    source = method.getAnnotation(DingerImageText.class);
+                    messageSubType = MessageSubType.IMAGETEXT;
+                } else if (method.isAnnotationPresent(DingerLink.class)) {
+                    paramTypes = methodParamsType(method, DingerLink.clazz);
+                    if (paramTypes.length != 1) {
+                        throw new DingerException(LINK_METHOD_PARAM_EXCEPTION, dingerName);
+                    }
+                    source = method.getAnnotation(DingerLink.class);
+                    messageSubType = MessageSubType.LINK;
                 } else {
                     if (log.isDebugEnabled()) {
                         log.debug("register annotation dingerDefinition and skip method={}(possible use xml definition).", dingerName);
                     }
+                    continue;
                 }
+
+                registerDingerDefinition(
+                        dingerName, source,
+                        dingerDefinitionKey + messageSubType,
+                        dingerConfiguration,
+                        new DingerMethod(dingerName, methodParams(method), paramTypes)
+                );
             }
 
         }

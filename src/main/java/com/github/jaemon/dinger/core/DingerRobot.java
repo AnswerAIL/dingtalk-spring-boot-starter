@@ -31,7 +31,6 @@ import com.github.jaemon.dinger.utils.DingerUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -54,6 +53,9 @@ public class DingerRobot extends AbstractDingerSender {
 
     @Override
     public DingerResponse send(DingerType dingerType, MessageSubType messageSubType, DingerRequest request) {
+        if (!messageSubType.isSupport()) {
+            return DingerResponse.failed(DingerResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED);
+        }
         CustomMessage customMessage = customMessage(messageSubType);
         String msgContent = customMessage.message(
                 dingerProperties.getProjectId(), request
@@ -86,7 +88,7 @@ public class DingerRobot extends AbstractDingerSender {
                                 dingers.containsKey(dingerType)
                 )
         ) {
-            return DingerResponse.failed(DingerResponseCodeEnum.DINGER_DISABLED, dkid);
+            return DingerResponse.failed(dkid, DingerResponseCodeEnum.DINGER_DISABLED);
         }
 
         DingerConfig localDinger = getLocalDinger();
@@ -141,7 +143,7 @@ public class DingerRobot extends AbstractDingerSender {
             return DingerResponse.success(dkid, response);
         } catch (Exception e) {
             exceptionCallback(dkid, message, new SendMsgException(e));
-            return DingerResponse.failed(DingerResponseCodeEnum.SEND_MESSAGE_FAILED, dkid);
+            return DingerResponse.failed(dkid, DingerResponseCodeEnum.SEND_MESSAGE_FAILED);
         }
     }
 

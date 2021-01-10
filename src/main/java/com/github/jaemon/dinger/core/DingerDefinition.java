@@ -146,4 +146,20 @@ public interface DingerDefinition {
      */
     void setMethodParams(String[] methodParams);
 
+    /**
+     * genericIndex
+     *
+     * @return
+     *      genericIndex
+     */
+    int[] genericIndex();
+
+    /**
+     * setGenericIndex
+     *
+     * @param genericIndex
+     *          genericIndex
+     */
+    void setGenericIndex(int[] genericIndex);
+
 }

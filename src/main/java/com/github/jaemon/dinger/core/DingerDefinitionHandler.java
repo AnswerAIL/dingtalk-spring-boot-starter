@@ -15,9 +15,7 @@
  */
 package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.core.annatations.DingerTokenId;
-import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
-import com.github.jaemon.dinger.core.annatations.DingerText;
+import com.github.jaemon.dinger.core.annatations.*;
 import com.github.jaemon.dinger.core.entity.DingerRequest;
 import com.github.jaemon.dinger.core.entity.MsgType;
 import com.github.jaemon.dinger.core.entity.enums.*;
@@ -105,6 +103,52 @@ public class DingerDefinitionHandler {
         return dingerDefinition;
     }
 
+    /**
+     * 处理注解-ImageText定义的Dinger消息
+     *
+     * @param dingerType
+     *          Dinger类型 {@link DingerType}
+     * @param context
+     *          Dinger定义源
+     * @return
+     *          dingerDefinition {@link DingerDefinition}
+     */
+    protected static DingerDefinition dingerImageTextHandler(DingerType dingerType, DingerDefinitionGeneratorContext<DingerImageText> context) {
+        String keyName = context.getKeyName();
+        DingerImageText dinger = context.getSource();
+        DingerDefinition dingerDefinition = annotationDingerDefition(keyName, dinger.tokenId(), dinger.asyncExecute());
+        dingerDefinition.setDingerType(dingerType);
+        dingerDefinition.setMessageSubType(MessageSubType.IMAGETEXT);
+
+        MsgType msgType = dingerDefinition.messageSubType().msgType(dingerType, null);
+        dingerDefinition.setMessage(msgType);
+
+        return dingerDefinition;
+    }
+
+    /**
+     * 处理注解-Link定义的Dinger消息
+     *
+     * @param dingerType
+     *          Dinger类型 {@link DingerType}
+     * @param context
+     *          Dinger定义源
+     * @return
+     *          dingerDefinition {@link DingerDefinition}
+     */
+    protected static DingerDefinition dingerLinkHandler(DingerType dingerType, DingerDefinitionGeneratorContext<DingerLink> context) {
+        String keyName = context.getKeyName();
+        DingerLink dinger = context.getSource();
+        DingerDefinition dingerDefinition = annotationDingerDefition(keyName, dinger.tokenId(), dinger.asyncExecute());
+        dingerDefinition.setDingerType(dingerType);
+        dingerDefinition.setMessageSubType(MessageSubType.LINK);
+
+        MsgType msgType = dingerDefinition.messageSubType().msgType(dingerType, null);
+        dingerDefinition.setMessage(msgType);
+
+        return dingerDefinition;
+    }
+
 
     /**
      * 处理Xml定义的Dinger消息
@@ -141,30 +185,32 @@ public class DingerDefinitionHandler {
         Optional<ConfigurationTag> configuration = Optional.ofNullable(messageTag.getConfiguration());
         dingerConfig(dingerConfig, configuration);
 
-        Optional<BodyTag> body = Optional.ofNullable(messageTag.getBody());
+        DingerRequest request = null;
+        if (dingerDefinitionType.messageSubType().isSupport()) {
+            Optional<BodyTag> body = Optional.ofNullable(messageTag.getBody());
 
-        // 处理@成员逻辑
-        Optional<PhonesTag> phonesTag = body.map(e -> e.getPhones());
-        Boolean atAll = phonesTag.map(e -> e.getAtAll()).orElse(false);
+            // 处理@成员逻辑
+            Optional<PhonesTag> phonesTag = body.map(e -> e.getPhones());
+            Boolean atAll = phonesTag.map(e -> e.getAtAll()).orElse(false);
 
-        List<PhoneTag> phoneTags = phonesTag.map(e -> e.getPhones()).orElse(null);
-        List<String> phones;
-        if (phoneTags != null) {
-            phones = phoneTags.stream().map(PhoneTag::getValue).collect(Collectors.toList());
-        } else {
-            phones = new ArrayList<>();
-        }
+            List<PhoneTag> phoneTags = phonesTag.map(e -> e.getPhones()).orElse(null);
+            List<String> phones;
+            if (phoneTags != null) {
+                phones = phoneTags.stream().map(PhoneTag::getValue).collect(Collectors.toList());
+            } else {
+                phones = new ArrayList<>();
+            }
 
-        // 处理消息体逻辑
-        Optional<ContentTag> contentTag = body.map(e -> e.getContent());
-        String content = contentTag.map(e -> e.getContent()).orElse("");
-        String title = contentTag.map(e -> e.getTitle()).orElse("Dinger Title");
+            // 处理消息体逻辑
+            Optional<ContentTag> contentTag = body.map(e -> e.getContent());
+            String content = contentTag.map(e -> e.getContent()).orElse("");
+            String title = contentTag.map(e -> e.getTitle()).orElse("Dinger Title");
 
-        DingerRequest request;
-        if (atAll) {
-            request = DingerRequest.request(content, title, true);
-        } else {
-            request = DingerRequest.request(content, title, phones);
+            if (atAll) {
+                request = DingerRequest.request(content, title, true);
+            } else {
+                request = DingerRequest.request(content, title, phones);
+            }
         }
 
         MsgType message = dingerDefinitionType.messageSubType().msgType(dingerDefinitionType.dingerType(), request);

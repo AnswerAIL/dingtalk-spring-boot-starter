@@ -76,9 +76,13 @@ public enum ExceptionEnum implements ExceptionPairs {
 
 
     /** Dinger解析公共相关异常, 65XX */
-    /** 注定DingerText和Dinger xml重复配置也会抛出该异常 */
+    /** 注解DingerText和Dinger xml重复配置也会抛出该异常 */
     DINGER_REPEATED_EXCEPTION(6500, "重复的DingerId=%s对象"),
     DINGERDEFINITIONTYPE_UNDEFINED_KEY(6501, "当前key=%s在DingerDefinitionType中没定义"),
+    IMAGETEXT_METHOD_PARAM_EXCEPTION(6502, "方法%s的参数不符合图文消息定义规范"),
+    METHOD_DEFINITION_EXCEPTION(6503, "方法%s定义不符合规范"),
+    LINK_METHOD_PARAM_EXCEPTION(6504, "方法%s的参数不符合Link消息定义规范"),
+    DINGER_UNSUPPORT_MESSAGE_TYPE_EXCEPTION(6505, "Dinger[%s]暂不支持消息类型[%s]"),
 
 
 

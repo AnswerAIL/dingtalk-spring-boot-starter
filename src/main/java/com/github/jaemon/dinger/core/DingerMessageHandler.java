@@ -54,12 +54,23 @@ public class DingerMessageHandler
     protected DingerProperties dingerProperties;
 
     @Override
-    public Map<String, Object> paramsHandler(Method method, String[] keys, Object[] values) {
+    public Map<String, Object> paramsHandler(Method method, DingerDefinition dingerDefinition, Object[] values) {
         Map<String, Object> params = new HashMap<>();
         int valueLength = values.length;
         if (valueLength == 0) {
             return params;
         }
+
+        String[] keys = dingerDefinition.methodParams();
+        int[] genericIndex = dingerDefinition.genericIndex();
+        if (genericIndex.length > 0) {
+            for (int i : genericIndex) {
+                params.put(keys[i], values[i]);
+            }
+
+            return params;
+        }
+
         int keyLength = keys.length;
         if (keyLength == valueLength) {
             for (int i = 0; i < valueLength; i++) {
@@ -175,7 +186,6 @@ public class DingerMessageHandler
                     .Container.INSTANCE.get(dingerName);
 
             if (dingerDefinition == null) {
-                log.warn("{} there is no corresponding dinger message config", dingerName);
                 return null;
             }
             DingerConfig dingerMethodDefaultDingerConfig = dingerDefinition.dingerConfig();
@@ -215,7 +225,6 @@ public class DingerMessageHandler
                     .Container.INSTANCE.get(keyName);
 
             if (dingerDefinition == null) {
-                log.warn("{} there is no corresponding dinger message config", keyName);
                 return null;
             }
         }

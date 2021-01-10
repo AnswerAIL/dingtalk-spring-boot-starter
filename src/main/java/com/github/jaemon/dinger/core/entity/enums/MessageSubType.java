@@ -16,18 +16,20 @@
 package com.github.jaemon.dinger.core.entity.enums;
 
 import com.github.jaemon.dinger.core.entity.DingerRequest;
-import com.github.jaemon.dinger.dingtalk.entity.DingMarkDown;
-import com.github.jaemon.dinger.dingtalk.entity.DingText;
+import com.github.jaemon.dinger.dingtalk.entity.*;
 import com.github.jaemon.dinger.core.entity.MsgType;
-import com.github.jaemon.dinger.dingtalk.entity.Message;
+import com.github.jaemon.dinger.exception.DingerException;
 import com.github.jaemon.dinger.wetalk.entity.WeMarkdown;
+import com.github.jaemon.dinger.wetalk.entity.WeNews;
 import com.github.jaemon.dinger.wetalk.entity.WeText;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static com.github.jaemon.dinger.core.DingerDefinitionHandler.WETALK_AT_ALL;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.DINGER_UNSUPPORT_MESSAGE_TYPE_EXCEPTION;
 
 /**
  * 消息体定义子类型
@@ -36,7 +38,8 @@ import static com.github.jaemon.dinger.core.DingerDefinitionHandler.WETALK_AT_AL
  * @since 1.0
  */
 public enum MessageSubType {
-    TEXT {
+    /** Text类型 */
+    TEXT(true) {
         @Override
         public MsgType msgType(DingerType dingerType, DingerRequest request) {
             String content = request.getContent();
@@ -65,7 +68,8 @@ public enum MessageSubType {
         }
     },
 
-    MARKDOWN {
+    /** Markdown类型 */
+    MARKDOWN(true) {
         @Override
         public MsgType msgType(DingerType dingerType, DingerRequest request) {
             String content = request.getContent();
@@ -85,11 +89,43 @@ public enum MessageSubType {
                 return weMarkdown;
             }
         }
+    },
+
+    /** 图文类型 */
+    IMAGETEXT(false) {
+        @Override
+        public MsgType msgType(DingerType dingerType, DingerRequest request) {
+            if (dingerType == DingerType.DINGTALK) {
+                return new DingFeedCard(new ArrayList<>());
+            } else {
+                return new WeNews(new ArrayList<>());
+            }
+        }
+    },
+
+    /** link类型, 只支持 {@link DingerType#DINGTALK} */
+    LINK(false) {
+        @Override
+        public MsgType msgType(DingerType dingerType, DingerRequest request) {
+            if (dingerType == DingerType.DINGTALK) {
+                return new DingLink();
+            } else {
+                throw new DingerException(DINGER_UNSUPPORT_MESSAGE_TYPE_EXCEPTION, dingerType, this.name());
+            }
+        }
     }
 
     ;
 
-    MessageSubType() {
+    /** 是否支持显示设置消息子类型调用 */
+    private boolean support;
+
+    MessageSubType(boolean support) {
+        this.support = support;
+    }
+
+    public boolean isSupport() {
+        return support;
     }
 
     /**

@@ -16,8 +16,10 @@
 package com.github.jaemon.dinger.utils;
 
 import java.io.Closeable;
-import java.util.Base64;
-import java.util.UUID;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * DingTalk Utils
@@ -122,6 +124,62 @@ public class DingerUtils {
      */
     public static String uuid() {
         return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
+    }
+
+
+    /**
+     * 获取方法中参数的泛型的参数信息
+     *
+     * @param method
+     *          method
+     * @param clazz
+     *          clazz
+     * @return
+     *          arr
+     */
+    public static int[] methodParamsGenericType(Method method, Class<?> clazz) {
+        Type[] genericParameterTypes = method.getGenericParameterTypes();
+        int length = genericParameterTypes.length;
+        int[] arr = new int[length];
+        for (int i = 0; i < length; i++) {
+            Type type = genericParameterTypes[i];
+            arr[i] = -1;
+            if (ParameterizedType.class.isInstance(type)) {
+                ParameterizedType parameterizedType = (ParameterizedType) type;
+                if (parameterizedType.getRawType() == List.class) {
+                    Type actualTypeArgument = parameterizedType.getActualTypeArguments()[0];
+                    if (actualTypeArgument == clazz) {
+                        arr[i] = i;
+                    }
+                }
+            }
+        }
+        return Arrays.stream(arr).filter(e -> e > -1).toArray();
+    }
+
+    /**
+     * 获取方法中参数的指定类型信息
+     *
+     * @param method
+     *          method
+     * @param clazz
+     *          clazz
+     * @return
+     *          arr
+     */
+    public static int[] methodParamsType(Method method, Class<?> clazz) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        int length = parameterTypes.length;
+        int[] arr = new int[length];
+        for (int i = 0; i < length; i++) {
+            Class<?> parameterType = parameterTypes[i];
+            if (parameterType.getName().equals(clazz.getName())) {
+                arr[i] = i;
+            } else {
+                arr[i] = -1;
+            }
+        }
+        return Arrays.stream(arr).filter(e -> e > -1).toArray();
     }
 
 }

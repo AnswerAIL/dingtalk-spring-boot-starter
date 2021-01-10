@@ -18,6 +18,7 @@ package com.github.jaemon.dinger.core;
 import com.github.jaemon.dinger.core.annatations.DingerClose;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.core.entity.MsgType;
+import com.github.jaemon.dinger.core.entity.enums.DingerResponseCodeEnum;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.entity.DingerResponse;
 import org.slf4j.Logger;
@@ -70,16 +71,21 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
             DingerDefinition dingerDefinition = dingerDefinition(
                     useDinger, dingerClassName, keyName
             );
+
+            DingerResponse dingerResponse;
             if (dingerDefinition == null) {
-                return null;
+//                log.warn("method {} does not support dinger {}。", keyName, useDinger);
+                dingerResponse = DingerResponse.failed(
+                        DingerResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED,
+                        String.format("method %s does not support dinger %s.", keyName, useDinger));
+            } else {
+                // method params map
+                Map<String, Object> params = paramsHandler(method, dingerDefinition, args);
+
+                MsgType message = transfer(dingerDefinition, params);
+
+                dingerResponse = dingerRobot.send(message);
             }
-
-            // method params map
-            Map<String, Object> params = paramsHandler(method, dingerDefinition.methodParams(), args);
-
-            MsgType message = transfer(dingerDefinition, params);
-
-            DingerResponse dingerResponse = dingerRobot.send(message);
 
             // return...
             return resultHandler(method.getReturnType(), dingerResponse);

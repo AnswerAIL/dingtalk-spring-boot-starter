@@ -15,10 +15,12 @@
  */
 package com.github.jaemon.dinger.dingtalk.entity;
 
+import com.github.jaemon.dinger.core.entity.ImageTextDeo;
 import com.github.jaemon.dinger.dingtalk.entity.enums.DingTalkMsgType;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * FeedCard类型
@@ -37,6 +39,11 @@ public class DingFeedCard extends DingTalkMessage {
         setMsgtype(DingTalkMsgType.FEED_CARD.type());
     }
 
+    public DingFeedCard(List<FeedCard.Link> links) {
+        this();
+        this.feedCard = new FeedCard(links);
+    }
+
     public FeedCard getFeedCard() {
         return feedCard;
     }
@@ -50,6 +57,13 @@ public class DingFeedCard extends DingTalkMessage {
          * {@link Link}
          */
         private List<Link> links;
+
+        public FeedCard() {
+        }
+
+        public FeedCard(List<Link> links) {
+            this.links = links;
+        }
 
         public List<Link> getLinks() {
             return links;
@@ -73,6 +87,15 @@ public class DingFeedCard extends DingTalkMessage {
              */
             private String picURL;
 
+            public Link() {
+            }
+
+            public Link(String title, String messageURL, String picURL) {
+                this.title = title;
+                this.messageURL = messageURL;
+                this.picURL = picURL;
+            }
+
             public String getTitle() {
                 return title;
             }
@@ -95,6 +118,20 @@ public class DingFeedCard extends DingTalkMessage {
 
             public void setPicURL(String picURL) {
                 this.picURL = picURL;
+            }
+        }
+    }
+
+    @Override
+    public void transfer(Map<String, Object> params) {
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            Object value = entry.getValue();
+            if (List.class.isInstance(value)) {
+                List<ImageTextDeo> imageTexts = (List<ImageTextDeo>) value;
+                for (ImageTextDeo imageText : imageTexts) {
+                    this.feedCard.links.add(new FeedCard.Link(imageText.getTitle(), imageText.getUrl(), imageText.getPicUrl()));
+                }
+                break;
             }
         }
     }

@@ -31,7 +31,7 @@ public interface DingerSender {
 
 
     /**
-     * 发送预警消息到钉钉
+     * 发送消息到指定群
      *
      * <pre>
      *     使用配置的默认钉钉机器人, {@link DingerProperties#getDefaultDinger()}
@@ -47,7 +47,7 @@ public interface DingerSender {
     DingerResponse send(MessageSubType messageSubType, DingerRequest request);
 
     /**
-     * 发送预警消息到钉钉
+     * 发送消息到指定群
      *
      * @param dingerType
      *              Dinger类型 {@link DingerType}
@@ -59,5 +59,4 @@ public interface DingerSender {
      *              响应报文
      * */
     DingerResponse send(DingerType dingerType, MessageSubType messageSubType, DingerRequest request);
-
 }

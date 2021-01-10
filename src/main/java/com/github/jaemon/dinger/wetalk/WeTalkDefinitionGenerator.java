@@ -19,6 +19,7 @@ import com.github.jaemon.dinger.core.DingerDefinition;
 import com.github.jaemon.dinger.core.DingerDefinitionGenerator;
 import com.github.jaemon.dinger.core.DingerDefinitionGeneratorContext;
 import com.github.jaemon.dinger.core.DingerDefinitionHandler;
+import com.github.jaemon.dinger.core.annatations.DingerImageText;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
 import com.github.jaemon.dinger.core.annatations.DingerText;
@@ -39,9 +40,7 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerText> context) {
-            DingerDefinition dingerDefinition = dingerTextHandler(DingerType.WETALK, context);
-
-            return dingerDefinition;
+            return dingerTextHandler(DingerType.WETALK, context);
         }
     }
 
@@ -52,9 +51,7 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
     public static class AnnotationMarkDown extends DingerDefinitionGenerator<DingerMarkdown> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerMarkdown> context) {
-            DingerDefinition dingerDefinition = dingerMarkdownHandler(DingerType.WETALK, context);
-
-            return dingerDefinition;
+            return dingerMarkdownHandler(DingerType.WETALK, context);
         }
     }
 
@@ -66,8 +63,7 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
 
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
-            DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.WETALK_XML_TEXT, context);
-            return dingerDefinition;
+            return xmlHandler(DingerDefinitionType.WETALK_XML_TEXT, context);
         }
     }
 
@@ -78,8 +74,29 @@ public class WeTalkDefinitionGenerator extends DingerDefinitionHandler {
     public static class XmlMarkdown extends DingerDefinitionGenerator<MessageTag> {
         @Override
         public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
-            DingerDefinition dingerDefinition = xmlHandler(DingerDefinitionType.WETALK_XML_MARKDOWN, context);
-            return dingerDefinition;
+            return xmlHandler(DingerDefinitionType.WETALK_XML_MARKDOWN, context);
+        }
+    }
+
+
+    /**
+     * 生成XML ImageText消息体定义
+     */
+    public static class AnnotationImageText extends DingerDefinitionGenerator<DingerImageText> {
+        @Override
+        public DingerDefinition generator(DingerDefinitionGeneratorContext<DingerImageText> context) {
+            return dingerImageTextHandler(DingerType.WETALK, context);
+        }
+    }
+
+
+    /**
+     * 生成XML ImageText消息体定义
+     */
+    public static class XmlImageText extends DingerDefinitionGenerator<MessageTag> {
+        @Override
+        public DingerDefinition generator(DingerDefinitionGeneratorContext<MessageTag> context) {
+            return xmlHandler(DingerDefinitionType.WETALK_XML_IMAGETEXT, context);
         }
     }
 }
