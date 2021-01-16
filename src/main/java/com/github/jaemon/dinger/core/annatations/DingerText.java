@@ -22,10 +22,10 @@ import java.lang.annotation.*;
 /**
  * DingerText
  *
- * <code>
- *     `@`DingerText(value = "send to dingtalk at ${date}", tokenId = @DingerTokenId("20200906"), phones = {"13520200906"})
+ * <pre>
+ *     &#064;DingerText(value = "send to dingtalk at ${date}", tokenId = @DingerTokenId("20200906"), phones = {"13520200906"})
  *     void method(@Keyword String keyword, String date) {...}
- * </code>
+ * </pre>
  *
  * @author Jaemon
  * @since 1.0
@@ -44,14 +44,14 @@ public @interface DingerText {
     /**
      * atAll. either atAll or phones
      *
-     * @return whether `@` all members
+     * @return whether &#064;all members
      */
     boolean atAll() default false;
 
     /**
      * phones. either atAll or phones
      *
-     * @return `@` designated members
+     * @return &#064; designated members
      */
     String[] phones() default {};
 

@@ -22,8 +22,8 @@ import java.lang.annotation.*;
 /**
  * DingerMarkdown
  *
- * <code>
- *     `@`DingerMarkdown(
+ * <pre>
+ *     &#064;DingerMarkdown(
  *             value = "#### 下单失败啦 @13520200906\n - 订单号： ${orderNo}\n - 标识： ${flag}\n - 数量： ${num}",
  *             title = "下单结果反馈",
  *             phones = {"13520200906"},
@@ -32,7 +32,7 @@ import java.lang.annotation.*;
  *                     secret = "SAQ23a9039bb01f2dcd017b90ab8e9dda1355f97c9016f37ff371ec8124327c7f09")
  *     )
  *     void method(@Keyword String keyword, String orderNo, int num, boolean flag) {...}
- * </code>
+ * </pre>
  *
  *  @author Jaemon
  * @since 1.0
@@ -59,7 +59,7 @@ public @interface DingerMarkdown {
     /**
      * phones. either atAll or phones
      *
-     * @return `@` designated members
+     * @return &#064; designated members
      */
     String[] phones() default {};
 
