@@ -7,7 +7,7 @@
     <groupId>com.github.answerail</groupId>
     <artifactId>dingtalk-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <version>3.0.0-SP1</version>
+    <version>3.0.1-SP1</version>
 
     <name>dingtalk-spring-boot-starter</name>
     <description>springboot集成钉钉机器人实现消息通知中间件</description>
