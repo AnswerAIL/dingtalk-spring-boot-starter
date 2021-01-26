@@ -29,8 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.File;
-import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -52,13 +50,12 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
     synchronized
     protected void analysisDingerXml(String dingerLocations, Resource[] resources) throws Exception {
         for (Resource resource : resources) {
-            File file = resource.getFile();
-            String xml = FileCopyUtils.copyToString(new FileReader(file));
+            String xml = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()), "UTF-8");
             xml = transferXml(xml);
             BeanTag dingerBean = XmlUtils.xmlToJavaBean(xml, BeanTag.class);
             if (dingerBean == null) {
                 if (log.isDebugEnabled()) {
-                    log.debug("dinger xml file: {} content is empty.", file.getName());
+                    log.debug("dinger xml file: {} content is empty.", resource.getFilename());
                 }
                 continue;
             }
