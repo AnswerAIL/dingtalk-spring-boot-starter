@@ -53,13 +53,12 @@ public class DingerDefinitionResolver extends AbstractDingerDefinitionResolver {
     protected void analysisDingerXml(String dingerLocations, Resource[] resources) throws Exception {
         boolean debugEnabled = log.isDebugEnabled();
         for (Resource resource : resources) {
-            File file = resource.getFile();
-            String xml = FileCopyUtils.copyToString(new FileReader(file));
+            String xml = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()), "UTF-8");
             xml = transferXml(xml);
             BeanTag dingerBean = XmlUtils.xmlToJavaBean(xml, BeanTag.class);
             if (dingerBean == null) {
                 if (debugEnabled) {
-                    log.debug("dinger xml file: {} content is empty.", file.getName());
+                    log.debug("dinger xml file: {} content is empty.", resource.getFilename());
                 }
                 continue;
             }
