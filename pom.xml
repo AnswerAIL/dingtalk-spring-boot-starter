@@ -7,7 +7,7 @@
     <groupId>com.github.answerail</groupId>
     <artifactId>dinger-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.1</version>
+    <version>1.1.1-beta1</version>
 
     <name>dinger-spring-boot-starter</name>
     <description>Dinger-SpringBoot集成钉钉/企业微信群机器人实现消息通知中间件</description>
