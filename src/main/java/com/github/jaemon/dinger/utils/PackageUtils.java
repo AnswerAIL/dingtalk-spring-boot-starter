@@ -143,8 +143,13 @@ public class PackageUtils {
                 }
             }
         } catch (Exception ex) {
-            log.error("when analysis packageName={} catch exception=",
-                    packageName, ex);
+            if (log.isDebugEnabled()) {
+                log.error("when analysis packageName={} catch exception=",
+                        packageName, ex);
+            } else {
+                log.warn("when analysis packageName={} catch exception={}.",
+                        packageName, ex.getMessage());
+            }
         }
     }
 

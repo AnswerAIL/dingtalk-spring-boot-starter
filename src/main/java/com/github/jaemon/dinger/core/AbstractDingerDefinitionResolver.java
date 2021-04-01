@@ -22,7 +22,6 @@ import com.github.jaemon.dinger.core.annatations.DingerScan;
 import com.github.jaemon.dinger.core.annatations.Parameter;
 import com.github.jaemon.dinger.core.entity.enums.DingerDefinitionType;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
-import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
 import com.github.jaemon.dinger.exception.DingerException;
 import com.github.jaemon.dinger.listeners.DingerListenersProperty;
 import com.github.jaemon.dinger.utils.PackageUtils;
@@ -38,6 +37,7 @@ import java.util.*;
 import java.util.List;
 
 import static com.github.jaemon.dinger.core.AbstractDingerDefinitionResolver.Container.INSTANCE;
+import static com.github.jaemon.dinger.core.ClassPathScanForResources.*;
 import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.*;
 import static com.github.jaemon.dinger.utils.DingerUtils.methodParamsGenericType;
 import static com.github.jaemon.dinger.utils.DingerUtils.methodParamsType;
@@ -156,7 +156,17 @@ public abstract class AbstractDingerDefinitionResolver
                 if (debugEnabled) {
                     log.debug("ready to scan package[{}] for Dinger.", basePackage);
                 }
-                PackageUtils.classNames(basePackage, dingerClasses, true);
+                List<Class<?>> classes = scanInterfaces(basePackage);
+                if (!classes.isEmpty()) {
+                    dingerClasses.addAll(classes);
+                }
+            }
+
+            if (dingerClasses.isEmpty()) {
+                log.warn("the first time to parse the packages[{}] is empty.", Arrays.asList(basePackages));
+                for (String basePackage : basePackages) {
+                    PackageUtils.classNames(basePackage, dingerClasses, true);
+                }
             }
         } else {
             log.warn("annotation dingerScan is not configured and will execute Dinger scanner registrar.");
