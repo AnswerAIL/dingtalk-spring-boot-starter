@@ -2,7 +2,7 @@
 [![Dinger Logo](https://gitee.com/jaemon/docs/raw/master/dinger.png)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)
 
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.answerail/dinger-spring-boot-starter)](https://mvnrepository.com/artifact/com.github.answerail/dingtalk-spring-boot-starter)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.answerail/dinger-spring-boot-starter)](https://mvnrepository.com/artifact/com.github.answerail/dinger-spring-boot-starter)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/AnswerAIL/dingtalk-spring-boot-starter)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/releases)
 [![GitHub stars](https://img.shields.io/github/stars/AnswerAIL/dingtalk-spring-boot-starter.svg?style=social)](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)
 [![Gitee stars](https://gitee.com/jaemon/dingtalk-spring-boot-starter/badge/star.svg?theme=dark)](https://gitee.com/jaemon/dingtalk-spring-boot-starter)
@@ -23,16 +23,16 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
 
 
 ## Why(为什么用Dinger)
- - 配置简单，上手容易，无需花费太多精力在群机器人API的使用上；
- - 插拔式功能组件，和业务代码解耦；
- - 核心功能面向接口编程, 可以据具体业务对功能进行定制化来满足不同的业务需求；
- - 支持集中式管理消息，提供xml标签，支持编写动态消息体；
- - 基于具体消息编程，消息体可支持XML标签方式配置和注解方式定义；
- - 支持钉钉和企业微信群机器人一键切换使用和混合使用；
+ - [x] 配置简单，上手容易，无需花费太多精力在群机器人API的使用上；
+ - [x] 插拔式功能组件，和业务代码解耦；
+ - [x] 核心功能面向接口编程, 可以据具体业务对功能进行定制化来满足不同的业务需求；
+ - [x] 支持集中式管理消息，提供xml标签，支持编写动态消息体；
+ - [x] 基于具体消息编程，消息体可支持XML标签方式配置和注解方式定义；
+ - [x] 支持钉钉和企业微信群机器人一键切换使用和混合使用；
 
 &nbsp;
 
-> **如果觉得项目对您的工作有帮助的话, 欢迎[Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)或[Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter)加星关注哈~**
+> ★ **如果觉得项目对您的工作有帮助的话, 欢迎『[Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)』 或 『[Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter)』加星关注☺**
 
 &nbsp;
 
@@ -46,7 +46,7 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
     <version>${dinger.version}</version>
 </dependency>
 ```
-> [dinger.version版本号取值](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-1.1-Upgrade-Log)
+> **dinger.version版本号取值** ☞ [Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-1.1-Upgrade-Log) 或 [Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis/Dinger-1.1-Upgrade-Log?sort_id=3312594)
 
 ### 配置文件配置
 **使用钉钉群机器人配置**
@@ -94,7 +94,7 @@ public class AppInit implements InitializingBean {
     }
 }
 ```
-更多功能请移步[Github Dinger wiki](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki) OR [Gitee Dinger wiki](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis)
+更多功能请移步 『[Github Dinger wiki](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki)』 或 『[Gitee Dinger wiki](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis)』
 
 
 &nbsp;
@@ -118,7 +118,7 @@ public class AppInit implements InitializingBean {
 
 
 ## Feedback
-**有任何建议或问题欢迎提Issue~**
+✍ **有任何建议或问题欢迎提Issue~**
 
 - [Issues-Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues)
 
