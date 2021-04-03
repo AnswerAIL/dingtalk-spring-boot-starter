@@ -21,6 +21,7 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
 
 &nbsp;
 
+***
 
 ## Why(为什么用Dinger)
  - [x] 配置简单，上手容易，无需花费太多精力在群机器人API的使用上；
@@ -36,9 +37,10 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
 
 &nbsp;
 
+***
 
 ## How(如何使用Dinger-快速使用)
-### 引入依赖
+### 一、引入依赖
 ```xml
 <dependency>
     <groupId>com.github.answerail</groupId>
@@ -48,7 +50,9 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
 ```
 > **dinger.version版本号取值** ☞ [Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki/Dinger-1.1-Upgrade-Log) 或 [Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis/Dinger-1.1-Upgrade-Log?sort_id=3312594)
 
-### 配置文件配置
+&nbsp;
+
+### 二、application.yml 配置
 **使用钉钉群机器人配置**
 ```yaml
 spring:
@@ -72,7 +76,9 @@ spring:
         token-id: 32865206-7082-46l5-8j39-2m7ycy6d868
 ```
 
-### 代码中使用
+&nbsp;
+
+### 三、代码中使用
 ```java
 @Component
 public class AppInit implements InitializingBean {
@@ -98,6 +104,7 @@ public class AppInit implements InitializingBean {
 
 
 &nbsp;
+
 
 ## Documentation, Getting Started and Developer Guides
 - [Dinger Wiki-Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki)
