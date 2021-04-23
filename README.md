@@ -18,6 +18,8 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
 只需要简单的配置（最简单的发送功能只需要一行代码），即可快速的在springboot项目中将消息发送到指定的钉钉或企业微信群聊中。
 
 
+[Dinger QQ交流群： 1002507383](https://jq.qq.com/?_wv=1027&k=xbcwxp0i)
+
 &nbsp;
 
 ***
