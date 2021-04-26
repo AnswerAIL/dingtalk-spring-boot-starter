@@ -66,7 +66,7 @@ spring:
         secret: AEQ74a9039ai01f2ljm017b90ycye9asg6335f97c658ff37ff371ec8120581c7f09
 ```
 
-**使用企业群机器人配置**
+**使用企业微信群机器人配置**
 ```yaml
 spring:
   dinger:
