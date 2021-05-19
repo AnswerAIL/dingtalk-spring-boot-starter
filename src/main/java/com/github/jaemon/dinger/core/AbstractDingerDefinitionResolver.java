@@ -16,49 +16,42 @@
 package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.constant.DingerConstant;
-import com.github.jaemon.dinger.core.annatations.DingerImageText;
-import com.github.jaemon.dinger.core.annatations.DingerLink;
-import com.github.jaemon.dinger.core.annatations.DingerScan;
-import com.github.jaemon.dinger.core.annatations.Parameter;
+import com.github.jaemon.dinger.core.annatations.AsyncExecute;
+import com.github.jaemon.dinger.core.annatations.DingerConfiguration;
+import com.github.jaemon.dinger.core.entity.DingerMethod;
 import com.github.jaemon.dinger.core.entity.enums.DingerDefinitionType;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.exception.DingerException;
 import com.github.jaemon.dinger.listeners.DingerListenersProperty;
-import com.github.jaemon.dinger.utils.PackageUtils;
+import com.github.jaemon.dinger.utils.DingerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.ParameterNameDiscoverer;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.github.jaemon.dinger.core.AbstractDingerDefinitionResolver.Container.INSTANCE;
-import static com.github.jaemon.dinger.core.ClassPathScanForResources.*;
-import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.*;
-import static com.github.jaemon.dinger.utils.DingerUtils.methodParamsGenericType;
-import static com.github.jaemon.dinger.utils.DingerUtils.methodParamsType;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.DINGER_REPEATED_EXCEPTION;
+import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.METHOD_DEFINITION_EXCEPTION;
 
 /**
- * AbstractDingerDefinitionResolver
+ * AbsDingerDefinitionResolver
  *
  * @author Jaemon
- * @since 1.0
+ * @version 1.0
  */
-public abstract class AbstractDingerDefinitionResolver
-        extends DingerListenersProperty {
+public abstract class AbstractDingerDefinitionResolver<T> extends DingerListenersProperty implements DingerDefinitionResolver<T> {
     private static final Logger log = LoggerFactory.getLogger(AbstractDingerDefinitionResolver.class);
     /** dinger消息类型和对应生成器映射关系 */
-    protected Map<String, Class<? extends DingerDefinitionGenerator>> dingerDefinitionGeneratorMap;
-    /** Dinger默认的DingerConfig */
-    protected Map<DingerType, DingerConfig> defaultDingerConfigs;
+    private Map<String, Class<? extends DingerDefinitionGenerator>> dingerDefinitionGeneratorMap;
+    /**
+     * 方法参数名称解析
+     */
+    protected ParameterNameDiscoverer parameterNameDiscoverer;
 
     public AbstractDingerDefinitionResolver() {
         this.dingerDefinitionGeneratorMap = new HashMap<>();
-        this.defaultDingerConfigs = new HashMap<>();
+        this.parameterNameDiscoverer = new DingerParameterNameDiscoverer();
 
         for (DingerDefinitionType dingerDefinitionType : DingerDefinitionType.dingerDefinitionTypes) {
             dingerDefinitionGeneratorMap.put(
@@ -71,119 +64,25 @@ public abstract class AbstractDingerDefinitionResolver
 
     }
 
-    /**
-     * 解析XML文件Dinger
-     *
-     * @param resources
-     *          Dinger.xml文件集
-     * @throws Exception ex
-     */
-    abstract void analysisDingerXml(Resource[] resources) throws Exception;
+    protected DingerConfig dingerConfiguration(Class<?> dingerClass) {
+        DingerConfig dingerConfig = new DingerConfig();
 
-    /**
-     * 解析注解Dinger
-     *
-     * @param dingerClasses
-     *          dingerClasses
-     * @throws Exception
-     *          ex
-     */
-    abstract void analysisDingerAnnotation(List<Class<?>> dingerClasses) throws Exception;
-
-
-    /**
-     *  Xml定义Dinger解析处理
-     *
-     * @param dingerLocations
-     *          Dinger Xml文件位置
-     * @throws Exception
-     *          ex
-     * */
-    protected void dingerXmlResolver(String dingerLocations) throws Exception {
-        boolean debugEnabled = log.isDebugEnabled();
-        if (dingerLocations == null) {
-            if (debugEnabled) {
-                log.debug("dinger xml is not configured.");
+        if (dingerClass.isAnnotationPresent(DingerConfiguration.class)) {
+            DingerConfiguration dingerConfiguration = dingerClass.getAnnotation(DingerConfiguration.class);
+            String tokenId = dingerConfiguration.tokenId();
+            if (DingerUtils.isNotEmpty(tokenId)) {
+                dingerConfig.setTokenId(tokenId);
+                dingerConfig.setDecryptKey(dingerConfiguration.decryptKey());
+                dingerConfig.setSecret(dingerConfiguration.secret());
             }
-            return;
         }
 
-        // 处理xml配置转为dingerDefinition
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        Resource[] resources = resolver.getResources(dingerLocations);
-        if (resources.length == 0) {
-            log.warn("dinger xml is empty under {}.", dingerLocations);
-            return;
+        if (dingerClass.isAnnotationPresent(AsyncExecute.class)) {
+            dingerConfig.setAsyncExecute(true);
         }
-
-        analysisDingerXml(resources);
+        return dingerConfig;
     }
 
-
-    /**
-     *  注释定义Dinger解析处理
-     *
-     * @return
-     *          Dinger类集合
-     * @throws Exception
-     *          ex
-     * */
-    protected List<Class<?>> dingerAnnotationResolver() throws Exception {
-        boolean debugEnabled = log.isDebugEnabled();
-        // deal with annotation
-        DingerScan dingerScan = null;
-        List<Class<?>> dingerClasses = new ArrayList<>();
-        // 获取启动类下所有Dinger标注的类信息
-        for (Class<?> primarySource : DingerListenersProperty.primarySources()) {
-            if (debugEnabled) {
-                log.debug("ready to analysis primarySource[{}].", primarySource.getName());
-            }
-            // 存在DingerScan并记录， 后续使用扫面 XXXDinger.java
-            if (primarySource.isAnnotationPresent(DingerScan.class)) {
-                // obtain dingerScan basePackages value
-                if (dingerScan == null) {
-                    dingerScan = primarySource.getAnnotation(DingerScan.class);
-                } else {
-                    throw new DingerException(MULTI_DINGER_SCAN_ERROR);
-                }
-            }
-        }
-
-        // 获取dingerScan下所有类信息
-        if (dingerScan != null) {
-            String[] basePackages = dingerScan.basePackages();
-            for (String basePackage : basePackages) {
-                if (debugEnabled) {
-                    log.debug("ready to scan package[{}] for Dinger.", basePackage);
-                }
-                List<Class<?>> classes = scanInterfaces(basePackage);
-                if (!classes.isEmpty()) {
-                    dingerClasses.addAll(classes);
-                }
-            }
-
-            if (dingerClasses.isEmpty()) {
-                log.warn("the first time to parse the packages[{}] is empty.", Arrays.asList(basePackages));
-                for (String basePackage : basePackages) {
-                    PackageUtils.classNames(basePackage, dingerClasses, true);
-                }
-            }
-        } else {
-            log.warn("annotation dingerScan is not configured and will execute Dinger scanner registrar.");
-        }
-
-        if (dingerClasses.isEmpty()) {
-            if (debugEnabled) {
-                log.debug("annotation dinger class is empty.");
-            }
-            return dingerClasses;
-        }
-
-        // 处理类信息转为dingerDefinition
-        analysisDingerAnnotation(dingerClasses);
-
-        return dingerClasses;
-    }
 
     /**
      * 注册Dinger Definition
@@ -240,112 +139,26 @@ public abstract class AbstractDingerDefinitionResolver
                 }
                 continue;
             }
-            if (INSTANCE.contains(keyName)) {
+            if (Container.INSTANCE.contains(keyName)) {
                 throw new DingerException(DINGER_REPEATED_EXCEPTION, keyName);
             }
 
             if (dingerMethod.check()) {
-                throw new DingerException(METHOD_DEFINITION_EXCEPTION, dingerMethod.methodName);
+                throw new DingerException(METHOD_DEFINITION_EXCEPTION, dingerMethod.getMethodName());
             }
-            dingerDefinition.setMethodParams(dingerMethod.methodParams);
-            dingerDefinition.setGenericIndex(dingerMethod.paramTypes);
+            dingerDefinition.setMethodParams(dingerMethod.getMethodParams());
+            dingerDefinition.setGenericIndex(dingerMethod.getParamTypes());
 
             // DingerConfig Priority： `@DingerText | @DingerMarkdown | XML` > `@DingerConfiguration` > `***.yml | ***.properties`
             dingerDefinition.dingerConfig()
                     .merge(dingerConfiguration)
                     .merge(defaultDingerConfig);
 
-            INSTANCE.put(keyName, dingerDefinition);
+            Container.INSTANCE.put(keyName, dingerDefinition);
             if (debugEnabled) {
                 log.debug("dinger definition={} has been registed.", keyName);
             }
         }
-    }
-
-    /**
-     * 获取当前Dinger接口层方法的所有参数信息
-     *
-     * @param dingerClass
-     *          Dinger接口层类
-     * @return
-     *          当前Dinger接口定义的方法的参数信息和泛型信息
-     */
-    protected Map<String, DingerMethod> dingerClassMethods(Class<?> dingerClass) {
-        Method[] methods = dingerClass.getMethods();
-        Map<String, DingerMethod> dingerMethodParams = new HashMap<>();
-        for (Method method : methods) {
-            String methodName = method.getName();
-            String methodAllName = dingerClass.getSimpleName() + DingerConstant.SPOT_SEPERATOR + methodName;
-            int[] paramTypes = null;
-            if (method.isAnnotationPresent(DingerImageText.class)) {
-                paramTypes = methodParamsGenericType(method, DingerImageText.clazz);
-                if (paramTypes.length != 1) {
-                    throw new DingerException(IMAGETEXT_METHOD_PARAM_EXCEPTION, methodAllName);
-                }
-            } else if (method.isAnnotationPresent(DingerLink.class)) {
-                paramTypes = methodParamsType(method, DingerLink.clazz);
-                if (paramTypes.length != 1) {
-                    throw new DingerException(LINK_METHOD_PARAM_EXCEPTION, methodAllName);
-                }
-            }
-            String[] methodParams = methodParams(method);
-            dingerMethodParams.put(methodName, new DingerMethod(methodAllName, methodParams, paramTypes));
-        }
-        return dingerMethodParams;
-    }
-
-    /**
-     * 获取当前方法的所有参数信息
-     *
-     * @param method
-     *          Dinger接口层方法
-     * @return
-     *          当前方法的参数信息
-     */
-    protected String[] methodParams(Method method) {
-        Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-        java.lang.reflect.Parameter[] parameters = method.getParameters();
-        String[] params = new String[parameterAnnotations.length];
-
-        for (int i = 0; i < parameterAnnotations.length; i++) {
-            Annotation[] parameterAnnotation = parameterAnnotations[i];
-            params[i] = parameters[i].getName();
-            for (Annotation annotation : parameterAnnotation) {
-                if (Parameter.class.isInstance(annotation)) {
-                    Parameter dingerParam = (Parameter) annotation;
-                    params[i] = dingerParam.value();
-                    break;
-                }
-            }
-        }
-        return params;
-    }
-
-    static class DingerMethod {
-        String methodName;
-        String[] methodParams;
-        int[] paramTypes;
-
-        public DingerMethod(String methodName, String[] methodParams, int[] paramTypes) {
-            this.methodName = methodName;
-            this.methodParams = methodParams;
-            this.paramTypes = paramTypes;
-        }
-
-        boolean check() {
-            if (paramTypes == null) {
-                return false;
-            }
-
-            int length = this.methodParams.length;
-            for (int index : paramTypes) {
-                if (index >= length) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
     }
 
     /**
@@ -391,17 +204,5 @@ public abstract class AbstractDingerDefinitionResolver
 
     protected static void clear() {
         Container.INSTANCE.container.clear();
-    }
-
-    /**
-     * transferXml
-     *
-     * solve -Djavax.xml.accessExternalSchema=all
-     *
-     * @param sourceXml sourceXml
-     * @return xml
-     */
-    String transferXml(String sourceXml) {
-        return sourceXml.replaceAll("<!DOCTYPE.*>", "");
     }
 }

@@ -7,5 +7,4 @@ com.github.jaemon.dinger.config.DingerThreadPoolConfig
 
 # Application Listeners
 org.springframework.context.ApplicationListener=\
-com.github.jaemon.dinger.listeners.DingerXmlPreparedEvent,\
 com.github.jaemon.dinger.listeners.ExitEventListener

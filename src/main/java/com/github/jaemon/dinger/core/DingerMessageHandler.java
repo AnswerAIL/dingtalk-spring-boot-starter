@@ -20,7 +20,6 @@ import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.core.entity.MsgType;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.entity.DingerResponse;
-import com.github.jaemon.dinger.listeners.DingerXmlPreparedEvent;
 import com.github.jaemon.dinger.multi.MultiDingerConfigContainer;
 import com.github.jaemon.dinger.multi.MultiDingerProperty;
 import com.github.jaemon.dinger.multi.entity.MultiDingerConfig;
@@ -85,7 +84,6 @@ public class DingerMessageHandler
             String paramName = parameter.getName();
             com.github.jaemon.dinger.core.annatations.Parameter[] panno =
                     parameter.getDeclaredAnnotationsByType(com.github.jaemon.dinger.core.annatations.Parameter.class);
-//            Keyword[] kanno = parameter.getDeclaredAnnotationsByType(Keyword.class);
             if (panno != null && panno.length > 0) {
                 paramName = panno[0].value();
             }
@@ -182,7 +180,7 @@ public class DingerMessageHandler
         // 优先使用用户设定 dingerConfig
         if (localDinger == null) {
             String dingerName = useDinger + SPOT_SEPERATOR + keyName;
-            dingerDefinition = DingerXmlPreparedEvent
+            dingerDefinition = AbstractDingerDefinitionResolver
                     .Container.INSTANCE.get(dingerName);
 
             if (dingerDefinition == null) {
@@ -221,7 +219,7 @@ public class DingerMessageHandler
                 dingerType = useDinger;
             }
             keyName = dingerType + SPOT_SEPERATOR + keyName;
-            dingerDefinition = DingerXmlPreparedEvent
+            dingerDefinition = AbstractDingerDefinitionResolver
                     .Container.INSTANCE.get(keyName);
 
             if (dingerDefinition == null) {

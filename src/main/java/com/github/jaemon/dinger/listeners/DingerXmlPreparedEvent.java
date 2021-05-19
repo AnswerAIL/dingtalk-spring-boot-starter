@@ -15,25 +15,16 @@
  */
 package com.github.jaemon.dinger.listeners;
 
-import com.github.jaemon.dinger.core.DingerDefinitionResolver;
 import com.github.jaemon.dinger.core.annatations.DingerScan;
-import com.github.jaemon.dinger.core.entity.enums.DingerType;
-import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
-import com.github.jaemon.dinger.exception.DingerAnalysisException;
-import com.github.jaemon.dinger.exception.DingerException;
-import com.github.jaemon.dinger.utils.DingerUtils;
-import com.github.jaemon.dinger.core.DingerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.core.env.Environment;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
 
 /**
  * DingerXmlPreparedEvent
@@ -41,8 +32,8 @@ import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
  * @author Jaemon
  * @since 1.0
  */
+@Deprecated
 public class DingerXmlPreparedEvent
-        extends DingerDefinitionResolver
         implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
     private static final Logger log = LoggerFactory.getLogger(DingerXmlPreparedEvent.class);
 
@@ -50,15 +41,6 @@ public class DingerXmlPreparedEvent
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         log.info("ready to execute dinger analysis.");
         loadPrimarySources(event);
-        registerDefaultDingerConfig(event.getEnvironment());
-
-        try {
-            DingerListenersProperty.dingerClasses = doAnalysis(event);
-        } catch (DingerException ex) {
-            throw new DingerAnalysisException(ex.getPairs(), ex.getMessage());
-        } catch (Exception ex) {
-            throw new DingerException(ex, ExceptionEnum.UNKNOWN);
-        }
     }
 
     /**
@@ -83,60 +65,5 @@ public class DingerXmlPreparedEvent
                 }
             }
         }
-        DingerListenersProperty.primarySources = primarySources;
-    }
-
-    /**
-     * 注册默认的Dinger机器人信息, 即配置文件内容
-     *
-     * @param environment
-     *          environment
-     */
-    private void registerDefaultDingerConfig(Environment environment) {
-        for (DingerType dingerType : enabledDingerTypes) {
-            String dingers = DINGER_PROPERTIES_PREFIX + "dingers" + SPOT_SEPERATOR + dingerType.name().toLowerCase() + SPOT_SEPERATOR;
-            String tokenIdProp = dingers + "token-id";
-            String secretProp = dingers + "secret";
-            String decryptProp = dingers + "decrypt";
-            String decryptKeyProp = dingers + "decryptKey";
-            String asyncExecuteProp = dingers + "async";
-
-            if (DingerUtils.isEmpty(tokenIdProp)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("dinger={} is not open.", dingerType);
-                }
-                continue;
-            }
-            String tokenId = environment.getProperty(tokenIdProp);
-            String secret = environment.getProperty(secretProp);
-            boolean decrypt = getProperty(environment, decryptProp);
-            boolean async = getProperty(environment, asyncExecuteProp);
-            DingerConfig defaultDingerConfig = DingerConfig.instance(tokenId);
-            defaultDingerConfig.setDingerType(dingerType);
-            defaultDingerConfig.setSecret(secret);
-            if (decrypt) {
-                defaultDingerConfig.setDecryptKey(
-                        environment.getProperty(decryptKeyProp)
-                );
-            }
-            defaultDingerConfig.setAsyncExecute(async);
-
-            defaultDingerConfig.check();
-            defaultDingerConfigs.put(dingerType, defaultDingerConfig);
-        }
-    }
-
-    /**
-     * getProperty
-     *
-     * @param environment  environment
-     * @param prop prop
-     * @return prop value
-     */
-    private boolean getProperty(Environment environment, String prop) {
-        if (environment.getProperty(prop) != null) {
-            return environment.getProperty(prop, boolean.class);
-        }
-        return false;
     }
 }

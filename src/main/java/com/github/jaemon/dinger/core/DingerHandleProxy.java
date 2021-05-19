@@ -74,7 +74,6 @@ public class DingerHandleProxy extends DingerMessageHandler implements Invocatio
 
             DingerResponse dingerResponse;
             if (dingerDefinition == null) {
-//                log.warn("method {} does not support dinger {}。", keyName, useDinger);
                 dingerResponse = DingerResponse.failed(
                         DingerResponseCodeEnum.MESSAGE_TYPE_UNSUPPORTED,
                         String.format("method %s does not support dinger %s.", keyName, useDinger));

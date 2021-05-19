@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger.listeners;
 
+import com.github.jaemon.dinger.core.DingerConfig;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 
 import java.util.*;
@@ -28,17 +29,13 @@ import java.util.stream.Collectors;
  */
 public class DingerListenersProperty {
     /**
-     * primarySources
-     */
-    static Set<Class<?>> primarySources = new HashSet<>();
-    /**
      * dingerClasses
      */
-    static List<Class<?>> dingerClasses = new ArrayList<>();
-
-    protected static Set<Class<?>> primarySources() {
-        return primarySources;
-    }
+    protected static List<Class<?>> dingerClasses = new ArrayList<>();
+    /**
+     * Dinger默认的DingerConfig
+     */
+    protected static Map<DingerType, DingerConfig> defaultDingerConfigs = new HashMap<>();
 
     protected static List<Class<?>> dingerClasses() {
         return dingerClasses;
@@ -56,8 +53,8 @@ public class DingerListenersProperty {
     }
 
     protected static void clear() {
-        DingerListenersProperty.primarySources().clear();
-        DingerListenersProperty.dingerClasses().clear();
+        dingerClasses.clear();
+        defaultDingerConfigs.clear();
     }
 
 }

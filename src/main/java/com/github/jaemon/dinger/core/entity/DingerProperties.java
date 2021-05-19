@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.github.jaemon.dinger.constant.DingerConstant.DINGER_PROP_PREFIX;
@@ -48,7 +48,7 @@ public class DingerProperties implements InitializingBean {
     /**
      * dinger类型 <code>key={@link DingerType}, value={@link Dinger}</code>, 必填
      */
-    private Map<DingerType, Dinger> dingers = new HashMap<>();
+    private Map<DingerType, Dinger> dingers = new LinkedHashMap<>();
 
     /**
      * 项目名称, 必填 <code>eg: ${spring.application.name}</code>
@@ -250,7 +250,9 @@ public class DingerProperties implements InitializingBean {
 
             if (defaultDinger == null) {
                 defaultDinger = dingerType;
-                log.warn("defaultDinger undeclared and use fisrt dingers dingerType, defaultDinger={}", defaultDinger);
+                if (log.isDebugEnabled()) {
+                    log.debug("defaultDinger undeclared and use first dingers dingerType, defaultDinger={}.", defaultDinger);
+                }
             }
         }
 

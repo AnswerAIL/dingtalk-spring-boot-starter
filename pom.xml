@@ -7,7 +7,7 @@
     <groupId>com.github.answerail</groupId>
     <artifactId>dinger-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.1</version>
+    <version>1.2.0-beta1</version>
 
     <name>dinger-spring-boot-starter</name>
     <description>Dinger-SpringBoot集成钉钉/企业微信群机器人实现消息通知中间件</description>
@@ -83,6 +83,10 @@
         </developer>
     </developers>
 
+    <organization>
+        <name>AnswerAIL</name>
+        <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter</url>
+    </organization>
 
     <!-- SCM info -->
     <scm>
@@ -91,6 +95,10 @@
         <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master</url>
     </scm>
 
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter/issues</url>
+    </issueManagement>
 
     <distributionManagement>
         <snapshotRepository>

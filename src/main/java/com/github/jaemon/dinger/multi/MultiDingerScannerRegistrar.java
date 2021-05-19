@@ -43,10 +43,7 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.objenesis.instantiator.util.ClassUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
 import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.MULTIDINGER_ALGORITHM_EXCEPTION;
@@ -78,8 +75,6 @@ public class MultiDingerScannerRegistrar
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        log.info("ready to execute multiDingerScanner...");
-
         try {
             doScanAndRegister(importingClassMetadata, registry);
         } catch (DingerException ex) {
@@ -150,6 +145,7 @@ public class MultiDingerScannerRegistrar
     private void multiDingerHandler(BeanDefinitionRegistry registry, List<Class<?>> dingerClasses) {
         boolean debugEnabled = log.isDebugEnabled();
 
+        int valid = 0;
         for (Class<?> dingerClass : dingerClasses) {
             if (dingerClass.isAnnotationPresent(MultiHandler.class)) {
                 MultiHandler multiDinger = dingerClass.getAnnotation(MultiHandler.class);
@@ -172,7 +168,12 @@ public class MultiDingerScannerRegistrar
                     log.debug("regiseter multi dinger for dingerClass={} and dingerConfigHandler={}.",
                             dingerClass.getSimpleName(), beanName);
                 }
+                valid++;
             }
+        }
+
+        if (valid == 0) {
+            log.warn("enable global multi dinger but none dinger interface be decorated with @MultiHandler.");
         }
     }
 
@@ -200,6 +201,7 @@ public class MultiDingerScannerRegistrar
         Class<? extends AlgorithmHandler> algorithm = dingerConfigHandler.algorithmHandler();
         // if empty? use default dinger config
         List<DingerConfig> dingerConfigs = dingerConfigHandler.dingerConfigs();
+        dingerConfigs = dingerConfigs == null ? new ArrayList<>() : dingerConfigs;
 
         if (algorithm == null) {
             throw new DingerException(MULTIDINGER_ALGORITHM_EXCEPTION, dingerConfigHandlerClassName);
@@ -226,8 +228,6 @@ public class MultiDingerScannerRegistrar
             );
         } else {
             BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(algorithm);
-//        beanDefinitionBuilder.addPropertyReference("dingerService", "dingerService");
-//        beanDefinitionBuilder.addPropertyValue("dingerName", "Jaemon");
             AbstractBeanDefinition beanDefinition = beanDefinitionBuilder.getBeanDefinition();
             beanDefinition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
             // 将当前算法注册到Spring容器中

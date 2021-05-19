@@ -15,24 +15,27 @@
  */
 package com.github.jaemon.dinger.core.spring;
 
+import com.github.jaemon.dinger.core.ClassPathDingerScanner;
+import com.github.jaemon.dinger.core.DefaultDingerDefinitionResolver;
 import com.github.jaemon.dinger.core.annatations.DingerScan;
 import com.github.jaemon.dinger.core.entity.enums.ExceptionEnum;
+import com.github.jaemon.dinger.exception.DingerAnalysisException;
 import com.github.jaemon.dinger.exception.DingerException;
-import com.github.jaemon.dinger.listeners.DingerListenersProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.util.StringUtils;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import static com.github.jaemon.dinger.utils.PackageUtils.classNames;
+import java.util.stream.Collectors;
 
 /**
  * DingerScannerRegistrar
@@ -41,77 +44,68 @@ import static com.github.jaemon.dinger.utils.PackageUtils.classNames;
  * @since 1.0
  */
 public class DingerScannerRegistrar
-        extends DingerListenersProperty
-        implements ImportBeanDefinitionRegistrar, Ordered
+        extends DefaultDingerDefinitionResolver
+        implements ImportBeanDefinitionRegistrar
 {
     private static final Logger log = LoggerFactory.getLogger(DingerScannerRegistrar.class);
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        boolean isDebugEnabled = log.isDebugEnabled();
-        log.info("ready to execute dingerScanner...");
+        AnnotationAttributes annoAttrs = AnnotationAttributes.fromMap(
+                importingClassMetadata.getAnnotationAttributes(DingerScan.class.getName())
+        );
+
+        if (annoAttrs != null) {
+            registerBeanDefinitions(annoAttrs, registry);
+        }
+    }
+
+    void registerBeanDefinitions(AnnotationAttributes annoAttrs, BeanDefinitionRegistry registry) {
+        ClassPathDingerScanner scanner = new ClassPathDingerScanner(registry);
+
+        Class<? extends Annotation> annotationClass = annoAttrs.getClass("annotationClass");
+        if (!Annotation.class.equals(annotationClass)) {
+            scanner.setAnnotationClass(annotationClass);
+        }
+
+        Class<?> markerInterface = annoAttrs.getClass("markerInterface");
+        if (!Class.class.equals(markerInterface)) {
+            scanner.setMarkerInterface(markerInterface);
+        }
+
+        Class<? extends BeanNameGenerator> generatorClass = annoAttrs.getClass("nameGenerator");
+        if (!BeanNameGenerator.class.equals(generatorClass)) {
+            scanner.setBeanNameGenerator(BeanUtils.instantiateClass(generatorClass));
+        }
+
+        List<String> basePackages = new ArrayList<>();
+
+        basePackages.addAll(
+                Arrays.stream(annoAttrs.getStringArray("value"))
+                        .filter(StringUtils::hasText)
+                        .collect(Collectors.toList())
+        );
+
+        basePackages.addAll(
+                Arrays.stream(annoAttrs.getStringArray("basePackages"))
+                        .filter(StringUtils::hasText)
+                        .collect(Collectors.toList())
+        );
+
+
+        scanner.registerFilters();
+        scanner.doScan(
+                StringUtils.toStringArray(basePackages)
+        );
+
         try {
-            List<Class<?>> dingerClasses = DingerListenersProperty.dingerClasses();
-
-            if (!dingerClasses.isEmpty()) {
-                registerBeanDefinition(registry, dingerClasses);
-            } else {
-                if (isDebugEnabled) {
-                    log.debug("dinger class is empty in primarySources, ready to reanalysis from DingerScan.");
-                }
-
-                if (!importingClassMetadata.hasAnnotation(DingerScan.class.getName())) {
-                    log.warn("import class can't find DingerScan annotation.");
-                    return;
-                }
-                AnnotationAttributes annoAttrs = AnnotationAttributes.fromMap(
-                        importingClassMetadata.getAnnotationAttributes(DingerScan.class.getName())
-                );
-
-                String[] basePackages = annoAttrs.getStringArray("basePackages");
-                // traversing all classes under the package: basePackage
-                for (String basePackage : basePackages) {
-                    classNames(basePackage, dingerClasses, true);
-                }
-
-                // just to obtain interface that defined by Dinger annotation, Deprecated
-//                classNames(DingerUtils.classPackageName(importingClassMetadata.getClassName()), dingerClasses, true, Dinger.class);
-
-                if (!dingerClasses.isEmpty()) {
-                    registerBeanDefinition(registry, dingerClasses);
-                } else {
-                    throw new DingerException("dinger class is empty.", ExceptionEnum.CONFIG_ERROR);
-                }
-            }
-        } finally {
-//            ApplicationEventTimeTable.emptyDingerClasses();
-        }
-
-    }
-
-    /**
-     * registerBeanDefinition
-     *
-     * @param registry registry
-     * @param dingerClasses dingerClasses
-     */
-    private void registerBeanDefinition(BeanDefinitionRegistry registry, List<Class<?>> dingerClasses) {
-        for (Class<?> dingerClass : dingerClasses) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(DingerFactoryBean.class);
-            AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-            beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(dingerClass);
-            beanDefinition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
-            // 注册到 BeanDefinitionRegistry
-            registry.registerBeanDefinition(dingerClass.getSimpleName(), beanDefinition);
-
-            if (log.isDebugEnabled()) {
-                log.debug("the beanDefinition[{}] is already registered.", dingerClass.getSimpleName());
-            }
+            resolver(scanner.getDingerClasses());
+            dingerClasses = scanner.getDingerClasses();
+        } catch (DingerException ex) {
+            throw new DingerAnalysisException(ex.getPairs(), ex.getMessage());
+        } catch (Exception ex) {
+            throw new DingerException(ex, ExceptionEnum.UNKNOWN);
         }
     }
 
-    @Override
-    public int getOrder() {
-        return LOWEST_PRECEDENCE - 2;
-    }
 }

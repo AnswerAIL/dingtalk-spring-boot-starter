@@ -15,11 +15,7 @@
  */
 package com.github.jaemon.dinger.core.spring;
 
-import com.github.jaemon.dinger.core.DingerRobot;
-import com.github.jaemon.dinger.core.DingerSession;
-import com.github.jaemon.dinger.core.entity.DingerProperties;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * DingerFactoryBean
@@ -27,13 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Jaemon
  * @since 1.0
  */
-public class DingerFactoryBean<T> implements FactoryBean<T> {
+public class DingerFactoryBean<T> extends DingerSessionSupport implements FactoryBean<T> {
     private Class<T> dingerInterface;
 
-    @Autowired
-    private DingerRobot dingerRobot;
-    @Autowired
-    private DingerProperties dingerProperties;
+    public DingerFactoryBean() {
+    }
 
     public DingerFactoryBean(Class dingerInterface) {
         this.dingerInterface = dingerInterface;
@@ -41,7 +35,7 @@ public class DingerFactoryBean<T> implements FactoryBean<T> {
 
     @Override
     public T getObject() throws Exception {
-        return new DingerSession(dingerRobot, dingerProperties).getDinger(this.dingerInterface);
+        return getDingerSession().getDinger(this.dingerInterface);
     }
 
     @Override

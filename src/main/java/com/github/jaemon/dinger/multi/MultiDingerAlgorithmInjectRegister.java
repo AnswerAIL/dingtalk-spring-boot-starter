@@ -35,7 +35,6 @@ import org.springframework.context.ApplicationContextAware;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
 import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.ALGORITHM_FIELD_INJECT_FAILED;
 
 /**

@@ -16,6 +16,7 @@
 package com.github.jaemon.dinger.core.annatations;
 
 import com.github.jaemon.dinger.core.spring.DingerScannerRegistrar;
+import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -31,5 +32,53 @@ import java.lang.annotation.*;
 @Documented
 @Import(DingerScannerRegistrar.class)
 public @interface DingerScan {
-    String[] basePackages();
+    /**
+     * Alias for the {@link #basePackages()} attribute. Allows for more concise
+     * annotation declarations e.g.:
+     * {@code @DingerScan("org.my.pkg")} instead of {@code @DingerScan(basePackages = "org.my.pkg"})}.
+     *
+     * @return base package names
+     */
+    String[] value() default {};
+
+    /**
+     * Base packages to scan for Dinger interfaces. Note that only interfaces
+     * with at least one method will be registered; concrete classes will be
+     * ignored.
+     *
+     * @return base package names for scanning dinger interface
+     */
+    String[] basePackages() default {};
+
+    /**
+     * The {@link BeanNameGenerator} class to be used for naming detected components
+     * within the Spring container.
+     *
+     * @return the class of {@link BeanNameGenerator}
+     */
+    Class<? extends BeanNameGenerator> nameGenerator() default BeanNameGenerator.class;
+
+    /**
+     * This property specifies the annotation that the scanner will search for.
+     * <p>
+     * The scanner will register all interfaces in the base package that also have
+     * the specified annotation.
+     * <p>
+     * Note this can be combined with markerInterface.
+     *
+     * @return the annotation that the scanner will search for
+     */
+    Class<? extends Annotation> annotationClass() default Annotation.class;
+
+    /**
+     * This property specifies the parent that the scanner will search for.
+     * <p>
+     * The scanner will register all interfaces in the base package that also have
+     * the specified interface class as a parent.
+     * <p>
+     * Note this can be combined with annotationClass.
+     *
+     * @return the parent that the scanner will search for
+     */
+    Class<?> markerInterface() default Class.class;
 }
