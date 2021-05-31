@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger.core.spring;
 
+import com.github.jaemon.dinger.core.spring.support.DingerSessionSupport;
 import org.springframework.beans.factory.FactoryBean;
 
 /**

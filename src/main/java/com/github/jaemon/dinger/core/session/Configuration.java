@@ -13,34 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.core;
+package com.github.jaemon.dinger.core.session;
 
+import com.github.jaemon.dinger.core.DingerRobot;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 
-import java.lang.reflect.Proxy;
-
 /**
- * DingerSession
+ * Configuration
  *
  * @author Jaemon
- * @since 1.0
+ * @version 1.2
  */
-public class DingerSession {
-    private DingerRobot dingerRobot;
-    private DingerProperties dingerProperties;
+public class Configuration {
+    protected DingerProperties dingerProperties;
+    protected DingerRobot dingerRobot;
 
-    public DingerSession(DingerRobot dingerRobot, DingerProperties dingerProperties) {
-        this.dingerRobot = dingerRobot;
+    private Configuration(DingerProperties dingerProperties, DingerRobot dingerRobot) {
         this.dingerProperties = dingerProperties;
+        this.dingerRobot = dingerRobot;
     }
 
-    public <T> T getDinger(Class<T> type) {
-        return (T) Proxy.newProxyInstance(
-                // bugfix gitee#I29N15
-                Thread.currentThread().getContextClassLoader(),
-                new Class[]{type},
-                new DingerHandleProxy(dingerRobot, dingerProperties)
-        );
+    public static Configuration of(DingerProperties dingerProperties, DingerRobot dingerRobot) {
+        return new Configuration(dingerProperties, dingerRobot);
     }
 
+    public DingerProperties getDingerProperties() {
+        return dingerProperties;
+    }
+
+    public DingerRobot getDingerRobot() {
+        return dingerRobot;
+    }
 }

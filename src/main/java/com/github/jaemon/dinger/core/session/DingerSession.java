@@ -13,24 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.multi;
+package com.github.jaemon.dinger.core.session;
 
-import com.github.jaemon.dinger.core.DingerRefresh;
 
 /**
- * MultiDingerRefresh
+ * DingerSession
  *
  * @author Jaemon
  * @since 1.0
  */
-public class MultiDingerRefresh extends DingerRefresh {
+public interface DingerSession {
 
-    protected static void multiDingerRefresh() {
-        dingerFresh();
+    /**
+     * Retrieves a dinger.
+     *
+     * @param type
+     *          dinger interface class
+     * @param <T>
+     *          the dinger type
+     * @return
+     *          a dinger bound to this DingerSession
+     */
+    <T> T getDinger(Class<T> type);
 
-        MultiDingerProperty.clear();
-        MultiDingerAlgorithmInjectRegister.clear();
-        MultiDingerConfigContainer.clear();
-    }
+    /**
+     * dinger configuration
+     *
+     * @return
+     *      {@link Configuration}
+     */
+    Configuration configuration();
 
 }

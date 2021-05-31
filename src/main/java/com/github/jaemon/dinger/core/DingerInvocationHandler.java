@@ -13,24 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.multi;
+package com.github.jaemon.dinger.core;
 
-import com.github.jaemon.dinger.core.DingerRefresh;
+import java.lang.reflect.InvocationHandler;
 
 /**
- * MultiDingerRefresh
+ * Dinger Invocation Handler
  *
  * @author Jaemon
- * @since 1.0
+ * @since 1.2
  */
-public class MultiDingerRefresh extends DingerRefresh {
+public abstract class DingerInvocationHandler
+        extends DingerMessageHandler
+        implements InvocationHandler {
 
-    protected static void multiDingerRefresh() {
-        dingerFresh();
-
-        MultiDingerProperty.clear();
-        MultiDingerAlgorithmInjectRegister.clear();
-        MultiDingerConfigContainer.clear();
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
-
 }

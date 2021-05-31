@@ -1,6 +1,7 @@
 # Auto Configuration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.github.jaemon.dinger.config.BeanConfiguration,\
+com.github.jaemon.dinger.config.DingerAutoConfiguration,\
 com.github.jaemon.dinger.config.DingerConfiguration,\
 com.github.jaemon.dinger.config.DingerHttpClientConfig,\
 com.github.jaemon.dinger.config.DingerThreadPoolConfig

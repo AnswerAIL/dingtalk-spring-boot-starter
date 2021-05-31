@@ -15,6 +15,11 @@
  */
 package com.github.jaemon.dinger.multi;
 
+import com.github.jaemon.dinger.core.entity.enums.IgnoreMethod;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * MultiDingerProperty
  *
@@ -24,8 +29,21 @@ package com.github.jaemon.dinger.multi;
 public class MultiDingerProperty {
     /** app start at multiDinger */
     static boolean multiDinger = false;
+    protected static Map<String, IgnoreMethod> ignoreMethodMap = new HashMap<>();
+
+    static {
+        for (
+                IgnoreMethod ignoreMethod : IgnoreMethod.values()
+        ) {
+            ignoreMethodMap.put(ignoreMethod.getMethodName(), ignoreMethod);
+        }
+    }
 
     protected static boolean multiDinger() {
         return multiDinger;
     }
+
+    protected static void clear() {
+        ignoreMethodMap.clear();
+    };
 }
