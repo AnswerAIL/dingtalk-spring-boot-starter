@@ -7,5 +7,5 @@ com.github.jaemon.dinger.config.DingerHttpClientConfig,\
 com.github.jaemon.dinger.config.DingerThreadPoolConfig
 
 # Application Listeners
-org.springframework.context.ApplicationListener=\
-com.github.jaemon.dinger.listeners.ExitEventListener
+#org.springframework.context.ApplicationListener=\
+#com.github.jaemon.dinger.listeners.ExitEventListener
