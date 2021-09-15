@@ -26,9 +26,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import java.io.IOException;
 
 /**
  * DingerAutoConfiguration
@@ -42,16 +45,15 @@ import org.springframework.util.StringUtils;
 public class DingerAutoConfiguration implements InitializingBean {
     private final DingerProperties properties;
     private final DingerRobot dingerRobot;
-    private final ResourceLoader resourceLoader;
+    private final ResourcePatternResolver resourceLoader;
 
     public DingerAutoConfiguration(
             DingerProperties dingerProperties,
-            DingerRobot dingerRobot,
-            ResourceLoader resourceLoader
+            DingerRobot dingerRobot
     ) {
         this.properties = dingerProperties;
         this.dingerRobot = dingerRobot;
-        this.resourceLoader = resourceLoader;
+        this.resourceLoader = new PathMatchingResourcePatternResolver();
     }
 
     @Bean
@@ -71,15 +73,15 @@ public class DingerAutoConfiguration implements InitializingBean {
         checkConfigFileExists();
     }
 
-    private void checkConfigFileExists() {
+    private void checkConfigFileExists() throws IOException {
 
         if (
                 StringUtils.hasText(this.properties.getDingerLocations())
         ) {
 
-            Resource resource = this.resourceLoader.getResource(this.properties.getDingerLocations());
+            Resource[] resources = this.resourceLoader.getResources(this.properties.getDingerLocations());
 
-            Assert.state(resource.exists(), "Cannot find config location: " + resource
+            Assert.state(resources.length > 0, "Cannot find config location: " + this.properties.getDingerLocations()
                     + " (please add config file or check your Dinger configuration)");
         }
     }
