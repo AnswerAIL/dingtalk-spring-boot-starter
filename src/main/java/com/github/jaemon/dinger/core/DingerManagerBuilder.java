@@ -1,5 +1,5 @@
 /*
- * Copyright ©2015-2021 Jaemon. All Rights Reserved.
+ * Copyright ©2015-2022 Jaemon. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class DingerManagerBuilder {
     }
 
     /**
-     * 自定义restTemplate客户端
+     * 自定义restTemplate客户端-服务于默认Http客户端
      *
      * @param dingerRestTemplate restTemplate
      * @return this
@@ -178,6 +178,19 @@ public class DingerManagerBuilder {
     public DingerManagerBuilder dingerAsyncCallback(DingerAsyncCallback dingerAsyncCallback) {
         if (dingerAsyncCallback != null) {
             this.dingerAsyncCallback = dingerAsyncCallback;
+        }
+        return this;
+    }
+
+    /**
+     * 定义发送客户端-dingerRestTemplate配置将失效
+     *
+     * @param dingerHttpClient dingerHttpClient
+     * @return this
+     */
+    public DingerManagerBuilder dingerHttpClient(DingerHttpClient dingerHttpClient) {
+        if (dingerHttpClient != null) {
+            this.dingerHttpClient = dingerHttpClient;
         }
         return this;
     }

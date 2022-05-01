@@ -1,5 +1,5 @@
 /*
- * Copyright ©2015-2021 Jaemon. All Rights Reserved.
+ * Copyright ©2015-2022 Jaemon. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ public interface DingerConstant {
     String DINGER_EXECUTOR = "dingerExecutor";
     /** 自定义restTemplate名称 */
     String DINGER_REST_TEMPLATE = "dingerRestTemplate";
+    String DINGER_HTTP_CLIENT = "dingerHttpClient";
 
     String NEW_LINE = "\r\n";
     String SPOT_SEPERATOR = ".";

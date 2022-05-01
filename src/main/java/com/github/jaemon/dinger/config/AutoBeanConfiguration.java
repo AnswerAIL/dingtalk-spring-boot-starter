@@ -1,5 +1,5 @@
 /*
- * Copyright ©2015-2021 Jaemon. All Rights Reserved.
+ * Copyright ©2015-2022 Jaemon. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,11 @@
  */
 package com.github.jaemon.dinger.config;
 
+import com.github.jaemon.dinger.constant.DingerConstant;
 import com.github.jaemon.dinger.support.client.DingerHttpClient;
 import com.github.jaemon.dinger.support.client.DingerHttpTemplate;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0
  */
 @Configuration
+@ConditionalOnMissingBean(name = DingerConstant.DINGER_HTTP_CLIENT)
 @AutoConfigureAfter(DingerHttpClientConfig.class)
 public class AutoBeanConfiguration {
     @Bean
