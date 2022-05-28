@@ -16,6 +16,8 @@
 package com.github.jaemon.dinger.core.entity;
 
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
+import com.github.jaemon.dinger.support.sign.SignBase;
+import com.github.jaemon.dinger.support.sign.SignResult;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -61,6 +63,8 @@ public class MsgType implements Serializable {
      */
     public void transfer(Map<String, Object> params) {
     }
+
+    public void signAttributes(SignBase sign) {}
 
     /**
      * 转换文本内容

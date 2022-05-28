@@ -13,41 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jaemon.dinger.core.entity.enums;
+package com.github.jaemon.dinger.bytetalk.entity.enums;
 
 /**
- * Dinger类型
+ * ByteTalk支持的消息类型
  *
  * @author Jaemon
  * @since 1.0
  */
-public enum DingerType {
-    DINGTALK("钉钉", "https://oapi.dingtalk.com/robot/send?access_token=", true),
-    WETALK("企业微信", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=", true),
-    BYTETALK("飞书", "https://open.feishu.cn/open-apis/bot/v2/hook/", true),
+public enum ByteTalkMsgType {
+    /**
+     * text类型
+     */
+    TEXT("text"),
 
     ;
 
     private String type;
-    private String robotUrl;
-    /** 是否开启 */
-    private boolean enabled;
 
-    DingerType(String type, String robotUrl, boolean enabled) {
+    ByteTalkMsgType(String type) {
         this.type = type;
-        this.robotUrl = robotUrl;
-        this.enabled = enabled;
     }
 
-    public String getType() {
+    public String type() {
         return type;
-    }
-
-    public String getRobotUrl() {
-        return robotUrl;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 }

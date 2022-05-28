@@ -182,4 +182,11 @@ public class DingerUtils {
         return Arrays.stream(arr).filter(e -> e > -1).toArray();
     }
 
+    public static <T> T newInstance(Class<T> clazz) {
+        try {
+            return clazz.newInstance();
+        } catch (IllegalAccessException | InstantiationException var2) {
+            throw new RuntimeException(var2);
+        }
+    }
 }

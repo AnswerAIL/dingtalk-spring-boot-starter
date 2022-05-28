@@ -18,6 +18,7 @@ package com.github.jaemon.dinger.core.entity.enums;
 
 import com.github.jaemon.dinger.core.DingerDefinitionGenerator;
 import com.github.jaemon.dinger.dingtalk.DingTalkDefinitionGenerator;
+import com.github.jaemon.dinger.bytetalk.FeiShuDefinitionGenerator;
 import com.github.jaemon.dinger.wetalk.WeTalkDefinitionGenerator;
 
 
@@ -81,6 +82,16 @@ public enum DingerDefinitionType {
 
     WETALK_ANNOTATION_IMAGETEXT(
             DingerType.WETALK, MessageMainType.ANNOTATION, MessageSubType.IMAGETEXT, WeTalkDefinitionGenerator.AnnotationImageText.class
+    ),
+
+
+
+    /** 飞书机器人消息类型 */
+    BYTETALK_XML_TEXT(
+            DingerType.BYTETALK, MessageMainType.XML, MessageSubType.TEXT, FeiShuDefinitionGenerator.XmlText.class
+    ),
+    BYTETALK_ANNOTATION_TEXT(
+            DingerType.BYTETALK, MessageMainType.ANNOTATION, MessageSubType.TEXT, FeiShuDefinitionGenerator.AnnotationText.class
     ),
 
     ;

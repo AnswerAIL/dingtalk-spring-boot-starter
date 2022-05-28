@@ -51,4 +51,6 @@ public interface DingerConstant {
 
     String DINGER_PROP_PREFIX = "spring.dinger";
     String DINGER_PROPERTIES_PREFIX = DINGER_PROP_PREFIX + SPOT_SEPERATOR;
+
+    String DINGER_COMMA = ",";
 }

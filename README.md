@@ -13,7 +13,10 @@
 
 
 ## What(Dinger是什么)
-Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对现有两大移动办公系统[钉钉](https://ding-doc.dingtalk.com/doc#/serverapi3/iydd5)和[企业微信](https://work.weixin.qq.com/api/doc/90000/90136/91770)的群机器人API做了一层封装，让使用更简单便捷。
+Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对如下移动办公系统的群机器人API做了一层封装，让使用更简单便捷。
+- [钉钉](https://open.dingtalk.com/document/group/custom-robot-access)
+- [企业微信](https://developer.work.weixin.qq.com/document/path/91770)
+- [飞书](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#756b882f)
 
 只需要简单的配置（最简单的发送功能只需要一行代码），即可快速的在springboot项目中将消息发送到指定的钉钉或企业微信群聊中。
 
@@ -75,6 +78,17 @@ spring:
       # 使用企业微信机器人, 请根据自己机器人配置信息进行修改
       wetalk:
         token-id: 32865206-7082-46l5-8j39-2m7ycy6d868
+```
+
+**使用飞书群机器人配置**
+```yaml
+spring:
+  dinger:
+    project-id: ${spring.application.name}
+    dingers:
+      # 使用飞书机器人, 请根据自己机器人配置信息进行修改
+      bytetalk:
+        token-id: 20200528-0824-20jm-21hy-5yc556210y15
 ```
 
 &nbsp;

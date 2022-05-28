@@ -17,7 +17,6 @@ package com.github.jaemon.dinger.core;
 
 import com.github.jaemon.dinger.core.entity.DingerRequest;
 import com.github.jaemon.dinger.core.entity.DingerResponse;
-import com.github.jaemon.dinger.support.sign.SignBase;
 import com.github.jaemon.dinger.support.client.MediaTypeEnum;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
@@ -27,6 +26,7 @@ import com.github.jaemon.dinger.core.entity.MsgType;
 import com.github.jaemon.dinger.exception.AsyncCallException;
 import com.github.jaemon.dinger.exception.SendMsgException;
 import com.github.jaemon.dinger.support.CustomMessage;
+import com.github.jaemon.dinger.support.sign.SignBase;
 import com.github.jaemon.dinger.utils.DingerUtils;
 import org.springframework.beans.BeanUtils;
 
@@ -106,17 +106,21 @@ public class DingerRobot extends AbstractDingerSender {
             }
 
             StringBuilder webhook = new StringBuilder();
-            webhook.append(dinger.getRobotUrl()).append("=").append(dinger.getTokenId());
+            webhook.append(dinger.getRobotUrl()).append(dinger.getTokenId());
 
             if (log.isDebugEnabled()) {
                 log.debug("dingerId={} send message and use dinger={}, tokenId={}.", dkid, dingerType, dinger.getTokenId());
             }
 
             // 处理签名问题(只支持DingTalk)
-            if (dingerType == DingerType.DINGTALK &&
-                    DingerUtils.isNotEmpty((dinger.getSecret()))) {
+            if (DingerUtils.isNotEmpty((dinger.getSecret()))) {
                 SignBase sign = dingTalkManagerBuilder.dingerSignAlgorithm.sign(dinger.getSecret().trim());
-                webhook.append(sign.transfer());
+
+                if (dingerType == DingerType.DINGTALK) {
+                    webhook.append(sign.transfer());
+                } else if (dingerType == DingerType.BYTETALK) {
+                    message.signAttributes(sign);
+                }
             }
 
             Map<String, String> headers = new HashMap<>();

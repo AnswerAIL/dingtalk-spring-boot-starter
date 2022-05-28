@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger.core.entity.enums;
 
+import com.github.jaemon.dinger.bytetalk.entity.ByteText;
 import com.github.jaemon.dinger.core.entity.DingerRequest;
 import com.github.jaemon.dinger.dingtalk.entity.*;
 import com.github.jaemon.dinger.core.entity.MsgType;
@@ -22,12 +23,15 @@ import com.github.jaemon.dinger.exception.DingerException;
 import com.github.jaemon.dinger.wetalk.entity.WeMarkdown;
 import com.github.jaemon.dinger.wetalk.entity.WeNews;
 import com.github.jaemon.dinger.wetalk.entity.WeText;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.github.jaemon.dinger.constant.DingerConstant.DINGER_COMMA;
 import static com.github.jaemon.dinger.core.DingerDefinitionHandler.WETALK_AT_ALL;
 import static com.github.jaemon.dinger.core.entity.enums.ExceptionEnum.DINGER_UNSUPPORT_MESSAGE_TYPE_EXCEPTION;
 
@@ -55,7 +59,7 @@ public enum MessageSubType {
                 }
 
                 return message;
-            } else {
+            } else if (dingerType == DingerType.WETALK) {
                 WeText.Text text = new WeText.Text(content);
                 WeText weText = new WeText(text);
                 if (atAll) {
@@ -64,6 +68,28 @@ public enum MessageSubType {
                     text.setMentioned_mobile_list(phones);
                 }
                 return weText;
+            } else if (dingerType == DingerType.BYTETALK) {
+                if (atAll) {
+                    content = "<at user_id=\"all\">所有人</at>" + content;
+                } else if (!CollectionUtils.isEmpty(phones)) {
+                    StringBuilder sb = new StringBuilder();
+                    for (String phone : phones) {
+                        if (StringUtils.isEmpty(phone)) {
+                            continue;
+                        }
+                        String[] userIdAndName = phone.split(DINGER_COMMA);
+                        if (userIdAndName.length != 2) {
+                            continue;
+                        }
+                        sb.append(String.format("<at user_id=\"%s\">%s</at>", userIdAndName[0], userIdAndName[1]));
+                    }
+
+                    content = sb.toString() + content;
+                }
+
+                return new ByteText(new ByteText.Content(content));
+            } else {
+                throw new DingerException(DINGER_UNSUPPORT_MESSAGE_TYPE_EXCEPTION, dingerType, this.name());
             }
         }
     },
@@ -83,10 +109,12 @@ public enum MessageSubType {
                 }
 
                 return message;
-            } else {
+            } else if (dingerType == DingerType.WETALK) {
                 WeMarkdown.Markdown markdown = new WeMarkdown.Markdown(content);
                 WeMarkdown weMarkdown = new WeMarkdown(markdown);
                 return weMarkdown;
+            } else {
+                throw new DingerException(DINGER_UNSUPPORT_MESSAGE_TYPE_EXCEPTION, dingerType, this.name());
             }
         }
     },
@@ -97,8 +125,10 @@ public enum MessageSubType {
         public MsgType msgType(DingerType dingerType, DingerRequest request) {
             if (dingerType == DingerType.DINGTALK) {
                 return new DingFeedCard(new ArrayList<>());
-            } else {
+            } else if (dingerType == DingerType.WETALK) {
                 return new WeNews(new ArrayList<>());
+            } else {
+                throw new DingerException(DINGER_UNSUPPORT_MESSAGE_TYPE_EXCEPTION, dingerType, this.name());
             }
         }
     },

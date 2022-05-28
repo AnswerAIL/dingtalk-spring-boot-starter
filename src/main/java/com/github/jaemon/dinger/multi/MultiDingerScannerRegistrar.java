@@ -41,7 +41,6 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.objenesis.instantiator.util.ClassUtils;
 
 import java.util.*;
 
@@ -159,7 +158,7 @@ public class MultiDingerScannerRegistrar
                     continue;
                 }
                 String key = dingerClass.getName();
-                DingerConfigHandler handler = ClassUtils.newInstance(dingerConfigHandler);
+                DingerConfigHandler handler = DingerUtils.newInstance(dingerConfigHandler);
                 DingerType dinger = value.dinger();
 
                 registerHandler(registry, dinger, dinger + DingerConstant.SPOT_SEPERATOR + key, handler);
@@ -222,7 +221,7 @@ public class MultiDingerScannerRegistrar
         // 如果无需注入属性，直接采用反射进行实例化并注册到容器
         if (injectionCnt == 0) {
             // create algorithm instance
-            AlgorithmHandler algorithmHandler = ClassUtils.newInstance(algorithm);
+            AlgorithmHandler algorithmHandler = DingerUtils.newInstance(algorithm);
             MultiDingerConfigContainer.INSTANCE.put(
                     key, new MultiDingerConfig(algorithmHandler, dingerConfigs)
             );
