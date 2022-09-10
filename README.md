@@ -20,8 +20,9 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
 
 只需要简单的配置（最简单的发送功能只需要一行代码），即可快速的在springboot项目中将消息发送到指定的钉钉或企业微信群聊中。
 
+- [Dinger在线文档](https://answerail.gitee.io/docsify-jaemon)
 
-[Dinger QQ交流群： 1002507383](https://jq.qq.com/?_wv=1027&k=xbcwxp0i)
+- [Dinger QQ交流群： 1002507383](https://jq.qq.com/?_wv=1027&k=xbcwxp0i)
 
 &nbsp;
 
@@ -33,7 +34,7 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
  - [x] 核心功能面向接口编程, 可以据具体业务对功能进行定制化来满足不同的业务需求；
  - [x] 支持集中式管理消息，提供xml标签，支持编写动态消息体；
  - [x] 基于具体消息编程，消息体可支持XML标签方式配置和注解方式定义；
- - [x] 支持钉钉和企业微信群机器人一键切换使用和混合使用；
+ - [x] 支持钉钉、企业微信、飞书群机器人一键切换使用和混合使用；
 
 &nbsp;
 
@@ -122,6 +123,8 @@ public class AppInit implements InitializingBean {
 
 
 ## Documentation, Getting Started and Developer Guides
+- [Dinger在线文档](https://answerail.gitee.io/docsify-jaemon)
+
 - [Dinger Wiki-Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter/wiki)
 
 - [Dinger Wiki-Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter/wikis)
