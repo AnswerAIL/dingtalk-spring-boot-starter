@@ -67,6 +67,6 @@ public class DingText extends Message {
 
     @Override
     public void transfer(Map<String, Object> params) {
-        this.text.content = replaceContent(this.text.content, params);
+        this.text.content = replaceContent(this.text.content, params) + parsePhone(params);
     }
 }

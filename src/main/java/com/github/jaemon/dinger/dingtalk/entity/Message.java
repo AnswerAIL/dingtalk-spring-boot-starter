@@ -15,8 +15,12 @@
  */
 package com.github.jaemon.dinger.dingtalk.entity;
 
+import com.github.jaemon.dinger.constant.DingerConstant;
+import org.springframework.util.CollectionUtils;
+
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 请求体实体对象
@@ -41,6 +45,47 @@ public class Message extends DingTalkMessage implements Serializable {
     public void setAt(At at) {
         this.at = at;
     }
+
+
+    /**
+     * 解析处理
+     *
+     * @param params param
+     * @return phone content
+     */
+    protected String parsePhone(Map<String, Object> params) {
+        List<String> phones = parseAtParam(params);
+
+        if (CollectionUtils.isEmpty(phones)) {
+            return atPhones();
+        }
+
+        boolean atIsNull = at == null;
+        if (atIsNull) {
+            at = new At(new ArrayList<>());
+        }
+
+        if (!atIsNull && at.getAtMobiles() == null) {
+            at.setAtMobiles(new ArrayList<>());
+        }
+
+        boolean force = params.containsKey(DingerConstant.DINGER_PHONE_FORCE_TAG);
+        if (force || atIsNull || (at.isAtAll != null && !at.isAtAll && CollectionUtils.isEmpty(at.atMobiles))) {
+            if (force) {
+                at.isAtAll = false;
+            }
+            at.setAtMobiles(phones);
+            return at.getAtMobiles().stream().map(e -> DingerConstant.DINGER_AT + e).collect(Collectors.joining());
+        }
+
+        return atPhones();
+    }
+
+    private String atPhones() {
+        List<String> ats = Optional.ofNullable(this).map(e -> e.at).map(e -> e.getAtMobiles()).orElse(null);
+        return ats == null ? "" : ats.stream().map(e -> DingerConstant.DINGER_AT + e).collect(Collectors.joining());
+    }
+
 
     public static class At implements Serializable {
         /**

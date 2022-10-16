@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger.core;
 
+import com.github.jaemon.dinger.core.annatations.DingerPhone;
 import com.github.jaemon.dinger.core.annatations.Parameter;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.multi.annotations.MultiDinger;
@@ -23,6 +24,8 @@ import com.github.jaemon.dinger.core.annatations.DingerMarkdown;
 import com.github.jaemon.dinger.core.annatations.DingerText;
 import com.github.jaemon.dinger.core.entity.DingerResponse;
 import com.github.jaemon.dinger.multi.handler.UserDingerConfigHandler;
+
+import java.util.List;
 
 /**
  * UserDinger
@@ -58,8 +61,7 @@ public interface UserDinger {
      */
     @DingerMarkdown(
             value = "#### 用户注销通知 @13520200906\n - 用户Id： ${userId}\n - 用户名： ${userName}",
-            title = "用户注销反馈",
-            phones = {"13520200906"}
+            title = "用户注销反馈"
     )
-    DingerResponse userLogout(@Parameter("userId") Long id, String userName);
+    DingerResponse userLogout(@DingerPhone List<String> phone, @Parameter("userId") Long id, String userName);
 }

@@ -20,7 +20,6 @@ import com.github.jaemon.dinger.support.sign.SignBase;
 import com.github.jaemon.dinger.support.sign.SignResult;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**

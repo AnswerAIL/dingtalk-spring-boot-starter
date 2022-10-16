@@ -38,7 +38,10 @@ Dinger是一个以SpringBoot框架为基础开发的消息发送中间件， 对
 
 &nbsp;
 
-> ★ **如果觉得项目对您的工作有帮助的话, 欢迎『[Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)』 或 『[Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter)』加星关注☺**
+### 支持Dinger
+> ★ **欢迎『[Github](https://github.com/AnswerAIL/dingtalk-spring-boot-starter)』 或 『[Gitee](https://gitee.com/jaemon/dingtalk-spring-boot-starter)』点下Star让更多码友知道Dinger的存在**
+
+> ❤ [Gitee捐赠](https://gitee.com/jaemon/dingtalk-spring-boot-starter): 如果觉得Dinger不错, 条件允许的话捐赠杯奶茶犒劳下维护者, 感谢您的支持和鼓励^_^。
 
 &nbsp;
 

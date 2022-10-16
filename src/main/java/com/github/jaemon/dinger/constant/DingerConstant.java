@@ -53,4 +53,8 @@ public interface DingerConstant {
     String DINGER_PROPERTIES_PREFIX = DINGER_PROP_PREFIX + SPOT_SEPERATOR;
 
     String DINGER_COMMA = ",";
+    String DINGER_PHONE_KEY = "@Dinger_Phone_Key@";
+    String DINGER_PHONE_TAG = "@Dinger_Phone_Tag@";
+    String DINGER_PHONE_FORCE_TAG = "@Dinger_Phone_Force_Tag@";
+    String DINGER_AT = "@";
 }

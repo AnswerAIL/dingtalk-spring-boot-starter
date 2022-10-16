@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger.support;
 
+import com.github.jaemon.dinger.constant.DingerConstant;
 import com.github.jaemon.dinger.core.entity.DingerRequest;
 
 import java.text.MessageFormat;
@@ -37,7 +38,7 @@ public class MarkDownMessage implements CustomMessage {
         StringBuilder text = new StringBuilder(title);
         if (phones != null && !phones.isEmpty()) {
             for (String phone : phones) {
-                text.append("@").append(phone);
+                text.append(DingerConstant.DINGER_AT).append(phone);
             }
         }
         return MessageFormat.format(

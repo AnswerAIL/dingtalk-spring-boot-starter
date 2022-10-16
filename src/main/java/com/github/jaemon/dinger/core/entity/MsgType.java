@@ -15,12 +15,13 @@
  */
 package com.github.jaemon.dinger.core.entity;
 
+import com.github.jaemon.dinger.constant.DingerConstant;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.support.sign.SignBase;
-import com.github.jaemon.dinger.support.sign.SignResult;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 消息类型实体
@@ -64,6 +65,11 @@ public class MsgType implements Serializable {
     public void transfer(Map<String, Object> params) {
     }
 
+    /**
+     * 签名参数处理
+     *
+     * @param sign sign
+     */
     public void signAttributes(SignBase sign) {}
 
     /**
@@ -86,12 +92,40 @@ public class MsgType implements Serializable {
                     || v instanceof Number) {
                 content = content.replaceAll(key, v.toString());
             } else {
-//                content = content.replaceAll(key, v.toString());
+                /*content = content.replaceAll(key, v.toString());*/
                 continue;
             }
 
         }
 
         return content;
+    }
+
+    /**
+     * 解析at参数信息
+     * @param params params
+     * @return phones
+     */
+    protected List<String> parseAtParam(Map<String, Object> params) {
+        Object phoneParamKey = params.get(DingerConstant.DINGER_PHONE_TAG);
+        if (phoneParamKey == null) {
+            return null;
+        }
+
+        Object phoneVal = params.get(phoneParamKey.toString());
+        if (phoneVal == null) {
+            return null;
+        }
+
+        if (phoneVal instanceof String) {
+            String[] phones = phoneVal.toString().split(DingerConstant.DINGER_COMMA);
+            return Arrays.asList(phones);
+        } else if (phoneVal instanceof Collection) {
+            return (List<String>) ((Collection) phoneVal).stream().map(Object::toString).collect(Collectors.toList());
+        } else if (phoneVal instanceof String[]) {
+            return Arrays.asList((String[])phoneVal);
+        }
+
+        return null;
     }
 }

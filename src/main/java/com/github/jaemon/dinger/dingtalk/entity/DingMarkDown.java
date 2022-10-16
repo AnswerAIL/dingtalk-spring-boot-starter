@@ -83,6 +83,6 @@ public class DingMarkDown extends Message {
 
     @Override
     public void transfer(Map<String, Object> params) {
-        this.markdown.text = replaceContent(this.markdown.text, params);
+        this.markdown.text = replaceContent(this.markdown.text, params) + parsePhone(params);
     }
 }

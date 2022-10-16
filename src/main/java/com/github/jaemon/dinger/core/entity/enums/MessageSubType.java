@@ -20,11 +20,11 @@ import com.github.jaemon.dinger.core.entity.DingerRequest;
 import com.github.jaemon.dinger.dingtalk.entity.*;
 import com.github.jaemon.dinger.core.entity.MsgType;
 import com.github.jaemon.dinger.exception.DingerException;
+import com.github.jaemon.dinger.utils.DingerUtils;
 import com.github.jaemon.dinger.wetalk.entity.WeMarkdown;
 import com.github.jaemon.dinger.wetalk.entity.WeNews;
 import com.github.jaemon.dinger.wetalk.entity.WeText;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,7 +74,7 @@ public enum MessageSubType {
                 } else if (!CollectionUtils.isEmpty(phones)) {
                     StringBuilder sb = new StringBuilder();
                     for (String phone : phones) {
-                        if (StringUtils.isEmpty(phone)) {
+                        if (DingerUtils.isEmpty(phone)) {
                             continue;
                         }
                         String[] userIdAndName = phone.split(DINGER_COMMA);

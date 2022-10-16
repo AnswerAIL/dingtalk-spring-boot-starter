@@ -15,14 +15,18 @@
  */
 package com.github.jaemon.dinger.core;
 
+import com.github.jaemon.dinger.constant.DingerConstant;
 import com.github.jaemon.dinger.core.annatations.Dinger;
+import com.github.jaemon.dinger.core.annatations.DingerPhone;
 import com.github.jaemon.dinger.core.entity.DingerProperties;
 import com.github.jaemon.dinger.core.entity.MsgType;
 import com.github.jaemon.dinger.core.entity.enums.DingerType;
 import com.github.jaemon.dinger.core.entity.DingerResponse;
+import com.github.jaemon.dinger.core.entity.enums.PhoneParamType;
 import com.github.jaemon.dinger.multi.MultiDingerConfigContainer;
 import com.github.jaemon.dinger.multi.MultiDingerProperty;
 import com.github.jaemon.dinger.multi.entity.MultiDingerConfig;
+import com.github.jaemon.dinger.utils.DingerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,10 +36,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.github.jaemon.dinger.constant.DingerConstant.DINGER_PREFIX;
 import static com.github.jaemon.dinger.constant.DingerConstant.SPOT_SEPERATOR;
 
 /**
@@ -73,7 +79,13 @@ public class DingerMessageHandler
         int keyLength = keys.length;
         if (keyLength == valueLength) {
             for (int i = 0; i < valueLength; i++) {
-                params.put(keys[i], values[i]);
+                String key = keys[i];
+                Object value = values[i];
+
+                if (DingerConstant.DINGER_PHONE_KEY.equals(key) && handlePhoneParam(i, params, method, value)) {
+                    continue;
+                }
+                params.put(key, value);
             }
             return params;
         }
@@ -82,6 +94,12 @@ public class DingerMessageHandler
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
             String paramName = parameter.getName();
+            Object value = values[i];
+
+            if (fillParamPhone(parameter, params, value)) {
+                continue;
+            }
+
             com.github.jaemon.dinger.core.annatations.Parameter[] panno =
                     parameter.getDeclaredAnnotationsByType(com.github.jaemon.dinger.core.annatations.Parameter.class);
             if (panno != null && panno.length > 0) {
@@ -91,6 +109,68 @@ public class DingerMessageHandler
         }
 
         return params;
+    }
+
+    /**
+     * 处理phone参数
+     *
+     * @param i i
+     * @param params params
+     * @param method method
+     * @param value value
+     * @return true | false
+     */
+    private static boolean handlePhoneParam(int i, Map<String, Object> params, Method method, Object value) {
+        return fillParamPhone(method.getParameters()[i], params, value);
+    }
+
+
+    /**
+     * 填充phone参数信息
+     *
+     * @param parameter parameter
+     * @param params params
+     * @param value value
+     * @return true | false
+     */
+    private static boolean fillParamPhone(Parameter parameter, Map<String, Object> params, Object value) {
+        String paramName = parameter.getName();
+
+        DingerPhone[] dingerPhones = parameter.getDeclaredAnnotationsByType(DingerPhone.class);
+        if (dingerPhones != null && dingerPhones.length > 0) {
+            DingerPhone dingerPhone = dingerPhones[0];
+            paramName = DingerUtils.isEmpty(dingerPhone.value()) ? paramName : dingerPhone.value();
+            PhoneParamType type = dingerPhone.type();
+
+            if (paramTypeIsValid(type, value)) {
+                params.put(DingerConstant.DINGER_PHONE_TAG, paramName);
+                params.put(paramName, value);
+                if (dingerPhone.force()) {
+                    params.put(DingerConstant.DINGER_PHONE_FORCE_TAG, DINGER_PREFIX);
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 判断参数类型是否有效
+     *
+     * @param type type
+     * @param value value
+     * @return true | false
+     */
+    private static boolean paramTypeIsValid(PhoneParamType type, Object value) {
+        if (type == PhoneParamType.ARRAY) {
+            if (value instanceof Collection || value instanceof String[]) {
+                return true;
+            }
+        }
+
+        return type == PhoneParamType.STRING && value instanceof String;
     }
 
 

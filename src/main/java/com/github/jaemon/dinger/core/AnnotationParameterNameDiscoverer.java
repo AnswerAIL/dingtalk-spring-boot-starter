@@ -15,12 +15,17 @@
  */
 package com.github.jaemon.dinger.core;
 
+import com.github.jaemon.dinger.core.annatations.Dinger;
+import com.github.jaemon.dinger.core.annatations.DingerPhone;
 import com.github.jaemon.dinger.core.annatations.Parameter;
+import com.github.jaemon.dinger.utils.DingerUtils;
 import org.springframework.core.ParameterNameDiscoverer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+
+import static com.github.jaemon.dinger.constant.DingerConstant.DINGER_PHONE_KEY;
 
 /**
  * 注解参数名称解析
@@ -52,13 +57,22 @@ public class AnnotationParameterNameDiscoverer implements ParameterNameDiscovere
     protected String[] getParameterNames(java.lang.reflect.Parameter[] parameters, Annotation[][] parameterAnnotations) {
         String[] params = new String[parameterAnnotations.length];
 
-        for (int i = 0; i < parameterAnnotations.length; i++) {
+        for (int i = 0, j = 0; i < parameterAnnotations.length; i++) {
             Annotation[] parameterAnnotation = parameterAnnotations[i];
             params[i] = parameters[i].getName();
             for (Annotation annotation : parameterAnnotation) {
                 if (Parameter.class.isInstance(annotation)) {
                     Parameter dingerParam = (Parameter) annotation;
-                    params[i] = dingerParam.value();
+                    String value = dingerParam.value();
+                    if (DingerUtils.isNotEmpty(value)) {
+                        params[i] = value;
+                        break;
+                    }
+                }
+
+                if (DingerPhone.class.isInstance(annotation) && j == 0) {
+                    params[i] = DINGER_PHONE_KEY;
+                    j++;
                     break;
                 }
             }

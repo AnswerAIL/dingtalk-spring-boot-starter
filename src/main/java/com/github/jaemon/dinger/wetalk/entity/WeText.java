@@ -15,6 +15,7 @@
  */
 package com.github.jaemon.dinger.wetalk.entity;
 
+import com.github.jaemon.dinger.constant.DingerConstant;
 import com.github.jaemon.dinger.wetalk.entity.enums.WeTalkMsgType;
 
 import java.io.Serializable;
@@ -100,6 +101,11 @@ public class WeText extends WeTalkMessage {
 
     @Override
     public void transfer(Map<String, Object> params) {
+        if (params.containsKey(DingerConstant.DINGER_PHONE_FORCE_TAG)
+                || this.text.mentioned_mobile_list == null) {
+            this.text.mentioned_mobile_list = parseAtParam(params);
+        }
+
         this.text.content = replaceContent(this.text.content, params);
     }
 }
