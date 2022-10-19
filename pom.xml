@@ -19,7 +19,7 @@
         <spring-web-version>5.3.23</spring-web-version>
         <java.version>1.8</java.version>
         <slf4j-api.version>2.0.3</slf4j-api.version>
-        <jackson.version>2.13.4</jackson.version>
+        <jackson.version>2.13.4.1</jackson.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
